@@ -19,10 +19,6 @@ function loadScript(url, callback) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-if (typeof jQuery != "undefined") {
-    jQuery(".product-description-slider > div").hide();
-}
-
 var jQuery191;
 loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", function(){
     jQuery191 = jQuery.noConflict(true);
