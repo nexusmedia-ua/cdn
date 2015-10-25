@@ -24,11 +24,11 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
     jQuery191 = jQuery.noConflict(true);
     loadScript("//nexusmedia-ua.github.io/cdn/easyslide/jquery191-ui-1.10.4.min.js", function(){
         jQuery191(".product-description-slider").accordion( { collapsible: true, heightStyle: "content", animate: 100 } );
-        jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).parent().offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-150)}, 100).finish(100);   });
+        jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-150)}, 100).finish(100);   });
         if (navigator.userAgent.indexOf("Opera") != -1) {
           setTimeout(function(){
             jQuery191(".product-description-slider").accordion( { collapsible: true, heightStyle: "content", animate: 100 } );
-            jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).parent().offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-150)}, 100).finish(100);   });
+            jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-150)}, 100).finish(100);   });
           }, 100);
         }
     });
