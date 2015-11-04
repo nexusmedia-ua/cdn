@@ -24,20 +24,18 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
     jQuery191 = jQuery.noConflict(true);
     loadScript("//nexusmedia-ua.github.io/cdn/easyslide/jquery191-ui-1.10.4.min.js", function(){
         if (jQuery191("#easyslide_all_closed") && jQuery191("#easyslide_all_closed").val() == 1) {
-            var collpased = true;
+            jQuery191(".product-description-slider").accordion( { collapsible: true, heightStyle: "content", animate: 100 } );
         } else {
-            var collpased = false;
+            jQuery191(".product-description-slider").accordion( { active: false, collapsible: true, heightStyle: "content", animate: 100 } );
         }
-        jQuery191(".product-description-slider").accordion( { active: collpased, collapsible: true, heightStyle: "content", animate: 100 } );
         jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-150)}, 100).finish(100);   });
         if (navigator.userAgent.indexOf("Opera") != -1) {
           setTimeout(function(){
             if (jQuery191("#easyslide_all_closed") && jQuery191("#easyslide_all_closed").val() == 1) {
-                var collpased = true;
+                jQuery191(".product-description-slider").accordion( { collapsible: true, heightStyle: "content", animate: 100 } );
             } else {
-                var collpased = false;
+                jQuery191(".product-description-slider").accordion( { active: false, collapsible: true, heightStyle: "content", animate: 100 } );
             }
-            jQuery191(".product-description-slider").accordion( { active: collpased, collapsible: true, heightStyle: "content", animate: 100 } );
             jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-150)}, 100).finish(100);   });
           }, 100);
         }
