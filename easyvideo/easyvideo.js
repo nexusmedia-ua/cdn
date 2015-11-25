@@ -33,11 +33,11 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
     function easyVideoSetup() {
 
       var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
-      var ev_main_img = ev$("img[src*='" + ev_main_img_url + "_']");
+      var ev_main_img = ev$("img[src*='" + ev_main_img_url + "']");
 
       if (ev_main_img.length < 2) {
         var ev_main_img_url = ev$("#easyvideo_featured_product_image").attr("content");
-        var ev_main_img = ev$("img[src*='" + ev_main_img_url + "_']");
+        var ev_main_img = ev$("img[src*='" + ev_main_img_url + "']");
       }
 
       if (ev$('.easyvideo_main_image').length > 0) {
