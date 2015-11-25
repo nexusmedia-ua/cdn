@@ -91,5 +91,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
       ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "']").last().trigger('click');
 
+      console.log(ev_main_img_url);
+
     }
 });
