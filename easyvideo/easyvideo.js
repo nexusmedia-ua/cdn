@@ -22,13 +22,11 @@ function loadScriptEasyVideo(url, callback) {
 var ev$;
 loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", function(){
     ev$ = jQuery.noConflict(true);
-    ev$(function(){
 
-      if (ev$('#easyvideo_enabled').attr('content') == "1") {
-        easyVideoSetup();
-      }
+    if (ev$('#easyvideo_enabled').attr('content') == "1") {
+      easyVideoSetup();
+    }
 
-    });
 
     function easyVideoSetup() {
 
