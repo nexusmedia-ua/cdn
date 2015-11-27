@@ -58,10 +58,10 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_container.append("<div id='easyvideo_video' />");
       var is_zoom = false;
-      if (ev_container.hasClass("image-zoom")) {
+  //    if (ev_container.hasClass("image-zoom")) {
         is_zoom = true;
         var zoom_class = "image-zoom";
-      }
+    //  }
 
       ev_main_img.load(function () {
         setTimeout(function(){
