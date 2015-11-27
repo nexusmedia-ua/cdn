@@ -58,10 +58,10 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_container.append("<div id='easyvideo_video' />");
       var is_zoom = false;
-  //    if (ev_container.hasClass("image-zoom")) {
+      if (ev_container.hasClass("image-zoom")) {
         is_zoom = true;
         var zoom_class = "image-zoom";
-    //  }
+      }
 
       ev_main_img.load(function () {
         setTimeout(function(){
@@ -79,10 +79,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (!ev$(this).is(ev_main_img)) {
           ev_video_is_show = true;
           ev_main_img.hide();
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class);
           ev$('#easyvideo_video').css("position","relative").css("z-index", "99999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625); }, 50);
           ev$('#easyvideo_video').show();
-          }, 50);
         }
       });
       ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
@@ -91,10 +90,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (!ev$(this).is(ev_main_img)) {
           ev_video_is_show = true;
           ev_main_img.hide();
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class);
-          var width = ev$('#easyvideo_video').css("position","relative").css("z-index", "99999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625);
+          ev$('#easyvideo_video').css("position","relative").css("z-index", "99999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625); }, 50);
           ev$('#easyvideo_video').show();
-          }, 50);
         }
       });
       ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
