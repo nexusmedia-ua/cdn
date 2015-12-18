@@ -53,7 +53,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       }
 
 
-      var ev_container = ev_main_img.closest("div,section,span");
+      var ev_container = ev_main_img.closest("div,section,span,a");
       var ev_video_is_show = false;
 
       ev_container.append("<div id='easyvideo_video' />");
