@@ -95,8 +95,8 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
           ev$( ev_main_img_selector ).hide();
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "99999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625);
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625); }, 50);
+          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "99999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").width() * 0.5625);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").width() * 0.5625); }, 50);
           ev$('#easyvideo_video').show();
         }
       });
@@ -106,8 +106,8 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
           ev$( ev_main_img_selector ).hide();
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "99999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625);
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625); }, 50);
+          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "99999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").width() * 0.5625);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").width() * 0.5625); }, 50);
           ev$('#easyvideo_video').show();
         }
       });
@@ -117,8 +117,8 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
           ev$( ev_main_img_selector ).hide();
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "99999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625);
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").parent().width() * 0.5625); }, 50);
+          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "99999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#easyvideo_video").width() * 0.5625);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$("#easyvideo_video").width() * 0.5625); }, 50);
           ev$('#easyvideo_video').show();
         }
       });
