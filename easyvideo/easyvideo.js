@@ -75,6 +75,18 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         }, 50);
       });
 
+      ev$(".MagicToolboxSelectorsContainer a").click(function () {
+        setTimeout(function(){
+          if (!ev_video_is_show) {
+            ev_main_img.show();
+            if (is_zoom) ev_container.addClass(zoom_class);
+            ev$('#easyvideo_video').hide();
+          } else {
+            ev_video_is_show = false;
+          }
+        }, 50);
+      });
+
       ev$("img[alt*='youtu.be/']").click(function(){
         if (!ev$(this).is(ev_main_img)) {
           ev_video_is_show = true;
