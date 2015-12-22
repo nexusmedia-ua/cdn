@@ -82,7 +82,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
         setTimeout(function(){
           if (!ev_video_is_show) {
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').css("display", "block", "important"); }, 50);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 150);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 300);
             ev$('#easyvideo_video').hide();
           } else {
             ev_video_is_show = false;
@@ -95,6 +97,10 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           ev_video_is_show = true;
           ev_main_img.hide();
           ev$('.MagicZoomPlus figure > img').hide();
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); }, 50);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); }, 150);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); }, 300);
+
           var width = ev$("#easyvideo_video").width();
           if (ev$("#easyvideo_video").parent().width() > width) width = ev$("#easyvideo_video").parent().width();
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "9999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", width * 0.5625);
@@ -109,7 +115,11 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
           ev_main_img.hide();
-          ev$('.MagicZoomPlus figure > img').css("display", "none", "important");
+          ev$('.MagicZoomPlus figure > img').hide();
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); }, 50);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); }, 150);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); }, 300);
+
           var width = ev$("#easyvideo_video").width();
           if (ev$("#easyvideo_video").parent().width() > width) width = ev$("#easyvideo_video").parent().width();
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "9999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", width * 0.5625);
