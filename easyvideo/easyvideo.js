@@ -133,7 +133,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       if (ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
-          ev_video_is_show = true;
+          ev_video_is_show = false;
 
           hideMainImage(ev$, ev_main_img);
 
@@ -157,7 +157,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       if (ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
-          ev_video_is_show = true;
+          ev_video_is_show = false;
 
           hideMainImage(ev$, ev_main_img);
 
@@ -181,7 +181,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       if (ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
-          ev_video_is_show = true;
+          ev_video_is_show = false;
 
           hideMainImage(ev$, ev_main_img);
 
