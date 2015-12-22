@@ -95,8 +95,8 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       }
 
       ev_main_img.load(function () {
-        console.log('loaded: ' + ev_video_is_show);
         setTimeout(function(){
+          console.log('loaded: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             ev$( ev_main_img_selector ).show();
             if (is_zoom) ev_container.addClass(zoom_class);
@@ -104,7 +104,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           } else {
             ev_video_is_show = false;
           }
-        }, 50);
+        }, 301);
       });
 
       ev$(".MagicToolboxSelectorsContainer a").on("t1ouchend click", function () {
