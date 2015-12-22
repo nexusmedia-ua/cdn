@@ -104,10 +104,10 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           } else {
             ev_video_is_show = false;
           }
-        }, 301);
+        }, 501);
       });
 
-      ev$(".MagicToolboxSelectorsContainer a").on("t1ouchend click", function () {
+      ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
         setTimeout(function(){
           if (!ev_video_is_show) {
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
@@ -129,7 +129,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           showVideoBlock(ev$);
       }
 
-      ev$("img[alt*='youtu.be/']").on("to1uchend click", function(){
+      ev$("img[alt*='youtu.be/']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
 
@@ -153,7 +153,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           showVideoBlock(ev$);
       }
 
-      ev$("img[alt*='youtube.com/watch']").on("tou1chend click", function(){
+      ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
 
