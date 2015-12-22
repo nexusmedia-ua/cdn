@@ -143,7 +143,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
 
 
-      if (ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
+      if (ev$("img[alt*='11youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
           hideMainImage(ev$, ev_main_img);
 
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "9999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", video_width * 0.5625);
