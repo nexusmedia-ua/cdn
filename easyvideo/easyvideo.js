@@ -95,20 +95,21 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$("img[alt*='youtu.be/']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
-          ev_main_img.hide();
 
-          // Special selectors for MagicZoom plugin support + adding delay for touch events
-          ev$('.MagicZoomPlus figure > img').hide();
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
-
-          var width = ev$("#easyvideo_video").width();
+          var width = ev_main_img.width();
+          if (ev$("#easyvideo_video").width() > width) width = ev$("#easyvideo_video").width();
           if (ev$("#easyvideo_video").parent().width() > width) width = ev$("#easyvideo_video").parent().width();
           if (width == 0) width = ev$("#easyvideo_video").parent().parent().width();
           if (width == 0) width = 300;
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "9999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", width * 0.5625);
           setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", width * 0.5625); }, 50);
+
+          // Special selectors for MagicZoom plugin support + adding delay for touch events
+          ev_main_img.hide();
+          ev$('.MagicZoomPlus figure > img').hide();
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
 
           // Adding delay for touch events
           ev$('#easyvideo_video').show();
@@ -122,20 +123,21 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
-          ev_main_img.hide();
 
-          // Special selectors for MagicZoom plugin support + adding delay for touch events
-          ev$('.MagicZoomPlus figure > img').hide();
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
-
-          var width = ev$("#easyvideo_video").width();
+          var width = ev_main_img.width();
+          if (ev$("#easyvideo_video").width() > width) width = ev$("#easyvideo_video").width();
           if (ev$("#easyvideo_video").parent().width() > width) width = ev$("#easyvideo_video").parent().width();
           if (width == 0) width = ev$("#easyvideo_video").parent().parent().width();
           if (width == 0) width = 300;
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "9999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", width * 0.5625);
           setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", width * 0.5625); }, 50);
+
+          // Special selectors for MagicZoom plugin support + adding delay for touch events
+          ev_main_img.hide();
+          ev$('.MagicZoomPlus figure > img').hide();
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
 
           // Adding delay for touch events
           ev$('#easyvideo_video').show();
@@ -149,20 +151,21 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$("img[alt*='//vimeo.com/']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
-          ev_main_img.hide();
 
-          // Special selectors for MagicZoom plugin support + adding delay for touch events
-          ev$('.MagicZoomPlus figure > img').hide();
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
-          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
-
-          var width = ev$("#easyvideo_video").width();
+          var width = ev_main_img.width();
+          if (ev$("#easyvideo_video").width() > width) width = ev$("#easyvideo_video").width();
           if (ev$("#easyvideo_video").parent().width() > width) width = ev$("#easyvideo_video").parent().width();
           if (width == 0) width = ev$("#easyvideo_video").parent().parent().width();
           if (width == 0) width = 300;
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "9999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", width * 0.5625);
           setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", width * 0.5625); }, 50);
+
+          // Special selectors for MagicZoom plugin support + adding delay for touch events
+          ev_main_img.hide();
+          ev$('.MagicZoomPlus figure > img').hide();
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
+          setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
 
           // Adding delay for touch events
           ev$('#easyvideo_video').show();
