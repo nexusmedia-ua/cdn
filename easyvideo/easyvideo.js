@@ -79,7 +79,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         }, 50);
       });
 
-      ev$(".MagicToolboxSelectorsContainer a").click(function () {
+      ev$(".MagicToolboxSelectorsContainer a").on("click touchstart", function () {
         setTimeout(function(){
           if (!ev_video_is_show) {
             ev$( ev_main_img_selector ).show();
