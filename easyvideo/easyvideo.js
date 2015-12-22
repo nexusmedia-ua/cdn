@@ -118,7 +118,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           setTimeout(function(){ ev$('#easyvideo_video').show(); }, 300);
         }
       });
-      ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
+      //ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
 
       ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
@@ -146,7 +146,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           setTimeout(function(){ ev$('#easyvideo_video').show(); }, 300);
         }
       });
-      ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
+      //ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
 
       ev$("img[alt*='//vimeo.com/']").on("touchend click", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
@@ -174,6 +174,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           setTimeout(function(){ ev$('#easyvideo_video').show(); }, 300);
         }
       });
-      ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
+      //ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
     }
 });
