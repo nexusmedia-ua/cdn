@@ -105,7 +105,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
       ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").last().trigger('click');
 
-      ev$("img[alt*='youtube.com/watch']").on("click touchend", function(){
+      ev$("img[alt*='youtube.com/watch']").on("touchend", function(){
         if (!ev$(this).is(ev$( ev_main_img_selector ))) {
           ev_video_is_show = true;
           ev_main_img.hide();
