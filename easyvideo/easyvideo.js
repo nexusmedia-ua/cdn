@@ -98,6 +98,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         setTimeout(function(){
           console.log('loaded: ' + ev_video_is_show);
           if (!ev_video_is_show) {
+            console.log('showing image by this selector: ' + ev_main_img_selector);
             ev$( ev_main_img_selector ).show();
             if (is_zoom) ev_container.addClass(zoom_class);
             ev$('#easyvideo_video').hide();
