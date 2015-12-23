@@ -106,7 +106,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           } else {
             ev_video_is_show = false;
           }
-        }, 501);
+        }, 50);
       });
 
       ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
