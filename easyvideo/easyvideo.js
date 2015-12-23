@@ -51,6 +51,32 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
     function easyVideoSetup() {
 
+      // Fix for Owl Slider on PhotoBooth theme
+      ev$("#product-images .owl-item div img[alt*='youtube.com/watch']").each(function(){
+        var video_link = ev$(this).prop("alt");
+        ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
+      });
+      ev$("#product-images .owl-item div img[alt*='youtu.be/']").each(function(){
+        var video_link = ev$(this).prop("alt");
+        ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
+      });
+      ev$("#product-images .owl-item div img[alt*='//vimeo.com/']").each(function(){
+        var video_link = ev$(this).prop("alt");
+        ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
+      });
+
+
+      // Fix for Retina theme
+      ev$('.flexslider .slides li .video-container').each(function(){
+        var video_link = ev$(this).find('a').html();
+        if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
+          ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
+        }
+        if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
+          ev$(this).html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
+        }
+      });
+
       var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
       var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
       var ev_main_img = ev$( ev_main_img_selector );
@@ -106,34 +132,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             ev_video_is_show = false;
           }
         }, 50);
-      });
-
-      // Fix for Owl Slider on PhotoBooth theme
-      setTimeout(function(){
-        ev$("#product-images .owl-item div img[alt*='youtube.com/watch']").each(function(){
-          var video_link = ev$(this).prop("alt");
-          ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
-        });
-        ev$("#product-images .owl-item div img[alt*='youtu.be/']").each(function(){
-          var video_link = ev$(this).prop("alt");
-          ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
-        });
-        ev$("#product-images .owl-item div img[alt*='//vimeo.com/']").each(function(){
-          var video_link = ev$(this).prop("alt");
-          ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
-        });
-      }, 500);
-
-
-      // Fix for Retina theme
-      ev$('.flexslider .slides li .video-container').each(function(){
-        var video_link = ev$(this).find('a').html();
-        if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
-          ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
-        }
-        if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
-          ev$(this).html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
-        }
       });
 
       // Fix for MagicZoom
