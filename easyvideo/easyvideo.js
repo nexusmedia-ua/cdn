@@ -97,7 +97,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          console.log('loaded: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
@@ -109,6 +108,15 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         }, 50);
       });
 
+      // Fix for Retina theme
+      ev$('.flexslider .slides li .video-container').each(function(){
+        var video_link = ev$(this).find('a').html();
+        if ( video_link.toLowerCase().indexOf("youtube.com/watch") ) {
+          ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
+        }
+      });
+
+      // Fix for MagicZoom
       ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
         setTimeout(function(){
           if (!ev_video_is_show) {
