@@ -115,7 +115,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
         }
         if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
-          ev$(this).html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
+          ev$(this).html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$(this).width() * 0.5625).css("height", ev$(this).width() * 0.5625 + "px");
         }
       });
 
