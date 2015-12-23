@@ -78,6 +78,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       }
 
 
+      var ev_main_img_parent = ev_main_img.parent();
       var ev_container = ev_main_img.closest("div,section,span,a");
       var ev_video_is_show = false;
 
@@ -99,7 +100,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           console.log('loaded: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             console.log('showing image by this selector: ' + ev_main_img_selector);
-            ev$( ev_main_img_selector ).show();
+            ev_main_img_parent.find("img").first().show();
             if (is_zoom) ev_container.addClass(zoom_class);
             ev$('#easyvideo_video').hide();
           } else {
@@ -131,7 +132,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       }
 
       ev$("img[alt*='youtu.be/']").on("touchend click", function(){
-        if (!ev$(this).is(ev$( ev_main_img_selector ))) {
+        if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
           ev_video_is_show = true;
 
           hideMainImage(ev$, ev_main_img);
@@ -155,7 +156,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       }
 
       ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
-        if (!ev$(this).is(ev$( ev_main_img_selector ))) {
+        if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
           ev_video_is_show = true;
 
           hideMainImage(ev$, ev_main_img);
@@ -169,7 +170,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
 
       ev$("img[alt*='//vimeo.com/']").on("touchend click", function(){
-        if (!ev$(this).is(ev$( ev_main_img_selector ))) {
+        if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
           ev_video_is_show = true;
 
           hideMainImage(ev$, ev_main_img);
