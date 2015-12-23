@@ -122,7 +122,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           var video_link = ev$(this).prop("alt");
           ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", ev$("#product-images").width() * 0.5625).css("height", ev$("#product-images").width() * 0.5625 + "px");
         });
-      }, 1000);
+      }, 5000);
 
 
       // Fix for Retina theme
