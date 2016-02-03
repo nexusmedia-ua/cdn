@@ -1,0 +1,1 @@
+<?php require 'include/shopify_init.php';

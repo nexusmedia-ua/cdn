@@ -1,0 +1,372 @@
+.lightbox {
+  display: none;
+}
+
+.eorder_featherlight .easyorder-text-center {
+  text-align: center !important;
+}
+.eorder_featherlight .easyorder-text-left {
+  text-align: left !important;
+}
+.eorder_featherlight .easyorder-text-right {
+  text-align: right !important;
+}
+
+.eorder_featherlight {
+  line-height: 18px      !important;
+  font-family: Roboto, Helvetica, Arial, sans-serif !important;
+  font-size: 13px        !important;
+  font-style: normal     !important;
+  font-variant: normal   !important;
+  font-weight: normal    !important;
+  letter-spacing: normal !important;
+}
+
+.eorder_featherlight a,
+.eorder_featherlight p,
+.eorder_featherlight div,
+.eorder_featherlight span,
+.eorder_featherlight label,
+.eorder_featherlight input,
+.eorder_featherlight textarea,
+.eorder_featherlight select,
+.eorder_featherlight button,
+.eorder_featherlight small,
+.eorder_featherlight .easyorder-btn {
+  color: #333          !important;
+  line-height: 18px    !important;
+  font-family: inherit !important;
+  font-size: 13px      !important;
+  font-style: normal   !important;
+  font-weight: normal  !important;
+  letter-spacing: normal !important;
+  text-decoration:none !important;
+  text-transform: none !important;
+}
+.eorder_featherlight small {
+  font-size: 11px !important;
+}
+
+.eorder_featherlight h3,
+.eorder_featherlight h4  {
+  margin: 10px 0   !important;
+  padding: 0       !important;
+  background: none !important;
+  border: none     !important;
+  font-family: inherit   !important;
+  letter-spacing: normal !important;
+  text-transform: none   !important;
+  text-align: center     !important;
+}
+.eorder_featherlight h3,
+.eorder_featherlight h3 * {
+  color: #333       !important;
+  line-height: 30px !important;
+  font-size: 20px   !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+  text-transform: none  !important;
+}
+
+.eorder_featherlight h4,
+.eorder_featherlight h4 * {
+  color: #333     !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  font-weight: bold !important;
+  text-decoration: none !important;
+  text-transform: none  !important;
+}
+.eorder_featherlight .eorder_featherlight-close-icon {
+  width:  25px !important;
+  height: 25px !important;
+  line-height: 25px !important;
+}
+.eorder_featherlight h4.easyorder-product-title {
+  margin-top: 0    !important;
+  text-align: left !important;
+}
+
+.eorder_featherlight p {
+  margin: 0 0 10px !important;
+}
+
+.eorder_featherlight .easyorder-btn {
+  display: inline-block !important;
+  position: relative    !important;
+
+  padding: 8.5px 15px !important;
+  height: auto        !important;
+  border-radius: 3px  !important;
+  color: white        !important;
+  line-height: 20px   !important;
+  white-space: nowrap !important;
+  vertical-align: middle !important;
+  text-transform:none !important;
+  cursor: pointer     !important;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+}
+
+#easyorder-popup-blank-holder {
+  display: none;
+}
+
+.eorder_featherlight .grid {
+  margin-top: 10px !important;
+}
+.eorder_featherlight .grid:after,
+.eorder_featherlight .grid-uniform:after,
+.eorder_featherlight .grid-full:after {
+  clear: none !important;
+}
+
+.eorder_featherlight .grid__item {
+  overflow: hidden  !important;
+  padding-bottom: 0 !important;
+}
+.eorder_featherlight .grid .one-third,
+.eorder_featherlight .grid--rev .one-third,
+.eorder_featherlight .grid--full .one-third {
+  min-height: 1px   !important;
+  line-height: 30px !important;
+}
+.eorder_featherlight .two-fifths {
+  line-height: 0 !important;
+}
+.eorder_featherlight .grid-stack {
+  background: white   !important;
+  border-width: 5px 0 !important;
+  border-style: solid !important;
+  border-color: white !important;
+}
+.eorder_featherlight .grid__item.two-thirds > * {
+  max-width: 70% !important;
+}
+.eorder_featherlight .grid__item.two-thirds .checkbox-holder,
+.eorder_featherlight .grid__item.two-thirds .radio-holder {
+  max-width: 100% !important;
+}
+
+.eorder_featherlight input[type=text],
+.eorder_featherlight input[type=email],
+.eorder_featherlight select {
+  height: 30px !important;
+}
+.eorder_featherlight input[type=text],
+.eorder_featherlight input[type=email],
+.eorder_featherlight textarea,
+.eorder_featherlight select {
+  width: 70%        !important;
+  padding: 4px 10px !important;
+  margin: 0         !important;
+  background-color: white   !important;
+  border: 1px solid #f0f0f0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.eorder_featherlight select {
+  padding-right: 20px !important;
+  cursor: pointer     !important;
+}
+
+
+.eorder_featherlight input[type=text].error,
+.eorder_featherlight input[type=email].error,
+.eorder_featherlight textarea.error,
+.eorder_featherlight select.error {
+  border: 1px solid #fb8077 !important;
+}
+
+.eorder_featherlight input[type=checkbox],
+.eorder_featherlight input[type=radio] {
+  float: left       !important;
+  margin-top: 2px   !important;
+  margin-right: 8px !important;
+}
+
+.eorder_featherlight .checkbox-row-holder label,
+.eorder_featherlight .radio-row-holder label {
+  margin-bottom: 0 !important;
+}
+.eorder_featherlight .checkbox-row-holder + .checkbox-row-holder,
+.eorder_featherlight .radio-row-holder + .radio-row-holder {
+  margin-top: 4px !important;
+}
+.eorder_featherlight .grid img {
+  width: 100% !important;
+}
+.eorder_featherlight .btn {
+  display: inline-block !important;
+  text-align: center    !important;
+}
+.easyorder-popup-submit-holder {
+  text-align: center !important;
+}
+.eorder_featherlight .easyorder-popup-submit {
+  margin-top: 10px   !important;
+  margin-bottom: 0   !important;
+  margin-left: -20px !important;
+}
+
+.eorder_featherlight .checkbox-holder,
+.eorder_featherlight .radio-holder {
+  margin-top: 9px     !important;
+  padding-bottom: 2px !important;
+}
+.eorder_featherlight .checkbox-holder.error,
+.eorder_featherlight .radio-holder.error {
+  padding: 2px 0  !important;
+  margin-top: 5px !important;
+  border: 1px solid #fb8077 !important;
+  border-radius: 3px !important;
+}
+.eorder_featherlight .checkbox-holder .checkbox-row-holder,
+.eorder_featherlight .radio-holder .radio-row-holder {
+  padding: 0 4px !important;
+}
+
+.eorder_featherlight .easyorder-field-holder {
+  overflow: hidden !important;
+  clear: both      !important;
+}
+.eorder_featherlight .easyorder-products-holder .easyorder-field-holder {
+  height:  0 !important;
+  margin:  0 !important;
+  padding: 0 !important;
+}
+
+.easyorder-popup-result,
+.easyorder-loader {
+  display: none;
+  margin: 25px       !important;
+  text-align: center !important;
+}
+
+.eorder_featherlight hr {
+  clear: both !important;
+  height: 0   !important;
+  margin: 18px 0 20px       !important;
+  border-top: solid #f0f0f0 !important;
+  border-width: 1px 0 0     !important;
+}
+
+.eorder_featherlight .eorder_featherlight-content {
+  padding: 0 !important;
+}
+.eorder_featherlight .easyorder-popup-content {
+  margin: 25px !important;
+}
+
+.easyorder-popup-products {
+  display: none;
+}
+.easyorder-popup-products,
+.easyorder-popup-form-fields {
+  margin: 18px 0 0  !important;
+  padding: 18px 0 0 !important;
+  border-top: 1px solid #f0f0f0 !important;
+}
+
+.easyorder-popup-form-fields.centered-fields .easyorder-field-holder > div:first-child {
+  display: none;
+}
+.easyorder-popup-form-fields.centered-fields .easyorder-field-holder > div:first-child + div {
+  width: 100%        !important;
+  text-align: center !important;
+}
+.easyorder-popup-form-fields.centered-fields .easyorder-field-holder > div:first-child + div > * {
+  margin-left: auto  !important;
+  margin-right: auto !important;
+}
+.easyorder-popup-form-fields.centered-fields .checkbox-holder,
+.easyorder-popup-form-fields.centered-fields .radio-holder {
+  width: 70% !important;
+  margin: 9px auto 0 !important;
+  text-align: left   !important;
+}
+
+.easyorder-popup-currency {
+  display: none;
+}
+
+#admin_bar_iframe {
+  z-index: 2147483640 !important;
+}
+
+
+.eorder_featherlight .easyorder-loader .next-spinner {
+  display: inline-block !important;
+  position: relative !important;
+  line-height: 0 !important;
+  -webkit-animation: next-spinner-rotate 600ms linear infinite;
+  animation: next-spinner-rotate 600ms linear infinite;
+}
+.eorder_featherlight .easyorder-loader .next-spinner > .next-icon {
+  display: inline-block !important;
+  overflow: hidden !important;
+  position: static !important;
+  top: 0           !important;
+  width: 40px      !important;
+  height: 40px     !important;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.eorder_featherlight .easyorder-loader .next-spinner .next-spinner__ring {
+  stroke: #479ccf;
+  stroke-dasharray: 100%;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  fill: none;
+}
+
+@-webkit-keyframes next-spinner-rotate{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+@keyframes next-spinner-rotate{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}
+
+
+.eorder_featherlight .easyorder-products-holder {
+  overflow: hidden;
+  clear: both;
+}
+.eorder_featherlight .easyorder-products-holder > div {
+  text-align: left !important;
+}
+.eorder_featherlight .easyorder-product-image-holder a {
+  line-height: 0 !important;
+}
+.eorder_featherlight .easyorder-product-desc-holder a:hover {
+  text-decoration: underline !important;
+}
+
+@media only screen and (max-width: 480px) {
+  .eorder_featherlight .easyorder-products-holder > div {
+    width: 100% !important;
+    clear: both !important;
+  }
+  .eorder_featherlight .easyorder-product-desc-holder {
+    margin-top: 12px !important;
+  }
+  .eorder_featherlight .easyorder-field-holder > div {
+    width: 100% !important;
+    clear: both !important;
+    text-align: left !important;
+  }
+  .eorder_featherlight .easyorder-popup-content > .easyorder-field-holder > div {
+    text-align: center !important;
+  }
+  .eorder_featherlight .grid__item.two-thirds > * {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}

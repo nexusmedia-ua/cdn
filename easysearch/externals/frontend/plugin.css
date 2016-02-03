@@ -1,0 +1,101 @@
+.easysearch-text-center {
+  text-align: center !important;
+}
+.easysearch-text-left {
+  text-align: left !important;
+}
+.easysearch-text-right {
+  text-align: right !important;
+}
+
+.easysearch-select-holder {
+  display: inline-block !important;
+  margin: 0 0 6px !important;
+}
+.easysearch-select-holder label {
+  overflow: hidden !important;
+  margin: 0 30px 4px 0 !important;
+  line-height: 18px !important;
+  font-size: 13px !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  white-space: nowrap !important;
+}
+.easysearch-select-holder select {
+  display: block !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+
+/*  btn view */
+.easysearch-btn {
+  display: inline-block !important;
+  position: relative    !important;
+
+  padding: 8px 15px  !important;
+  height: auto       !important;
+  border-radius: 3px !important;
+
+  vertical-align: middle !important;
+  cursor: pointer        !important;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-appearance: none;
+}
+
+/*  btn font */
+.easysearch-btn {
+  color: white           !important;
+  line-height: 20px      !important;
+  font-family: inherit   !important;
+  font-size: 13px        !important;
+  font-style: normal     !important;
+  font-weight: normal    !important;
+  letter-spacing: normal !important;
+  text-decoration:none   !important;
+  text-transform: none   !important;
+  white-space: nowrap    !important;
+}
+
+#easysearch-search[disabled] {
+  opacity: 0.7;
+}
+
+
+.easysearch-vertical-mode {
+  text-align: center;
+}
+#easysearch-holder.easysearch-vertical-mode .easysearch-select-holder {
+  display: block !important;
+  margin-bottom: 12px !important;
+  clear: both !important;
+}
+.easysearch-vertical-mode > input {
+  display: block !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+@media only screen and (max-width: 480px) {
+  #easysearch-holder {
+    text-align: center;
+  }
+  #easysearch-holder .easysearch-select-holder {
+    display: block !important;
+    margin-bottom: 12px !important;
+    clear: both !important;
+  }
+  #easysearch-holder > input {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+  }
+}

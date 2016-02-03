@@ -1,0 +1,215 @@
+.easypopup_popups {
+  display: none;
+}
+.easypopup-main-grid {
+  display: block !important;
+  overflow: hidden;
+  max-width: 100%;
+}
+.lightbox {
+  display: none;
+}
+
+#easypopup-popups-holder .ep_featherlight:last-of-type {
+  display: block !important;
+}
+.ep_featherlight {
+  display: none !important;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  letter-spacing: normal;
+  line-height: 18px;
+}
+.ep_featherlight form {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.ep_featherlight .grid-stack {
+  background: white;
+  border-width: 5px 0;
+  border-style: solid;
+  border-color: white;
+}
+.ep_featherlight .grid {
+  margin: 0;
+}
+.ep_featherlight .grid__item {
+  padding: 0;
+}
+.ep_featherlight .easypopup-columns-row {
+  overflow: hidden;
+  clear: both;
+}
+.ep_featherlight .easypopup-columns-row > div > div {
+  padding-bottom: 0;
+}
+.ep_featherlight .easypopup-columns-row .grid__item {
+  min-height: 1px;
+}
+.ep_featherlight .easypopup-widgets-row  {
+  overflow: hidden;
+  clear: both;
+  padding: 0;
+  margin: 0;
+}
+.ep_featherlight .easypopup-widgets-row .grid {
+  margin: 0;
+}
+
+.ep_featherlight .grid:after,
+.ep_featherlight .grid-uniform:after,
+.ep_featherlight .grid-full:after {
+  clear: none;
+}
+
+.ep_featherlight .ep_featherlight-content {
+  padding: 0;
+}
+.ep_featherlight-content .grid__item {
+  overflow: hidden;
+}
+
+.ep_featherlight .popup-widget-holder {
+  overflow: hidden;
+}
+.ep_featherlight img {
+  max-width: 100%;
+}
+
+.ep_featherlight .popup-widget-image,
+.ep_featherlight .popup-widget-share,
+.ep_featherlight .popup-widget-social,
+.ep_featherlight .popup-widget-video {
+  line-height: 0;
+}
+.ep_featherlight .popup-widget-share a i {
+  color: white;
+}
+.ep_featherlight .popup-widget-button a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+.ep_featherlight ul.popup-social-buttons {
+  display: inline-block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  list-style: none;
+}
+.ep_featherlight ul.popup-social-buttons > li {
+  display: inline-block;
+  margin: 1px;
+  color: white;
+  text-align: center;
+}
+.ep_featherlight ul.popup-social-buttons > li a {
+  display: block;
+}
+.ep_featherlight ul.popup-social-buttons > li a i {
+  width: 30px;
+  height: 30px;
+  margin: 0px;
+  font-size: 17px;
+  line-height: 30px;
+}
+
+.ep_featherlight .popup-widget-share .fa-facebook {
+  background: #3e5499;
+}
+.ep_featherlight .popup-widget-share .fa-twitter {
+  background: #55acee;
+}
+.ep_featherlight .popup-widget-share .fa-pinterest {
+  background: #c51e2a;
+}
+.ep_featherlight .popup-widget-share .fa-google-plus {
+  background: #dd4b39;
+}
+
+.ep_featherlight .popup-widget-text p,
+.ep_featherlight .popup-widget-text ul,
+.ep_featherlight .popup-widget-text ol {
+  margin: 0 0 10px;
+}
+.ep_featherlight .popup-widget-text hr {
+  border-top: 1px #d3dbe2 solid;
+  margin: 10px -20px;
+  padding: 0;
+}
+
+.ep_featherlight .popup-widget-html * {
+  color: inherit;
+}
+.ep_featherlight .popup-widget-text a,
+.ep_featherlight .popup-widget-html a {
+  text-decoration: none;
+  color: #479ccf;
+  cursor: pointer;
+}
+.ep_featherlight .popup-widget-text a:hover,
+.ep_featherlight .popup-widget-html a:hover {
+  color: #2a6496;
+  text-decoration: underline;
+}
+
+.ep_featherlight .popup-widget-button a {
+  display: inline-block;
+}
+
+.ep_featherlight .popup-widget-subscribe {
+  margin: 0;
+}
+.ep_featherlight .popup-widget-subscribe label {
+  display: inline;
+  vertical-align: middle;
+  color: inherit;
+}
+.ep_featherlight .popup-widget-subscribe input {
+  width: 200px;
+  max-width: 100%;
+  margin: 5px 0;
+  vertical-align: middle;
+}
+.ep_featherlight .popup-widget-subscribe a {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@media only screen and (max-width: 480px) {
+  .ep_featherlight .popup-widget-subscribe label {
+    display: block;
+    line-height: 18px;
+  }
+  .ep_featherlight .popup-widget-subscribe input {
+    display: block;
+    width: 100%;
+  }
+}
+
+.ep_featherlight input {
+  display: inline-block;
+  width: 100%;
+  max-width: 100%;
+  height: 28px;
+  padding: 4px;
+  margin: 0 0 15px;
+
+  background-color: white;
+  border: 1px solid #d3dbe2;
+  color: #222;
+
+  line-height: 18px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  vertical-align: top;
+
+  border-radius: 3px;
+  box-sizing: border-box;
+}
