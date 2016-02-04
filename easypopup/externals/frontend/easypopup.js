@@ -636,9 +636,9 @@ if( typeof easypopup == 'undefined' ) {
     }
   }
 
-  easypopup.loadLink('https://shopifier.net/app/easypopup/externals/frontend/featherlight.css');
-  easypopup.loadLink('https://shopifier.net/app/easypopup/externals/frontend/grid.css');
-  easypopup.loadLink('https://shopifier.net/app/easypopup/externals/frontend/plugin.css');
+  easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/featherlight.css');
+  easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/grid.css');
+  easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/plugin.css');
   easypopup.loadLink('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css');
   easypopup.loadScript(easypopup.jq191Src, easypopup.initPage);
 }

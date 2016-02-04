@@ -804,8 +804,8 @@ if( typeof easyorder == 'undefined' ) {
     }
   }
 
-  easyorder.loadLink('https://shopifier.net/app/easyorder/externals/frontend/featherlight.css');
-  easyorder.loadLink('https://shopifier.net/app/easyorder/externals/frontend/grid.css');
-  easyorder.loadLink('https://shopifier.net/app/easyorder/externals/frontend/plugin.css');
+  easyorder.loadLink('https://nexusmedia-ua.github.io/cdn/easyorder/externals/frontend/featherlight.css');
+  easyorder.loadLink('https://nexusmedia-ua.github.io/cdn/easyorder/externals/frontend/grid.css');
+  easyorder.loadLink('https://nexusmedia-ua.github.io/cdn/easyorder/externals/frontend/plugin.css');
   easyorder.loadScript(easyorder.jq191Src, easyorder.initPage);
 }

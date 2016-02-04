@@ -1534,6 +1534,6 @@ if( typeof easysearch == 'undefined' ) {
     }
   }
 
-  easysearch.loadLink('https://shopifier.net/app/easysearch/externals/frontend/plugin.css');
+  easysearch.loadLink('https://nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
   easysearch.loadScript(easysearch.jq191Src, easysearch.initPage);
 }
