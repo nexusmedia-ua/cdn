@@ -28,6 +28,7 @@ function hideMainImage(ev$, ev_main_img) {
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 50);
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 150);
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 300);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev_main_img.hide(); }, 1000);
 }
 
 function showVideoBlock(ev$) {
@@ -38,6 +39,7 @@ function showVideoBlock(ev$) {
     setTimeout(function(){ ev$('#easyvideo_video').show(); }, 50);
     setTimeout(function(){ ev$('#easyvideo_video').show(); }, 150);
     setTimeout(function(){ ev$('#easyvideo_video').show(); }, 300);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 1000);
 }
 
 var ev$;
