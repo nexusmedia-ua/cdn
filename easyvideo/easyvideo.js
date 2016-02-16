@@ -126,7 +126,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          console.log('Min Img Load Fired: ' + ev_video_is_show);
+          //console.log('Min Img Load Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
@@ -141,7 +141,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       // Fix for MagicZoom
       ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
         setTimeout(function(){
-          console.log('MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
+          //console.log('MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 50);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 150);
@@ -187,9 +187,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
         if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
           ev_video_is_show = true;
-          console.log('Main Image Load Fired11: ' + ev_video_is_show);
           hideMainImage(ev$, ev_main_img);
-          console.log('Main Image Load Fired22: ' + ev_video_is_show);
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", video_width * 0.5625);
           setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
 
