@@ -29,7 +29,7 @@ function hideMainImage(ev$, ev_main_img) {
     ev$('.MagicZoomPlus').hide();
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 50);
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 150);
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); ev$('.MagicZoomPlus').show(); }, 300);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 300);
 }
 
 function showVideoBlock(ev$) {
