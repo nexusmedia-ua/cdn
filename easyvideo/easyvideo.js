@@ -143,9 +143,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         setTimeout(function(){
           console.log('MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 150);
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 300);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 50);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 150);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 300);
             ev$('#easyvideo_video').hide();
           }
         }, 50);
