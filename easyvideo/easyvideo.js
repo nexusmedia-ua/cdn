@@ -126,7 +126,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          console.log('Main Image Load Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
@@ -139,18 +138,19 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       // Fix for MagicZoom
-      //ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
-      //  setTimeout(function(){
-      //    if (!ev_video_is_show) {
-      //      setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
-      //      setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 150);
-      //      setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 300);
-      //      ev$('#easyvideo_video').hide();
-      //    } else {
-      //      ev_video_is_show = false;
-      //    }
-      //  }, 50);
-      //});
+      ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
+        setTimeout(function(){
+          console.log('MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
+          if (!ev_video_is_show) {
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 150);
+            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 300);
+            ev$('#easyvideo_video').hide();
+          } else {
+            ev_video_is_show = false;
+          }
+        }, 100);
+      });
 
       if (ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
           hideMainImage(ev$, ev_main_img);
