@@ -26,10 +26,9 @@ function hideMainImage(ev$, ev_main_img) {
     // Special selectors for MagicZoom plugin support + adding delay for touch events
     ev$('.MagicZoomPlus figure > img').hide();
     ev$('.MagicZoomPlus > img').hide();
-    ev$('.MagicZoomPlus').hide();
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 50);
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 150);
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); ev$('.MagicZoomPlus').show(); }, 300);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 300);
 }
 
 function showVideoBlock(ev$) {
@@ -140,18 +139,18 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       // Fix for MagicZoom
-      ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
-        setTimeout(function(){
-          if (!ev_video_is_show) {
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 150);
-            setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 300);
-            ev$('#easyvideo_video').hide();
-          } else {
-            ev_video_is_show = false;
-          }
-        }, 50);
-      });
+      //ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
+      //  setTimeout(function(){
+      //    if (!ev_video_is_show) {
+      //      setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 50);
+      //      setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 150);
+      //      setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); }, 300);
+      //      ev$('#easyvideo_video').hide();
+      //    } else {
+      //      ev_video_is_show = false;
+      //    }
+      //  }, 50);
+      //});
 
       if (ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
           hideMainImage(ev$, ev_main_img);
@@ -189,9 +188,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
         if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
           ev_video_is_show = true;
-
+          console.log('Main Image Load Fired11: ' + ev_video_is_show);
           hideMainImage(ev$, ev_main_img);
-
+          console.log('Main Image Load Fired22: ' + ev_video_is_show);
           ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", video_width * 0.5625);
           setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
 
