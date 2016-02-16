@@ -126,6 +126,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       }
 
       ev_main_img.load(function () {
+        console.log('Main Image Load Fired: ' + ev_video_is_show);
         setTimeout(function(){
           if (!ev_video_is_show) {
             console.log('showing image by this selector: ' + ev_main_img_selector);
