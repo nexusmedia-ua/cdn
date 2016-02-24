@@ -179,7 +179,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             video_width = ev$('#easyvideo_video').find("iframe").width();
             ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$('#easyvideo_video').find("iframe").width() * 0.5625); }, 50);
 
           showVideoBlock(ev$);
       }
@@ -195,7 +195,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             video_width = ev$('#easyvideo_video').find("iframe").width();
             ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$('#easyvideo_video').find("iframe").width() * 0.5625); }, 50);
 
           showVideoBlock(ev$);
         }
@@ -211,7 +211,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             video_width = ev$('#easyvideo_video').find("iframe").width();
             ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$('#easyvideo_video').find("iframe").width() * 0.5625); }, 50);
 
           showVideoBlock(ev$);
       }
@@ -225,8 +225,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             video_width = ev$('#easyvideo_video').find("iframe").width();
             ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
-
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$('#easyvideo_video').find("iframe").width() * 0.5625); }, 50);
           showVideoBlock(ev$);
         }
       });
@@ -243,7 +242,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             video_width = ev$('#easyvideo_video').find("iframe").width();
             ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$('#easyvideo_video').find("iframe").width() * 0.5625); }, 50);
 
           showVideoBlock(ev$);
         }
@@ -257,7 +256,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             video_width = ev$('#easyvideo_video').find("iframe").width();
             ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625); }, 50);
+          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", ev$('#easyvideo_video').find("iframe").width() * 0.5625); }, 50);
 
           showVideoBlock(ev$);
       }
