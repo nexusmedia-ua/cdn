@@ -167,10 +167,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 150);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 300);
             ev$('#easyvideo_video').hide();
-          } else {
-            ev$('.MagicZoomPlus').css('display','block');
           }
         }, 50);
+        ev$('.MagicZoomPlus').css('display','block');
       });
 
       if (ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "_']").size() > 0) {
