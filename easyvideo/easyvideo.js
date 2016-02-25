@@ -167,6 +167,8 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 150);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 300);
             ev$('#easyvideo_video').hide();
+          } else {
+            ev$('.MagicZoomPlus').css('display','block');
           }
         }, 50);
       });
