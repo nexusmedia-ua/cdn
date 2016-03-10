@@ -182,7 +182,7 @@ if( typeof easysearch == 'undefined' ) {
       document.cookie = updatedCookie;
     },
 
-    saveSearchParams(params) {
+    saveSearchParams: function(params) {
       easysearch.setCookie('easysearch-preselect', easysearch.curIndex.replace(/,/g, 'easysearch-preselect-delimiter'));
     },
 
