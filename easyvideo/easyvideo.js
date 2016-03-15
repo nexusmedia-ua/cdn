@@ -162,11 +162,12 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       ev$(".MagicToolboxSelectorsContainer a").on("click touchend", function () {
         setTimeout(function(){
           console.log('1MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
-          if (!ev_video_is_show) {
+          if (ev_video_is_show) {
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 50);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 150);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 300);
             ev$('#easyvideo_video').hide();
+            ev_video_is_show = false;
           }
         }, 50);
         ev$('.MagicZoomPlus').css('display','block');
