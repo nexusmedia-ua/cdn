@@ -159,7 +159,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       // Fix for MagicZoom
-      ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
+      ev$(".MagicToolboxSelectorsContainer a").on("click touchend", function () {
         setTimeout(function(){
           console.log('MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
