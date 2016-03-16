@@ -22,6 +22,7 @@ function loadScriptEasyVideo(url, callback) {
 function hideMainImage(ev$, ev_main_img) {
 
     ev_main_img.hide();
+    ev_main_img.removeAttr('data-image-zoom');
 
     // Special selectors for MagicZoom plugin support + adding delay for touch events
     ev$('.MagicZoomPlus figure > img').hide();
@@ -33,7 +34,7 @@ function hideMainImage(ev$, ev_main_img) {
 
 function showVideoBlock(ev$) {
 
-    ev$('#easyvideo_video').show().css('display','block','important');
+    ev$('#easyvideo_video').show();
 
     // Adding delay for touch events
     setTimeout(function(){ ev$('#easyvideo_video').show(); }, 50);
