@@ -142,9 +142,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       if (ev_container.hasClass("image-zoom")) {
         is_zoom = true;
         var zoom_class = "image-zoom";
-      } else if {
-        is_zoom = true;
-        var zoom_class = "zoomWrapper";
       }
 
       ev_main_img.load(function () {
