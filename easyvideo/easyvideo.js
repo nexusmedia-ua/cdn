@@ -33,7 +33,7 @@ function hideMainImage(ev$, ev_main_img) {
 
 function showVideoBlock(ev$) {
 
-    ev$('#easyvideo_video').show();
+    ev$('#easyvideo_video').show().css('display','block','important');
 
     // Adding delay for touch events
     setTimeout(function(){ ev$('#easyvideo_video').show(); }, 50);
