@@ -515,7 +515,6 @@ function fillSelects()
         var s = JSON.parse(JSON.stringify(selects));
         $.each(s, function(i, select){
           var $sel = $('#fields-holder .form-field:eq(' + i + ') select');
-          if( typeof orders[i] !== 'undefined' && orders[i]) {
             select.sort();
             if( orders[i] == 2 ) select.reverse();
           }
