@@ -615,6 +615,9 @@
             self._update_container_height();
             self.container.trigger('change', [self.grid.get_dirty_nodes()]);
 
+            var $widgetManageBtn = o.hasClass('layout-widget') ?  o.find('.grid-btn-holder') : o.find('.layout-widget .grid-btn-holder');
+            checkManageBtnContainer($widgetManageBtn);
+
             self.grid.end_update();
         };
 
@@ -644,6 +647,11 @@
                 if (!self.grid.can_move_node(node, x, y, width, height)) {
                     return;
                 }
+
+                var $resizeElement = $(ui.element);
+                var $widgetManageBtn = $resizeElement.hasClass('layout-widget') ?  $resizeElement.find('.grid-btn-holder') : $resizeElement.find('.layout-widget .grid-btn-holder');
+                checkManageBtnContainer($widgetManageBtn);
+
                 self.grid.move_node(node, x, y, width, height);
                 self._update_container_height();
             }

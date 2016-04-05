@@ -1,7 +1,7 @@
 var $editingElement = null;
 var $draggableParent = null;
-var popupEnabledPhrase = 'enabled<div class="tool-tip">Popup is now Enabled, click to Disable it</div>';
-var popupDisabledPhrase = 'disabled<div class="tool-tip">Popup is now Disabled, click to Enable it</div>';
+var popupEnabledPhrase = '<i class="fa fa-toggle-on"></i><div class="tool-tip">Popup is now Enabled, click to Disable it</div>';
+var popupDisabledPhrase = '<i class="fa fa-toggle-off"></i><div class="tool-tip">Popup is now Disabled, click to Enable it</div>';
 var popupUpdated = false;
 
 $(document).ready(function(){
@@ -78,7 +78,7 @@ function Controller(widgets)
           $('#empty-layout-notice').show();
         }
 
-        var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'delete_container', 'content_id': contentId});
+        var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'delete_container', 'content_id': contentId}, 'html', 'POST', true);
         if( request ) {
           request.done(function(response) {
             if( !ajaxCheckResponse(response) ) return;
@@ -100,7 +100,7 @@ function Controller(widgets)
           $column.find('.column-empty-notice').show();
         }
 
-        var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'delete_widget', 'content_id': contentId});
+        var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'delete_widget', 'content_id': contentId}, 'html', 'POST', true);
         if( request ) {
           request.done(function(response) {
             if( !ajaxCheckResponse(response) ) return;
@@ -168,6 +168,9 @@ function koRegister(name) {
             // column/container
             if( isColumn ) {
               $item.addClass('layout-column ui-droppable');
+              var $eh = $item.find('.edit-holder');
+              $eh.find('.type-holder,.separator').remove();
+              $eh.find('i').attr('class', 'fa fa-plus');
 
               // ----------------------------------------------------
               $item.droppable({
@@ -209,7 +212,7 @@ function koRegister(name) {
                         $draggableParent.find('.column-empty-notice').show();
                       }
 
-                      saveAllWidgetsParams($item.attr('data-content-id'));
+                      saveAllWidgetsParams($item.attr('data-content-id'), true);
                       ajaxIsActive = false;
                       saveAllWidgetsParams($draggableParent.attr('data-content-id'));
                     } else {
@@ -257,6 +260,8 @@ function koRegister(name) {
             // widget
             } else {
               $item.addClass('layout-widget');
+              checkManageBtnContainer($item.find('.grid-btn-holder'));
+
               var $column = $item.parent().closest('.layout-column');
               if( !$column.length ) return;
 
@@ -279,6 +284,8 @@ function koRegister(name) {
                   $el.children('.grid-stack-item-content')
                       .css('width', $item.children('.grid-stack-item-content').width())
                       .css('height', 60);
+                  $el.find('.grid-btn-holder').remove();
+
                   $item.hide();
                   $draggableParent = $item.parent().closest('.layout-column');
                   return $el;
@@ -297,7 +304,7 @@ function koRegister(name) {
                 };
 
                 $('#layout-editor-loader').show();
-                var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'create_widget', 'content_id': columnId, 'widget_params' : wp}, 'JSON');
+                var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'create_widget', 'content_id': columnId, 'widget_params' : wp}, 'JSON', 'POST', true);
                 if( request ) {
                   request.done(function(response) {
                     if( !ajaxCheckResponse(response) ) return;
@@ -325,10 +332,14 @@ function koRegister(name) {
         '<div class="grid-stack" data-bind="foreach: {data: widgets, afterRender: afterAddWidget}">',
         '  <div class="grid-stack-item" data-bind="attr: { \'id\': $data.content_name, \'data-gs-x\': $data.x, \'data-gs-y\': $data.y, \'data-gs-width\': $data.width, \'data-gs-height\': $data.height, \'data-gs-auto-position\': $data.auto_position, \'data-gs-max-height\': $data.max_height, \'data-gs-min-height\':  $data.min_height, \'data-gs-min-width\':  $data.min_width, \'data-content-id\': $data.content_id, \'data-content-type\': $data.content_type}">',
         '    <div class="grid-stack-item-content">',
-        '      <div class="widget-type-preview text-center tooltip-holder" data-bind="attr:{\'data-widget-type-icon\': $data.content_type}, click: function(){ $root.edit_content($data, event)}"><div class="grid-tool-tip" data-bind="text: $data.content_type"></div></div>',
+        '      <div class="widget-type-preview text-center tooltip-holder" data-bind="attr:{\'data-widget-type-icon\': $data.content_type}, click: function(){ $root.edit_content($data, event)}"><i class="fa"></i></div>',
         '     </div>',
-        '     <button class="delete-content" data-bind="click: function(){ $root.delete_content($data, event) }"></button>',
-        '     <button class="edit-content" data-bind="click: function(){ $root.edit_content($data, event) }"></button>',
+        '     <div class="grid-btn-holder">',
+        '       <button class="delete-content" data-bind="click: function(){ $root.delete_content($data, event) }"><i class="fa fa-close"></i></button>',
+        '       <div class="edit-holder">',
+        '         <span class="type-holder" data-bind="text: $data.content_type"></span><span class="separator">|</span><span class="edit-content" data-bind="click: function(){ $root.edit_content($data, event) }"><i class="fa fa-gear"></i></span>',
+        '       </div>',
+        '     </div>',
         '  </div>',
         '</div>'
       ].join('')
@@ -396,6 +407,7 @@ function editWidgetContent(params, $editingWidget)
   $('#editor-sidebar-header').hide();
   $('#editor-sidebar-form-holder').hide();
   $('#editor-sidebar-form-container').show();
+  $('body').animate({ scrollTop: $('#editor-sidebar-form-holder').offset().top }, 500);
 
   $editingElement = $editingWidget;
   var widgetId = $editingElement.attr('data-content-id');
@@ -417,6 +429,12 @@ function editWidgetContent(params, $editingWidget)
       initWYSIWYG();
     });
   }
+}
+
+function editPreviewingWidgetContent(widgetId, widgetType)
+{
+  var $editingWidget = $('#layout-row').find('.layout-widget[data-content-id=' + widgetId + ']');
+  editWidgetContent({content_type: widgetType}, $editingWidget);
 }
 
 function saveWidgetContentParams()
@@ -495,9 +513,10 @@ function saveAllColumnsParams()
   }
 }
 
-function saveAllWidgetsParams( containerId )
+function saveAllWidgetsParams( containerId, doubleCall )
 {
   if( ajaxIsActive ) return;
+  var doubleCall = false || doubleCall;
 
   var allContainerWidgets = $('#column-widget-holder-' + containerId + ' .layout-widget');
   var wp, data = [];
@@ -514,7 +533,7 @@ function saveAllWidgetsParams( containerId )
     data.push(wp);
   });
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'save_widgets', 'content_id': containerId, 'data' : data}, 'JSON');
+  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'save_widgets', 'content_id': containerId, 'data' : data}, 'JSON', 'POST', doubleCall);
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -595,12 +614,14 @@ function updateQuickPreviewContent( html )
 
   if( typeof html === 'string' ) {
     $holder.html( html );
+    checkManageBtnContainer($holder.find('.grid__item'));
   } else {
-    var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_show', 'layout_id': layoutId, 'preview': 1});
+    var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_show', 'layout_id': layoutId, 'preview': 1, 'quick_preview': 1});
     if( request ) {
       request.done(function(response) {
         if( !ajaxCheckResponse(response) ) return;
         $holder.html( response );
+        checkManageBtnContainer($holder.find('.grid__item'));
       });
     }
   }
@@ -629,9 +650,9 @@ $.fn.extend({setPreviewWidgetStyle : function() {
                 break;
 
         case 'font-size':
+        case 'line-height':
         case 'width':
         case 'height':
-        case 'border-width':
         case 'border-radius':
         case 'margin-top':
         case 'margin-bottom':
@@ -639,13 +660,24 @@ $.fn.extend({setPreviewWidgetStyle : function() {
         case 'margin-right':
                 value = parseInt(value);
 
-                if( previewStyle == 'font-size' && !value ) {
+                if( (previewStyle == 'font-size' || previewStyle == 'line-height' ) && !value ) {
                   value = 13;
                 }
 
                 if( previewStyle == 'width' && !value ) return;
                 if( value ) value = value + 'px';
 
+                break;
+
+        case 'btn-border-width':
+                previewStyle = 'border-width';
+                break;
+
+        case 'border-width':
+                var w = $('#widget-edit-form').find('#widget_setting_border_width').val() || 0;
+                var t = $('#widget-edit-form').find('#widget_setting_border_side').val()  || 'x';
+                value = t.replace(/x/g, w + 'px');
+                previewStyle = 'border-width';
                 break;
 
         case 'padding-v':
@@ -744,6 +776,12 @@ $.fn.extend({setPreviewWidgetStyle : function() {
         case 'show-field': previewStyle = 'display';
                            value = 'none';
                            break;
+        case 'border-width':
+                var w = $('#widget-edit-form').find('#widget_setting_border_width').val() || 0;
+                var t = $('#widget-edit-form').find('#widget_setting_border_side').val()  || 'x';
+                value = t.replace(/x/g, w + 'px');
+                previewStyle = 'border-width';
+                break;
       }
     }
 
@@ -799,8 +837,10 @@ function duplicateLayout( layoutId )
 
   var $row = $('#layout-item-' + layoutId);
 
-  $row.find('.layout-item-status').text('duplicating');
+  $row.find('.layout-item-status i').attr('class', 'fa fa-gears');
+  $row.find('.layout-item-status .tool-tip').text('Duplicating...');
   $row.find('a').removeAttr('onclick');
+
   $('#layout-list-holder').addClass('easypopup-disabled');
 
   var request = ajaxCall(globalBaseUrl, {'task': 'ajax_layout_actions',  'action': 'duplicate', 'layout_id': layoutId });
@@ -887,7 +927,8 @@ function layoutStatusToggle( layoutId )
 
   var $statusEl = $('#layout-item-' + layoutId + ' .layout-item-status');
   var status = parseInt($statusEl.attr('data-status'));
-  $statusEl.text('saving...');
+  $statusEl.children('i').attr('class', 'fa fa-gears');
+  $statusEl.children('.tool-tip').text('Saving...');
   $('#layout-list-holder').addClass('easypopup-disabled');
 
   var request = ajaxCall(globalBaseUrl, {'task': 'ajax_layout_actions',  'action': 'change_status', 'layout_id': layoutId, 'status': status });
@@ -927,8 +968,10 @@ function deleteLayout( layoutId )
   var _deleteLayout = function(layoutId) {
     var $row = $('#layout-item-' + layoutId);
 
-    $row.find('.layout-item-status').text('deleting');
     $row.find('a').removeAttr('onclick');
+    $row.find('.layout-item-status i').attr('class', 'fa fa-gears');
+    $row.find('.layout-item-status .tool-tip').text('Deleting...');
+
     $('#layout-list-holder').addClass('easypopup-disabled');
 
     var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_actions', 'action': 'delete', 'layout_id': layoutId});
@@ -950,14 +993,15 @@ function showPopup( layoutId, previewMode )
   var $popup = $('#layout-preview-container');
   if( !$popup.length || !layoutId || ajaxIsActive ) return;
 
+  $popup.find('.layout-preview-loader').show();
+  var fl = $.featherlight($popup, {uniqueClass: 'easypopup_container_' + layoutId});
+
   var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_show', 'layout_id': layoutId, 'preview': preview});
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
 
       if( response ) {
-        var fl = $.featherlight($popup, {uniqueClass: 'easypopup_container_' + layoutId});
-
         var content = $('.ep_featherlight-content .layout-preview-content');
         if( content.length ) {
           content.html(response);
@@ -1029,7 +1073,7 @@ function reinstallCode()
       if( !ajaxCheckResponse(response) ) return;
 
       $('#instructions-container').removeClass('easypopup-disabled');
-      if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Intall complete");
+      if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Install complete");
     });
   }
 }
@@ -1068,9 +1112,12 @@ function initWYSIWYG()
       height: 200,
       content_css : "externals/css/base.css,externals/libraries/tinymce/base.css",
       plugins: [
-        "advlist link textcolor code hr directionality"
+        "advlist link textcolor code hr directionality lineheight"
       ],
-      toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,formatselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,"
+      toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,",
+      fontsize_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
+      lineheight_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
+      font_formats: 'Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;'
 
     }, tinymce.EditorManager);
 
@@ -1085,5 +1132,18 @@ function initWYSIWYG()
     });
 
     editor.render();
+  }
+}
+
+function checkManageBtnContainer($widgetManageBtn)
+{
+  if( $widgetManageBtn.length ) {
+    $widgetManageBtn.each(function(i, el){
+      if( $(el).width() <= 100 ) {
+        $(el).find('.type-holder,.separator').addClass('hidden-widget-info');
+      } else {
+        $(el).find('.type-holder,.separator').removeClass('hidden-widget-info');
+      }
+    });
   }
 }

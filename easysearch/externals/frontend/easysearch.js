@@ -15,8 +15,10 @@ if( typeof easysearch == 'undefined' ) {
       script.type = "text/javascript";
 
       if( script.readyState ) {
+        // ie
+        //url += '?easysearch=' + parseInt(new Date().getTime()/1000);
         script.onreadystatechange = function () {
-          if (script.readyState == "loaded" || script.readyState == "complete") {
+          if( script.readyState == "loaded" || script.readyState == "complete" ) {
             script.onreadystatechange = null;
             if( typeof callback === 'function' ) callback();
           }
@@ -43,8 +45,13 @@ if( typeof easysearch == 'undefined' ) {
     initPage: function()
     {
       if( !easysearch.jq && typeof jQuery == 'function' && jQuery.fn.jquery == "1.9.1" ) easysearch.jq = jQuery.noConflict(true);
-      if( !easysearch.jq ) return;
 
+      if( !easysearch.jq ) {
+        easysearch.loadScript(easysearch.jq191Src, easysearch.initPage);
+        return;
+      }
+
+      easysearch.jq('#easysearch-holder select:first').attr('disabled', true);
       easysearch.jq('#easysearch-holder').show();
 
       easysearch.initPapaparse();
@@ -65,7 +72,9 @@ if( typeof easysearch == 'undefined' ) {
         header: false,
         skipEmptyLines: true,
         complete: function(resp){
+
           if( resp.data ) {
+            easysearch.jq('#easysearch-holder select:first').attr('disabled', false);
 
             easysearch.jq.each(resp.data, function(i, row){
               searchRowName = '';
@@ -678,7 +687,10 @@ if( typeof easysearch == 'undefined' ) {
             return;
           }
 
-          xhr = new XMLHttpRequest();
+          // --- fix-ie-20160311
+          //xhr = new XMLHttpRequest();
+          if (window.XDomainRequest) xhr = new XDomainRequest();
+          else xhr = new XMLHttpRequest();
 
           if (!IS_WORKER) {
             xhr.onload = bindFunction(this._chunkLoaded, this);
@@ -707,13 +719,16 @@ if( typeof easysearch == 'undefined' ) {
 
         this._chunkLoaded = function()
         {
-          if (xhr.readyState != 4)
-            return;
+          // --- fix-ie-20160311
+          if (!window.XDomainRequest && xhr instanceof XMLHttpRequest ) {
+            if (xhr.readyState != 4)
+              return;
 
-          if (xhr.status < 200 || xhr.status >= 400)
-          {
-            this._chunkError();
-            return;
+            if (xhr.status < 200 || xhr.status >= 400)
+            {
+              this._chunkError();
+              return;
+            }
           }
 
           this._finished = !this._config.chunkSize || this._start > getFileSize(xhr);
@@ -1534,6 +1549,6 @@ if( typeof easysearch == 'undefined' ) {
     }
   }
 
-  easysearch.loadLink('https://nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
+  easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
   easysearch.loadScript(easysearch.jq191Src, easysearch.initPage);
 }

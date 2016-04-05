@@ -14,12 +14,13 @@ window.onbeforeunload = function()
 };
 
 
-function ajaxCall(url, params, dt, rt)
+function ajaxCall(url, params, dt, rt, dbl)
 {
   if( ajaxIsActive ) return false;
 
-  var dataType    = dt || 'html';
-  var requestType = rt || 'POST';
+  var dataType    = dt    || 'html';
+  var requestType = rt    || 'POST';
+  var doubleAjax  = false || dbl;
   var ajaxParams  = {'ajax' : true};
 
   $.extend(ajaxParams, params);
@@ -32,7 +33,7 @@ function ajaxCall(url, params, dt, rt)
     dataType: dataType,
     data: ajaxParams,
     complete: function(response) {
-      ajaxAfter(response);
+      if( !doubleAjax ) ajaxAfter(response);
     }
   });
 

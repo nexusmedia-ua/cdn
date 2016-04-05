@@ -13,9 +13,10 @@
 #easypopup-popups-holder .ep_featherlight:last-of-type {
   display: block !important;
 }
+
 .ep_featherlight {
   display: none !important;
-  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-family: arial, helvetica, sans-serif;
   font-size: 13px;
   font-style: normal;
   font-variant: normal;
@@ -23,6 +24,51 @@
   letter-spacing: normal;
   line-height: 18px;
 }
+.ep_featherlight * {
+  font-family: inherit;
+  font-size: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+#easypopup-container h1 {
+  font-size: 36px;
+}
+#easypopup-container h2 {
+  font-size: 30px;
+}
+#easypopup-container h3 {
+  font-size: 24px;
+}
+#easypopup-container h4 {
+  font-size: 18px;
+}
+#easypopup-container h5 {
+  font-size: 14px;
+}
+#easypopup-container h6 {
+  font-size: 10px;
+}
+#easypopup-container h1, #easypopup-container h2, #easypopup-container h3,
+#easypopup-container h4, #easypopup-container h5, #easypopup-container h6 {
+  margin: 0;
+  font-weight: bold;
+  line-height: 1em;
+}
+#easypopup-container h1 *, #easypopup-container h2 *, #easypopup-container h3 *,
+#easypopup-container h4 *, #easypopup-container h5 *, #easypopup-container h6 * {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+}
+
+#easypopup-container p {
+  margin: 0 0 10px;
+}
+
 .ep_featherlight form {
   margin: 0;
   padding: 0;
@@ -133,9 +179,9 @@
   background: #dd4b39;
 }
 
-.ep_featherlight .popup-widget-text p,
-.ep_featherlight .popup-widget-text ul,
-.ep_featherlight .popup-widget-text ol {
+.ep_featherlight p,
+.ep_featherlight ul,
+.ep_featherlight ol {
   margin: 0 0 10px;
 }
 .ep_featherlight .popup-widget-text hr {
