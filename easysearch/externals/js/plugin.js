@@ -40,45 +40,46 @@ function mainController(widgets)
       auto_position: true
     });
   };
+};
 
+function editField(el)
+{
+  if( ajaxIsActive ) return;
 
-  this.edit_field = function(item, event) {
-    if( ajaxIsActive || !isset(event) || !isset(event.target) ) return false;
+  var $ff = $(el).parent().closest('.form-field');
+  $ff.editFieldSettings();
+}
 
-    var $el = $(event.target).parent().closest('.form-field');
-    $el.editFieldSettings();
+function deleteField(el)
+{
+  if( ajaxIsActive ) return;
+
+  if( isset(ShopifyApp) ) {
+    ShopifyApp.Modal.confirm('Are you sure?', function(result){ if(result) _deleteField(el); } );
+  } else {
+    if( confirm('Are you sure?') ) _deleteField(el);
   }
 
+  var _deleteField = function(el){
+    var $deletingElement = $(el).parent().closest('.grid-stack-item');
+    var fieldId = $deletingElement.attr('data-field-id');
+    var $gridStack = $(el).parent().closest('.grid-stack');
 
-  this.delete_field = function(item, event) {
-    if( ajaxIsActive ) return;
+    closeEditFieldForm();
 
-    if( isset(ShopifyApp) ) {
-      ShopifyApp.Modal.confirm('Are you sure?', function(result){ if(result) _deleteField(item, event); } );
-    } else {
-      if( confirm('Are you sure?') ) _deleteField(item, event);
+    $gridStack.data('gridstack').remove_widget($deletingElement[0], true);
+    $('#easysearch-tabs-loader').show();
+
+    var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'delete_field', 'field_id': fieldId});
+    if( request ) {
+      request.done(function(response) {
+        if( !ajaxCheckResponse(response) ) return;
+
+        $('#easysearch-tabs-loader').hide();
+        setTimeout(function(){saveFieldsParams();}, 50);
+      });
     }
-
-    var _deleteField = function(item, event){
-      var $deletingElement = $(event.target).parent().closest('.grid-stack-item');
-      var fieldId = $deletingElement.attr('data-field-id');
-      closeEditFieldForm();
-
-      self.widgets.remove(item);
-      $('#easysearch-tabs-loader').show();
-
-      var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'delete_field', 'field_id': fieldId});
-      if( request ) {
-        request.done(function(response) {
-          if( !ajaxCheckResponse(response) ) return;
-
-          $('#easysearch-tabs-loader').hide();
-          setTimeout(function(){saveFieldsParams();}, 50);
-        });
-      }
-    }
-
-  };
+  }
 };
 
 function koMainRegister(name)
@@ -147,8 +148,8 @@ function koMainRegister(name)
         '      <div class="field-preview"></div>',
         '      <div class="move-icon"></div>',
         '    </div>',
-        '    <button class="edit-field" data-bind="click: function(){ $root.edit_field($data, event) }"></button>',
-        '    <button class="delete-field" data-bind="click: function(){ $root.delete_field($data, event) }"></button>',
+        '    <button class="edit-field" onclick="editField(this);"></button>',
+        '    <button class="delete-field" onclick="deleteField(this);"></button>',
         '  </div>',
         '</div>'
       ].join('')
