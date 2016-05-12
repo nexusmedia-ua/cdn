@@ -71,7 +71,7 @@ if( typeof easyorder == 'undefined' ) {
       $easyorderPopup.find('.easyorder-field-holder[data-related-to=0]').find('input[type=checkbox], input[type=radio], select').trigger('change');
     },
 
-    popupOpen: function ($form, showProducts, showVendor)
+    popupOpen: function($form, showProducts, showVendor)
     {
       var actionUrl = $form.attr('action');
       easyorder.showProducts = showProducts;
@@ -111,7 +111,7 @@ if( typeof easyorder == 'undefined' ) {
 
               var currencyEl = easyorder.jq('.easyorder-popup-currency:first');
               var currency = currencyEl.length ? currencyEl.text() : '';
-              var totalPrice = currency + parseFloat(data.total_price / 100).toFixed(2);
+              var totalPrice = parseFloat(data.total_price / 100).toFixed(2);
 
               easyorder.jq.each(data.items, function(){
                 $productsList.append(
@@ -140,7 +140,7 @@ if( typeof easyorder == 'undefined' ) {
                 );
               });
 
-              $productsList.append('<h4 class="easyorder-text-left">Total: <span>' + totalPrice + '</span></h4>');
+              $productsList.append('<h4 class="easyorder-text-left">Total: ' + currency + '<span>' + totalPrice + '</span></h4>');
             } else {
               easyorder.jq.each(data.items, function(){
                 $('.easyorder-popup-form-fields:first').append(
@@ -179,7 +179,7 @@ if( typeof easyorder == 'undefined' ) {
       return pattern.test(emailAddress);
     },
 
-    updateFieldsTree: function( $field, display )
+    updateFieldsTree: function($field, display)
     {
       var display = display || false;
       var subOptions = $field.find('input[type=checkbox], input[type=radio], select > option');
@@ -801,6 +801,14 @@ if( typeof easyorder == 'undefined' ) {
 
       /* bind featherlight on ready if config autoBind is set */
       easyorder.jq(document).ready(function(){ Featherlight._onReady(); });
+    },
+
+    facebookConversionPixel: function (fbPixel, fbPrice, fbCurrency)
+    {
+      if( typeof fbPixel != 'undefined' && typeof fbq == 'function' ) {
+        var params = {'value': fbPrice, 'currency': fbCurrency};
+        fbq('track', 'Purchase', params);
+      }
     }
   }
 
