@@ -145,11 +145,15 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          console.log('Min Img Load Fired: ' + ev_video_is_show);
+          //console.log('Min Img Load Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
-            console.log('showing image by this selector: ' + ev_main_img_selector);
+            //console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
             if (is_zoom) ev_container.addClass(zoom_class);
+
+            // fix for ElevateZoom
+            ev$('.zoomContainer').css('height', ev_main_img_parent.find("img").first().height() + 'px').css('width', ev_main_img_parent.find("img").first().width() + 'px')
+
             ev$('#easyvideo_video').hide();
           } else {
             ev_video_is_show = false;
