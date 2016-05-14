@@ -37,11 +37,11 @@ function showVideoBlock(ev$) {
     ev$('#easyvideo_video').show();
 
     // Adding delay for touch events
-    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('zoomContainer').css('height', '0'); }, 50);
-    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('zoomContainer').css('height', '0'); }, 150);
-    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('zoomContainer').css('height', '0'); }, 300);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('.zoomContainer').css('height', '0'); }, 50);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('.zoomContainer').css('height', '0'); }, 150);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('.zoomContainer').css('height', '0'); }, 300);
 
-    ev$('zoomContainer').css('height', '0');
+    ev$('.zoomContainer').css('height', '0');
 }
 
 var ev$;
