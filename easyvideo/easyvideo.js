@@ -21,7 +21,7 @@ function loadScriptEasyVideo(url, callback) {
 
 function hideMainImage(ev$, ev_main_img) {
 
-    ev_main_img.hide();
+    ev_main_img.css('opacity', '0');
     ev_main_img.removeAttr('data-zoom-image');
 
     // Special selectors for MagicZoom plugin support + adding delay for touch events
