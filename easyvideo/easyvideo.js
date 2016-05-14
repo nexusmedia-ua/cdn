@@ -27,9 +27,10 @@ function hideMainImage(ev$, ev_main_img) {
     // Special selectors for MagicZoom plugin support + adding delay for touch events
     ev$('.MagicZoomPlus figure > img').hide();
     ev$('.MagicZoomPlus > img').hide();
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 50);
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 150);
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev_main_img.hide(); }, 300);
+    ev$('.zoomContainer').css('height', '0px');
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 50);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 150);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 300);
 }
 
 function showVideoBlock(ev$) {
@@ -37,11 +38,11 @@ function showVideoBlock(ev$) {
     ev$('#easyvideo_video').show();
 
     // Adding delay for touch events
-    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('.zoomContainer').css('height', '0'); }, 50);
-    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('.zoomContainer').css('height', '0'); }, 150);
-    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('.zoomContainer').css('height', '0'); }, 300);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 50);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 150);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 300);
 
-    ev$('.zoomContainer').css('height', '0');
+
 }
 
 var ev$;
