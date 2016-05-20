@@ -71,11 +71,12 @@ if( typeof easyorder == 'undefined' ) {
       $easyorderPopup.find('.easyorder-field-holder[data-related-to=0]').find('input[type=checkbox], input[type=radio], select').trigger('change');
     },
 
-    popupOpen: function($form, showProducts, showVendor)
+    popupOpen: function($form, showProducts, showVendor, singlePurchase)
     {
       var actionUrl = $form.attr('action');
       easyorder.showProducts = showProducts;
       easyorder.showVendor = showVendor;
+      singlePurchase = singlePurchase || false;
 
       if( actionUrl == '/cart' ) {
         easyorder.initOrderPopup(actionUrl);
@@ -93,7 +94,13 @@ if( typeof easyorder == 'undefined' ) {
           error: function(XMLHttpRequest, textStatus) {}
         };
 
-        easyorder.jq.ajax(params);
+        if( singlePurchase ) {
+          easyorder.jq.post('/cart/clear.js').always(function(){
+            easyorder.jq.ajax(params);
+          });
+        } else {
+          easyorder.jq.ajax(params);
+        }
       }
     },
 
