@@ -52,12 +52,14 @@ if( typeof easysearch == 'undefined' || typeof easysearch.jq191Src == 'undefined
       }
 
       easysearch.jq('#easysearch-holder select:first').attr('disabled', true);
-      easysearch.jq('#easysearch-holder').show();
-
       easysearch.initPapaparse();
+
       var event = document.createEvent('Event');
       event.initEvent('easysearch_init', true, true);
       document.dispatchEvent(event);
+
+      easysearch.jq('#easysearch-preload-loader').hide();
+      easysearch.jq('#easysearch-holder').show();
     },
 
     initSearchTree: function()
