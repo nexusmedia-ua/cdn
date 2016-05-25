@@ -1,4 +1,4 @@
-if( typeof easysearch == 'undefined' ) {
+if( typeof easysearch == 'undefined' || typeof easysearch.jq191Src == 'undefined' || typeof easysearch.jq == 'undefined' ) {
   var easysearch = {
     jq191Src: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
     jq: null,

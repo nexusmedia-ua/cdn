@@ -1,4 +1,4 @@
-if( typeof easypopup == 'undefined' ) {
+if( typeof easypopup == 'undefined' || typeof easypopup.jq191Src == 'undefined' || typeof easypopup.jq == 'undefined' ) {
   var easypopup = {
     jq191Src: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
     jq: null,
@@ -636,6 +636,9 @@ if( typeof easypopup == 'undefined' ) {
     }
   }
 
+  //easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/featherlight.css');
+  //easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/grid.css');
+  //easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/plugin.css');
   easypopup.loadLink('https://shopifier.net/app/easypopup/externals/frontend/featherlight.css');
   easypopup.loadLink('https://shopifier.net/app/easypopup/externals/frontend/grid.css');
   easypopup.loadLink('https://shopifier.net/app/easypopup/externals/frontend/plugin.css');

@@ -1,4 +1,4 @@
-if( typeof easyorder == 'undefined' || typeof easyorder.jq == 'jq191Src' || typeof easyorder.jq == 'undefined' ) {
+if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' || typeof easyorder.jq == 'undefined' ) {
   var easyorder = {
     jq191Src: '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
     jq: null,
