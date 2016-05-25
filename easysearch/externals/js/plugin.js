@@ -8,13 +8,6 @@ $(document).ready(function(){
     e.preventDefault();
     e.stopImmediatePropagation();
   });
-
-  $('div').on('dragstart', function(e) {
-    if( ajaxIsActive ) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    }
-  });
 });
 
 function mainController(widgets)
@@ -69,16 +62,7 @@ function deleteField(el)
 
     $gridStack.data('gridstack').remove_widget($deletingElement[0], true);
     $('#easysearch-tabs-loader').show();
-
-    var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'delete_field', 'field_id': fieldId});
-    if( request ) {
-      request.done(function(response) {
-        if( !ajaxCheckResponse(response) ) return;
-
-        $('#easysearch-tabs-loader').hide();
-        setTimeout(function(){saveFieldsParams();}, 50);
-      });
-    }
+    saveFieldsParams(fieldId);
   }
 };
 
@@ -109,30 +93,10 @@ function koMainRegister(name)
 
 
             $item.addClass('form-field');
+            $item.initPreviewField();
 
             if( $item.attr('data-field-id') == '0' ) {
-              setTimeout(function(){
-                  $('#easysearch-tabs-loader').show();
-
-                  var fp = { "y": $item.attr('data-gs-y') || 0 };
-
-                  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'create_field', 'form_id': formId, 'field_params' : fp}, 'JSON');
-                  if( request ) {
-                    request.done(function(response) {
-                      if( !ajaxCheckResponse(response) ) return;
-                      if( response.error || !response.data ) window.location.reload();
-
-                      $item.attr('id', response.data.name).attr('data-field-id', response.data.id);
-                      $('#easysearch-tabs-loader').hide();
-                      $item.initPreviewField();
-
-                      setTimeout(function(){$item.editFieldSettings();}, 50);
-                    });
-                  }
-                }, 50
-              );
-            } else {
-              $item.initPreviewField();
+              setTimeout(function(){$item.editFieldSettings();}, 50);
             }
           };
         };
@@ -220,12 +184,13 @@ $.fn.extend({editFieldSettings : function(){
   $('#editor-sidebar-form-holder').hide();
   $('#editor-sidebar-form-loader').show();
 
-  var fieldId = $editingElement.attr('data-field-id');
+  var fieldId = parseInt($editingElement.attr('data-field-id'));
 
   $('.grid-stack-item').removeClass('editing');
   $editingElement.addClass('editing');
   $('body').animate({ scrollTop: $("body").offset().top }, 500);
 
+  $('#fields-holder').addClass('easysearch-disabled');
   var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_get_form', 'type': 'field', 'id': fieldId});
   if( request ) {
     request.done(function(response) {
@@ -237,6 +202,9 @@ $.fn.extend({editFieldSettings : function(){
 
       $('#editor-sidebar-form-loader').hide();
       $('#editor-sidebar-form-holder').html(response).show();
+      if( fieldId ) {
+        $('#fields-holder').removeClass('easysearch-disabled');
+      }
 
       bindFieldPreview();
     });
@@ -252,17 +220,22 @@ function saveFieldSettings()
     var data = new FormData( fieldForm[0] );
     data.append('task', 'ajax_controller');
     data.append('action', 'save_field_settings');
+    data.append('field_setting_position', $editingElement.attr('data-gs-y') || 0);
 
     $('#editor-sidebar-form-loader').show();
     $('#editor-sidebar-form-holder').hide();
 
-    var request = ajaxCallForm(globalBaseUrl, data, 'JSON');
+    var request = ajaxCallForm(globalBaseUrl, data, 'JSON', '#fields-holder');
     if( request ) {
       request.done(function(response) {
         if( !ajaxCheckResponse(response) ) return;
 
         $('#editor-sidebar-form-loader').hide();
         if( !response.error ) {
+          $editingElement.attr('id', response.data.name).attr('data-field-id', response.data.id);
+          $editingElement.find('label').attr('id', 'field-preview-item-label-' + response.data.id).attr('for', 'field-preview-item-' + response.data.id);
+          $editingElement.find('select').attr('id', 'field-preview-item-' + response.data.id);
+
           closeEditFieldForm();
           if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Field settings saved");
         } else {
@@ -276,13 +249,19 @@ function saveFieldSettings()
 
 function cancelEditField()
 {
+  if( $editingElement && $editingElement.length && !parseInt($editingElement.attr('data-field-id')) ) {
+    var $gridStack = $editingElement.closest('.grid-stack');
+    $gridStack.data('gridstack').remove_widget($editingElement[0], true);
+    $('#fields-holder').removeClass('easysearch-disabled');
+  }
   closeEditFieldForm();
 }
 
-function saveFieldsParams()
+function saveFieldsParams(removedFieldID)
 {
   if( ajaxIsActive ) ajaxIsActive = false;
 
+  removedFieldID = removedFieldID || 0;
   var allFields = $('#fields-holder .form-field');
   var fp, data = [];
   $('#easysearch-tabs-loader').show();
@@ -296,7 +275,7 @@ function saveFieldsParams()
     data.push(fp);
   });
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'save_fields', 'form_id': formId, 'data' : data}, 'JSON');
+  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'save_fields', 'form_id': formId, 'removed_field_id': removedFieldID, 'data' : data}, 'JSON', '', '#fields-holder');
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -344,7 +323,7 @@ $.fn.extend({setPreviewFieldValue : function(){
 
 function addField()
 {
-  if( ajaxIsActive ) return;
+  if( ajaxIsActive || $('#fields-holder .grid-stack-item[data-field-id=0]').length ) return;
   mainGridController.add_new_content(mainGridController);
 }
 
@@ -496,6 +475,9 @@ function fillSelects()
   if( !globalDatabaseUrl ) return;
   var selectName = '';
 
+  $('#fields-holder').addClass('easysearch-disabled');
+  $('#easysearch-tabs-loader').show();
+
   Papa.parse(globalDatabaseUrl, {
     download: true,
     header: false,
@@ -526,6 +508,9 @@ function fillSelects()
           });
         });
       }
+
+      $('#fields-holder').removeClass('easysearch-disabled');
+      $('#easysearch-tabs-loader').hide();
     },
     error: function() {}
   });

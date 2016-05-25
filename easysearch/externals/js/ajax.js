@@ -2,6 +2,7 @@
 
 var ajaxRequest = null;
 var ajaxIsActive = false;
+var $ajaxDisabledBlock = null;
 
 window.onbeforeunload = function()
 {
@@ -11,12 +12,14 @@ window.onbeforeunload = function()
 };
 
 
-function ajaxCall(url, params, dt, rt)
+function ajaxCall(url, params, dt, rt, dbs)
 {
   if( ajaxIsActive ) return false;
 
   var dataType    = dt || 'html';
   var requestType = rt || 'POST';
+  $ajaxDisabledBlock = $(dbs).length ? $(dbs) : null;
+
   var ajaxParams  = {'ajax' : true};
 
   $.extend(ajaxParams, params);
@@ -36,11 +39,13 @@ function ajaxCall(url, params, dt, rt)
 }
 
 
-function ajaxCallForm(url, form, dt)
+function ajaxCallForm(url, form, dt, dbs)
 {
   if( ajaxIsActive ) return false;
 
   var dataType = dt || 'html';
+  $ajaxDisabledBlock = $(dbs).length ? $(dbs) : null;
+
   form.append('ajax',  1);
   ajaxBefore();
 
@@ -61,7 +66,7 @@ function ajaxCallForm(url, form, dt)
 
 function ajaxBefore()
 {
-  $('#fields-holder, #editor-sidebar-form-holder').find('a, button').addClass('easysearch-disabled');
+  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.addClass('easysearch-disabled');
   ajaxIsActive = true;
 }
 
@@ -71,7 +76,8 @@ function ajaxAfter(response)
 
   $('.loader').hide();
   ajaxIsActive = false;
-  $('#fields-holder, #editor-sidebar-form-holder').find('a, button').removeClass('easysearch-disabled');
+  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.removeClass('easysearch-disabled');
+  $ajaxDisabledBlock = null;
 }
 
 function ajaxCheckResponse(response)

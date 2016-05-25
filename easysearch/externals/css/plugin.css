@@ -37,7 +37,17 @@ select[multiple] {
   width: 100%;
 }
 .easysearch-disabled {
-  opacity: 0.4 !important;
+  position: relative;
+}
+.easysearch-disabled:after {
+  content: '';
+  position: absolute;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.4);
 }
 .stat--red {
   color: red;
@@ -175,7 +185,9 @@ select[multiple] {
   right: 10px;
 }
 
-
+#fields-container {
+  position: relative;
+}
 #fields-container .next-pane__header {
   position: relative;
 }
