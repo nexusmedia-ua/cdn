@@ -8,11 +8,14 @@
   text-align: right !important;
 }
 
-.easysearch-select-holder {
+.easysearch-select-holder,
+.easysearch-btn-holder {
   display: inline-block !important;
   margin: 0 0 6px !important;
+  vertical-align: top;
 }
-.easysearch-select-holder label {
+.easysearch-select-holder label,
+.easysearch-btn-holder label {
   overflow: hidden !important;
   margin: 0 30px 4px 0 !important;
   line-height: 18px !important;
@@ -38,7 +41,6 @@
   height: auto       !important;
   border-radius: 3px !important;
 
-  vertical-align: middle !important;
   cursor: pointer        !important;
 
   -moz-box-sizing: border-box;
@@ -82,6 +84,9 @@
   display: block !important;
   margin: 0 auto !important;
   text-align: center !important;
+}
+.easysearch-vertical-mode .easysearch-btn-holder label {
+  display: none;
 }
 
 @media only screen and (max-width: 480px) {
