@@ -32,7 +32,10 @@
   margin: 0 !important;
   width: 100% !important;
 }
-
+.easysearch-loading .easysearch-select-holder,
+.easysearch-loading .easysearch-btn-holder {
+  opacity: 0.6;
+}
 
 /*  btn view */
 .easysearch-btn {
@@ -92,10 +95,6 @@
 }
 .easysearch-vertical-mode .easysearch-btn-holder label {
   display: none;
-}
-.easysearch-vertical-mode.easysearch-loading .easysearch-select-holder,
-.easysearch-vertical-mode.easysearch-loading .easysearch-btn-holder {
-  opacity: 0.6;
 }
 .easysearch-vertical-mode .easysearch-preload-loader {
   position: absolute;
