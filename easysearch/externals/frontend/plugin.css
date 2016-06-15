@@ -10,14 +10,14 @@
 
 .easysearch-select-holder,
 .easysearch-btn-holder,
-.easysearch-preload-loader {
+#easysearch-holder .easysearch-preload-loader {
   display: inline-block !important;
   margin: 0 0 6px !important;
   vertical-align: top;
 }
 .easysearch-select-holder label,
 .easysearch-btn-holder label,
-.easysearch-preload-loader label {
+#easysearch-holder .easysearch-preload-loader label {
   overflow: hidden !important;
   margin: 0 30px 4px 0 !important;
   line-height: 18px !important;
@@ -54,7 +54,6 @@
   user-select: none;
   -webkit-appearance: none;
 }
-
 /*  btn font */
 .easysearch-btn {
   color: white           !important;
@@ -67,6 +66,9 @@
   text-decoration:none   !important;
   text-transform: none   !important;
   white-space: nowrap    !important;
+}
+.easysearch-btn-holder .easysearch-btn {
+  display: block !important;
 }
 
 #easysearch-search[disabled] {
