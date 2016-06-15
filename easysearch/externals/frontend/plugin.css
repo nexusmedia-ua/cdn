@@ -9,13 +9,15 @@
 }
 
 .easysearch-select-holder,
-.easysearch-btn-holder {
+.easysearch-btn-holder,
+.easysearch-preload-loader {
   display: inline-block !important;
   margin: 0 0 6px !important;
   vertical-align: top;
 }
 .easysearch-select-holder label,
-.easysearch-btn-holder label {
+.easysearch-btn-holder label,
+.easysearch-preload-loader label {
   overflow: hidden !important;
   margin: 0 30px 4px 0 !important;
   line-height: 18px !important;
@@ -73,6 +75,7 @@
 
 
 .easysearch-vertical-mode {
+  position: relative;
   text-align: center;
 }
 #easysearch-holder.easysearch-vertical-mode .easysearch-select-holder {
@@ -87,6 +90,16 @@
 }
 .easysearch-vertical-mode .easysearch-btn-holder label {
   display: none;
+}
+.easysearch-vertical-mode.easysearch-loading .easysearch-select-holder,
+.easysearch-vertical-mode.easysearch-loading .easysearch-btn-holder {
+  opacity: 0.6;
+}
+.easysearch-vertical-mode .easysearch-preload-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -18px 0 0 -12px !important;
 }
 
 @media only screen and (max-width: 480px) {
