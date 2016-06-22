@@ -22,6 +22,11 @@ select[multiple] {
   height: 74px;
 }
 
+.float-right {
+  overflow: hidden;
+  float: right;
+}
+
 .easypopup-main-grid {
   font-family: arial, helvetica, sans-serif;
 }
@@ -56,9 +61,11 @@ select[multiple] {
   line-height: inherit !important;
 }
 
-.easypopup-main-grid  p,
-.easypopup-main-grid  ul,
-.easypopup-main-grid  ol {
+.easypopup-main-grid p {
+  margin: 5px 0;
+}
+.easypopup-main-grid ul,
+.easypopup-main-grid ol {
   margin: 0 0 10px;
 }
 
@@ -74,6 +81,10 @@ select[multiple] {
 #editor-sidebar-form-container select {
   width: 100%;
 }
+#editor-sidebar-form-container input[disabled],
+#editor-sidebar-form-container select[disabled] {
+  opacity: 0.5;
+}
 
 #editor-sidebar-header .next-pane__header {
   height: auto;
@@ -82,6 +93,9 @@ select[multiple] {
 .elements-holder {
   overflow: hidden;
   margin-bottom: 15px;
+}
+.elements-holder .elements-holder {
+  margin-bottom: 0;
 }
 .elements-holder .grid__item {
   padding-bottom: 0;
@@ -268,11 +282,12 @@ select[multiple] {
   position: relative;
   height: 18px;
   padding: 3px 5px;
+  background: #ccc;
+  color: #333;
   font-size: 12px;
   line-height: 12px;
   vertical-align: top;
   text-transform: capitalize;
-  background: #ccc;
   white-space: nowrap;
 }
 #widget-preview-container .edit-holder {
@@ -316,7 +331,7 @@ select[multiple] {
   position: relative;
   border: 0 solid transparent;
 }
-#widget-preview-container .ep_featherlight-close {
+#widget-preview-container > .ep_featherlight-close {
   position: absolute;
   z-index: 9999;
   top: 0;
@@ -493,6 +508,11 @@ select[multiple] {
   position: relative;
   box-shadow: none;
 }
+#layout-editor-tabs li i.fa-link {
+  margin-left: 8px;
+  font-size: 16px;
+  line-height: 13px;
+}
 #layout-editor-title {
   overflow: hidden;
   margin-right: 30px;
@@ -585,6 +605,10 @@ select[multiple] {
 .popup-widget-button a {
   display: inline-block;
   text-decoration: none;
+  cursor: pointer;
+}
+.popup-widget-button a:hover {
+  opacity: 0.6;
 }
 
 ul.popup-social-buttons {
@@ -625,10 +649,6 @@ ul.popup-social-buttons > li a i {
   background: #dd4b39;
 }
 
-.popup-widget-button a {
-  text-decoration: none;
-}
-
 
 /************************ NEW STYLES *********************************/
 
@@ -644,12 +664,14 @@ ul.popup-social-buttons > li a i {
 
 #popup-widget-preview-content {
   padding: 0;
+  border-radius: 0;
 }
 
 #widget-preview-object {
   border-style: solid;
 }
 
+.popup-widget-text *,
 .popup-widget-html * {
   color: inherit;
 }
@@ -663,10 +685,6 @@ ul.popup-social-buttons > li a i {
 .popup-widget-html a:hover {
   color: #2a6496;
   text-decoration: underline;
-}
-
-.popup-widget-button a {
-  display: inline-block;
 }
 
 .popup-widget-subscribe {
@@ -708,15 +726,20 @@ ul.popup-social-buttons > li a i {
   }
 }
 
-
 .easypopup-disabled {
-  cursor: wait;
-  opacity: 0.5;
+  position: relative;
 }
-.easypopup-disabled * {
+.easypopup-disabled:after {
+  content: '';
+  position: absolute;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.5);
   cursor: wait !important;
 }
-
 .grid-stack-placeholder {
   display: none !important;
 }
@@ -823,4 +846,56 @@ ul.widgets-list {
   margin-top: 0;
   font-size: 14px;
   line-height: 21px;
+}
+
+#templates-container {
+  max-width: 720px;
+  padding: 10px;
+}
+.templates-content {
+  overflow: hidden;
+}
+.templates-content > h4 {
+  padding: 0 10px;
+}
+#templates-container .grid__item {
+  padding: 10px;
+  border: 1px solid transparent;
+  text-align: center;
+}
+#templates-container .grid__item.active {
+  border: 1px solid #479bcf;
+}
+#templates-container .grid__item > div {
+  cursor: pointer;
+}
+.template-cell-title {
+  display: table;
+  overflow: hidden;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+}
+.template-cell-title > div {
+  display: table-cell;
+  height: 2em;
+  vertical-align: middle;
+}
+.template-cell-title > div > div {
+  max-height: 2em;
+}
+.template-cell-image {
+  display: block;
+  width: 100%;
+  height: 100px;
+}
+.templates-popup-buttons button {
+  margin-left: 10px;
+}
+.templates-loader {
+  display: block;
+  width: 200px;
+  padding: 20px 0;
+  margin: 0;
+  background: white;
 }
