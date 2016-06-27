@@ -159,6 +159,11 @@ button {
 .text-right { text-align: right; }
 .text-left { text-align: left; }
 .text-center { text-align: center; }
+.padding { padding: 20px; }
+.padding-top { padding-top: 20px; }
+.padding-right { padding-right: 20px; }
+.padding-bottom { padding-bottom: 20px; }
+.padding-left { padding-left: 20px; }
 
 
 
@@ -183,6 +188,8 @@ button {
   -ms-user-select: none;
   user-select: none;
   -webkit-appearance: none;
+  width: auto;
+  margin: 0;
 }
 .btn-default, .btn {
   background-color: white;
@@ -258,7 +265,7 @@ p.note { margin-top: 0; }
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.tab_list>li {
+.tab_list > li {
   position: relative;
   -webkit-box-flex: 0;
   -webkit-flex-grow: 0;
@@ -277,7 +284,7 @@ p.note { margin-top: 0; }
   align-items: stretch;
 }
 
-.tab_list>li>a {
+.tab_list > li > a {
   padding: 15px 20px;
   text-decoration: none;
   color: #798c9c;
@@ -304,6 +311,7 @@ p.note { margin-top: 0; }
   -webkit-justify-content: center;
   -ms-flex-pack: center;
   justify-content: center;
+  outline: none;
 }
 
 .tab_list>li>a.active {
@@ -369,27 +377,52 @@ p.note { margin-top: 0; }
   margin: 0;
   padding: 0;
 }
-
-.next-list--divided>li {
+.next-list--divided > li {
   width: 100%;
   border-bottom: 1px solid #ebeef0;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-
-.next-list--divided>li:last-child {
-  border-bottom: none;
+.next-list--divided > li:last-child {
+  /*border-bottom: none;*/
 }
-
-.next-list--divided>li a {
+.next-list--divided > li a {
   display: block;
   color: #31373d;
   padding: 10px 20px;
 }
-
-.next-list--divided>li a:hover, .next-list--divided>li a.is-selected {
+.next-list--divided > li a:hover,
+.next-list--divided > li a.is-selected {
   background-color: #eff9fd;
   text-decoration: none;
+}
+
+.next-list--divided.dropdown > li > a,
+.next-list--divided.dropdown > li > a:hover {
+  padding: 15px 20px;
+  line-height: 1em;
+  background-color: #f5f6f7;
+  color: #798c9c;
+}
+.next-list--divided.dropdown > li.active > a {
+  /*background-color: white;*/
+  /*color: #31373d;*/
+  /*border-bottom: 1px solid #ebeef0;*/
+  text-decoration: none;
+}
+.next-list--divided.dropdown > li > div {
+  display: none;
+}
+.next-list--divided.dropdown > li.active > div {
+  display: block;
+}
+.next-list--divided.dropdown > li > a:after {
+  float: right;
+  font: normal normal normal 14px/1 FontAwesome;
+  content: "\f078";
+}
+.next-list--divided.dropdown > li.active > a:after {
+  content: "\f077";
 }
 
 .next-pane__footer-wrapper {
@@ -524,4 +557,89 @@ p.note { margin-top: 0; }
 
 .no-padding-top {
   padding-top:0 !important;
+}
+
+
+.ui-banner {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 0 10px;
+  padding: 0 20px;
+  background-color: #d3dbe2;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+.ui-banner > p,
+.ui-banner > div {
+  margin: 1em 0;
+}
+.ui-banner--status-info {
+  background-color: #cae9f7;
+  color: #0078bd;
+}
+.ui-banner--status-success {
+  background-color: #e5fabc;
+}
+.ui-banner--status-warning {
+  background-color: #fff7b2;
+}
+.ui-banner--status-critical {
+  background-color:#ff9797;
+}
+.ui-banner--default-horizontal-spacing {
+  margin-right: 20px;
+  margin-left: 20px;
+}
+.ui-banner--default-vertical-spacing {
+  margin-bottom: 20px;
+}
+
+.ui-empty-state {
+  text-align: center;
+}
+.ui-empty-state__section {
+  padding: 40px 0;
+}
+.ui-empty-state__subsection {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  max-width: 1000px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0 30px;
+}
+.ui-empty-state__subsection + .ui-empty-state__subsection {
+  padding-top: 40px;
+}
+.ui-empty-state__title {
+  margin: 0 0 20px;
+  color: #31373d;
+  font-size: 32px;
+  line-height: 1.2em;
+}
+.ui-empty-state__subtitle {
+  margin: 0 0 20px;
+  color: #798c9c;
+  font-size: 18px;
+  line-height: 1.2em;
+}
+.ui-empty-state__subtitle:last-child {
+  margin-bottom: 0;
+}
+.ui-empty-state__banner {
+  max-height: 270px;
 }
