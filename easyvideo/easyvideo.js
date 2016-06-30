@@ -83,7 +83,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
       ev$("#mob-product-images .owl-item div img[alt*='youtu.be/']").each(function(){
         var video_link = ev$(this).prop("alt");
-        ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#mob-product-images").width() * 0.5625).css("height", ev$("#mob-product-images").width() * 0.5625 + "px");
+        ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", ev$("#mob-product-images").width() * 0.5625).css("height", ev$("#mob-product-images").width() * 0.5625 + "px");;
         if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
           video_width = ev$('#easyvideo_video').find("iframe").width();
           ev$('#easyvideo_video').find("iframe").attr("height", video_width * 0.5625);
