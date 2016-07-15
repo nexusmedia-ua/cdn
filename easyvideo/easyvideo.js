@@ -312,7 +312,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev$("img").not("img[alt*='youtu.be/']").not("img[alt*='youtube.com/watch']").not("img[alt*='//vimeo.com/']").on("touchend click", function(){
           ev_video_is_show = false;
-      }      
+      });
 
     }
 });
