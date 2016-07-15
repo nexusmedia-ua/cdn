@@ -113,7 +113,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         flexwidth = ev$('.flexslider').width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
-          ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", flexwidth * 0.5625).css("height", flexwidth * 0.5625 + "px");
+          ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").replace("&", "?").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", flexwidth * 0.5625).css("height", flexwidth * 0.5625 + "px");
         }
         if ( video_link.toLowerCase().indexOf("youtu.be/") >= 0 ) {
           ev$(this).html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", flexwidth * 0.5625).css("height", flexwidth * 0.5625 + "px");
@@ -129,7 +129,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         flexwidth = ev$(this).parent().parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
-          ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", flexwidth * 0.5625).css("height", flexwidth * 0.5625 + "px");
+          ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").replace("&", "?").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", flexwidth * 0.5625).css("height", flexwidth * 0.5625 + "px");
         }
         if ( video_link.toLowerCase().indexOf("youtu.be/") >= 0 ) {
           ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", flexwidth * 0.5625).css("height", flexwidth * 0.5625 + "px");
