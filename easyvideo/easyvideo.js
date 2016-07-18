@@ -50,6 +50,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
     ev$ = jQuery.noConflict(true);
 
     if (ev$('#easyvideo_enabled').attr('content') == "1") {
+      ev$("img[alt*='//vimeo.com/']").show();
+      ev$("img[alt*='youtube.com/watch']").show();
+      ev$("img[alt*='youtu.be/']").show();
       easyVideoSetup();
     }
 
