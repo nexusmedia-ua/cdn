@@ -20,7 +20,7 @@ function ajaxCall(url, params, dt, rt, dbs)
   var requestType = rt || 'POST';
   $ajaxDisabledBlock = $(dbs).length ? $(dbs) : null;
 
-  var ajaxParams  = {'ajax' : true};
+  var ajaxParams  = {'ajax' : true, 'ahmac' : globalAhmac};
 
   $.extend(ajaxParams, params);
   ajaxBefore();
@@ -47,6 +47,7 @@ function ajaxCallForm(url, form, dt, dbs)
   $ajaxDisabledBlock = $(dbs).length ? $(dbs) : null;
 
   form.append('ajax',  1);
+  form.append('ahmac', globalAhmac);
   ajaxBefore();
 
   ajaxRequest = $.ajax({
