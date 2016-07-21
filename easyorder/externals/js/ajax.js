@@ -17,7 +17,7 @@ function ajaxCall(url, params, dt, rt)
 
   var dataType    = dt || 'html';
   var requestType = rt || 'POST';
-  var ajaxParams  = {'ajax' : true};
+  var ajaxParams  = {'ajax' : true, 'ahmac' : globalAhmac};
 
   $.extend(ajaxParams, params);
   ajaxBefore();
@@ -42,6 +42,7 @@ function ajaxCallForm(url, form, dt)
 
   var dataType = dt || 'html';
   form.append('ajax',  1);
+  form.append('ahmac', globalAhmac);
   ajaxBefore();
 
   ajaxRequest = $.ajax({
