@@ -57,6 +57,13 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
     }
 
 
+    ev$(window).load(function(){
+      ev$('.video-container').parent().height(ev$('.video-container').parent().parent().height());
+    });
+    ev$(window).resize(function(){
+      ev$('.video-container').parent().height(ev$('.video-container').parent().parent().height());
+    });
+
     function easyVideoSetup() {
 
       var ev_dimensions = ev$("#easyvideo_dimensions").attr("content");
