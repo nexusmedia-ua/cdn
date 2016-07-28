@@ -198,9 +198,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          console.log('Main Img Load Fired: ' + ev_video_is_show);
+          //console.log('Main Img Load Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
-            console.log('showing image by this selector: ' + ev_main_img_selector);
+            //console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
             if (is_zoom) ev_container.addClass(zoom_class);
 
