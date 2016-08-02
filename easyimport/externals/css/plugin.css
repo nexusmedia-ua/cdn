@@ -1,0 +1,66 @@
+h2 {
+  margin-bottom: 8px;
+}
+
+input[type=checkbox],
+input[type=radio] {
+  float: left;
+  margin-top: 2px;
+  margin-right: 8px;
+}
+
+.float-right {
+  overflow: hidden;
+  float: right;
+}
+
+select {
+  margin-bottom: 15px;
+}
+select[multiple] {
+  min-width: 240px;
+  height: 64px;
+}
+
+.form-elements {
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+label > .note {
+  margin: 15px 0 0 23px;
+}
+
+.stat--red {
+  color: red;
+}
+
+#imoprt-errors-details,
+#imoprt-warnings-details {
+  display: none;
+  padding: 0;
+}
+
+#import-statistics td {
+  padding: 10px 20px;
+}
+#import-statistics td + td {
+  text-align: right;
+}
+#import-statistics .stat--red a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.loader {
+  margin: 0;
+}
+.template-import_results .loader {
+  display: inline-block;
+  margin-right: 14px;
+  vertical-align: top;
+}
+.template-import_results #import-waiting-notice {
+  display: inline-block;
+  vertical-align: top;
+}
