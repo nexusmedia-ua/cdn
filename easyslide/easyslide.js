@@ -37,7 +37,7 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
                 params.active = false;
             } 
             if (jQuery191("#easyslide_all_openable").size() > 0 && jQuery191("#easyslide_all_openable").val() == "1") {
-
+console.log('111222211111');
                 params.beforeActivate = function(event, ui) {
                 	console.log('11111');
 		             // The accordion believes a panel is being opened
