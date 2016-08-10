@@ -33,6 +33,7 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
           setTimeout(function(){
 
           	var params = { collapsible: true, heightStyle: "content", animate: 100 };
+          	console.log('1112222111114');
             if (jQuery191("#easyslide_all_closed").size() > 0 && jQuery191("#easyslide_all_closed").val() == "1") {
                 params.active = false;
             } 
