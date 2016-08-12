@@ -127,7 +127,7 @@ function backgroundCheckPopupToUpdate()
     type: 'POST',
     url: globalBaseUrl,
     dataType: 'json',
-    data: {'ajax' : true, 'task': 'ajax_layout_actions', 'action': 'check_to_update'},
+    data: {'ajax' : true, 'ahmac' : globalAhmac, 'task': 'ajax_layout_actions', 'action': 'check_to_update'},
     success: function(response) {
       if( response.data ) $('#popup-save-inprogress').show();
       else $('#popup-save-inprogress').hide();
@@ -142,9 +142,6 @@ function backgroundSaveSnippet(showLoader)
   var ajaxParams  = {'ajax' : true, 'ahmac' : globalAhmac, 'task' : 'ajax_layout_editor', 'action': 'update_snippet', 'content_id': layoutId};
   if( showLoader ) $('#layout-editor-loader').show();
 
-  popupUpdated = false;
-  $('#popup-save-inprogress').hide();
-
   backgroundAjaxRequest = $.ajax({
     type: requestType,
     url: globalBaseUrl,
@@ -154,6 +151,8 @@ function backgroundSaveSnippet(showLoader)
     complete: function(response) {
       backgroundAjaxRequest = null;
       $('#layout-editor-loader').hide();
+      $('#popup-save-inprogress').hide();
+      popupUpdated = false;
       if( isset(ShopifyApp) ) ShopifyApp.Modal.close();
     }
   });

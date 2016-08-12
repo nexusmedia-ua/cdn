@@ -899,3 +899,7 @@ ul.widgets-list {
   margin: 0;
   background: white;
 }
+
+#popup-save-inprogress {
+  display: none;
+}

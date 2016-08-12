@@ -5,10 +5,29 @@ var popupDisabledPhrase = '<i class="fa fa-toggle-off"></i><div class="tool-tip"
 var popupUpdated = false;
 
 $(document).ready(function(){
+  $('body').on('contextmenu', 'a.easypopup-link', function(){
+    return false;
+  });
+
+  $('a.easypopup-link').on('click', function(e) {
+    if( !ajaxIsActive && this.getAttribute('data-href') ) {
+      window.location.href = this.getAttribute('data-href');
+    }
+  });
+
   $('div, a, button, span').on('click', function(e) {
     if( ajaxIsActive ) {
       e.preventDefault();
       e.stopImmediatePropagation();
+    }
+  });
+
+  $('div, a, button, span').on('click', '#editor-sidebar-form-container .next-list--divided > li > a', function(){
+    var $li = $(this).parent();
+    if( $li.hasClass('active') ) {
+      $li.removeClass('active');
+    } else {
+      $li.addClass('active').siblings('li').removeClass('active');
     }
   });
 });
@@ -36,89 +55,99 @@ function Controller(widgets)
       auto_position: true,
     });
   };
+};
 
+function editContent(el)
+{
+  if( ajaxIsActive ) return;
 
-  this.edit_content = function(item, event) {
-    if( ajaxIsActive ) return;
+  var $editingElement = $(el).parent().closest('.grid-stack-item');
+  var contentType = $editingElement.attr('data-content-type');
 
-    var $editingElement = $(event.target).parent().closest('.grid-stack-item');
-    var contentType = $editingElement.attr('data-content-type');
+  if( contentType == 'column' ) {
+    showWidgetsMenu($editingElement);
+  } else {
+    editWidgetContent($editingElement.attr('data-content-type'), $editingElement);
+  }
+}
 
-    if( contentType == 'column' ) {
-      showWidgetsMenu($editingElement);
-    } else {
-      editWidgetContent(item, $editingElement);
-    }
+function deleteContent(el)
+{
+  if( ajaxIsActive ) return;
+
+  if( isset(ShopifyApp) ) {
+    ShopifyApp.Modal.confirm('Are you sure?', function(result){ if(result) _deleteContent(el); } );
+  } else {
+    if( confirm('Are you sure?') ) _deleteContent(el);
   }
 
+  var _deleteContent = function(el){
+    var $deletingElement = $(el).parent().closest('.grid-stack-item');
+    var $gridStack = $(el).parent().closest('.grid-stack');
+    var contentId = $deletingElement.attr('data-content-id');
+    var contentType = $deletingElement.attr('data-content-type');
 
-  this.delete_content = function(item, event) {
-    if( ajaxIsActive ) return;
+    if( contentType == 'column' ) {
+      var columnsGrid = $('#layout-row > .grid-stack').data('gridstack');
+      columnsGrid.remove_widget($deletingElement[0], true);
 
-    if( isset(ShopifyApp) ) {
-      ShopifyApp.Modal.confirm('Are you sure?', function(result){ if(result) _deleteContent(item, event); } );
+      $gridStack.data('gridstack').remove_widget($deletingElement[0], true);
+      $('#layout-editor-loader').show();
+
+      if( !$('.layout-column').length ) {
+        $('#empty-layout-notice').show();
+      }
+
+      var request = ajaxCall(
+        globalBaseUrl,
+        { 'task': 'ajax_layout_editor', 'action': 'delete_container', 'content_id': contentId },
+        { 'disabled_block': '#easypopup_page_layout_editor div.wrapper', 'double_ajax' : true }
+      );
+
+      if( request ) {
+        request.done(function(response) {
+          if( !ajaxCheckResponse(response) ) return;
+
+          ajaxIsActive = false;
+          popupUpdated = false;
+          saveAllColumnsParams();
+        });
+      }
+
     } else {
-      if( confirm('Are you sure?') ) _deleteContent(item, event);
-    }
+      $column = $deletingElement.parent().closest('.layout-column');
+      if( !$column.length ) return;
 
-    var _deleteContent = function(item, event){
+      $gridStack.data('gridstack').remove_widget($deletingElement[0], true);
+      $('#layout-editor-loader').show();
 
-      var $deletingElement = $(event.target).parent().closest('.grid-stack-item');
-      var contentId = $deletingElement.attr('data-content-id');
-      var contentType = $deletingElement.attr('data-content-type');
-
-      if( contentType == 'column' ) {
-        var columnsGrid = $('#layout-row > .grid-stack').data('gridstack');
-        columnsGrid.remove_widget($deletingElement[0], true);
-
-        self.widgets.remove(item);
-        $('#layout-editor-loader').show();
-
-        if( !$('.layout-column').length ) {
-          $('#empty-layout-notice').show();
-        }
-
-        var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'delete_container', 'content_id': contentId}, 'html', 'POST', true);
-        if( request ) {
-          request.done(function(response) {
-            if( !ajaxCheckResponse(response) ) return;
-
-            ajaxIsActive = false;
-            popupUpdated = false;
-            saveAllColumnsParams();
-          });
-        }
-
-      } else {
-        $column = $deletingElement.parent().closest('.layout-column');
-        if( !$column.length ) return;
-
-        self.widgets.remove(item);
-        $('#layout-editor-loader').show();
-
-        if( !$column.find('.layout-widget').length ) {
-          $column.find('.column-empty-notice').show();
-        }
-
-        var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'delete_widget', 'content_id': contentId}, 'html', 'POST', true);
-        if( request ) {
-          request.done(function(response) {
-            if( !ajaxCheckResponse(response) ) return;
-
-            ajaxIsActive = false;
-            popupUpdated = false;
-            saveAllWidgetsParams( $column.attr('data-content-id') );
-          });
-        }
+      if( !$column.find('.layout-widget').length ) {
+        $column.find('.column-empty-notice').show();
       }
 
-      if( $deletingElement.length && $deletingElement.hasClass('editing') ) {
-        _hideEditWidgetForm();
+      var request = ajaxCall(
+        globalBaseUrl,
+        { 'task': 'ajax_layout_editor', 'action': 'delete_widget', 'content_id': contentId },
+        { 'disabled_block': '#easypopup_page_layout_editor div.wrapper', 'double_ajax': true }
+      );
+
+      if( request ) {
+        request.done(function(response) {
+          if( !ajaxCheckResponse(response) ) return;
+
+          ajaxIsActive = false;
+          popupUpdated = false;
+          saveAllWidgetsParams( $column.attr('data-content-id') );
+        });
       }
     }
 
-  };
+    if( $deletingElement.length && $deletingElement.hasClass('editing') ) {
+      _hideEditWidgetForm();
+    }
+  }
 };
+
 
 function koRegister(name) {
   ko.components.register(name, {
@@ -235,9 +264,14 @@ function koRegister(name) {
                   "y": item.getAttribute('data-gs-y') || 0,
                   "width": item.getAttribute('data-gs-width') || 1,
                 };
-                $('#layout-editor-loader').show();
 
-                var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'create_container', 'content_id': layoutId, 'container_params' : cp}, 'JSON');
+                $('#layout-editor-loader').show();
+                var request = ajaxCall(
+                  globalBaseUrl,
+                  { 'task': 'ajax_layout_editor', 'action': 'create_container', 'content_id': layoutId, 'container_params': cp },
+                  { 'disabled_block': '#easypopup_page_layout_editor div.wrapper' }
+                );
+
                 if( request ) {
                   request.done(function(response) {
                     if( !ajaxCheckResponse(response) ) return;
@@ -250,6 +284,7 @@ function koRegister(name) {
                     if( typeof response.preview === 'string' ) updateQuickPreviewContent( response.preview );
 
                     popupUpdated = true;
+                    $('#popup-save-inprogress').show();
                     showWidgetsMenu($item);
                   });
                 }
@@ -304,7 +339,12 @@ function koRegister(name) {
                 };
 
                 $('#layout-editor-loader').show();
-                var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'create_widget', 'content_id': columnId, 'widget_params' : wp}, 'JSON', 'POST', true);
+                var request = ajaxCall(
+                  globalBaseUrl,
+                  { 'task': 'ajax_layout_editor', 'action': 'create_widget', 'content_id': columnId, 'widget_params': wp },
+                  { 'disabled_block': '#easypopup_page_layout_editor div.wrapper', 'double_ajax': true }
+                );
+
                 if( request ) {
                   request.done(function(response) {
                     if( !ajaxCheckResponse(response) ) return;
@@ -315,7 +355,8 @@ function koRegister(name) {
 
                     ajaxIsActive = false;
                     popupUpdated = true;
-                    editWidgetContent({content_type: wp.widget_type}, $item);
+                    $('#popup-save-inprogress').show();
+                    editWidgetContent(wp.widget_type, $item);
                   });
                 }
               }
@@ -332,12 +373,12 @@ function koRegister(name) {
         '<div class="grid-stack" data-bind="foreach: {data: widgets, afterRender: afterAddWidget}">',
         '  <div class="grid-stack-item" data-bind="attr: { \'id\': $data.content_name, \'data-gs-x\': $data.x, \'data-gs-y\': $data.y, \'data-gs-width\': $data.width, \'data-gs-height\': $data.height, \'data-gs-auto-position\': $data.auto_position, \'data-gs-max-height\': $data.max_height, \'data-gs-min-height\':  $data.min_height, \'data-gs-min-width\':  $data.min_width, \'data-content-id\': $data.content_id, \'data-content-type\': $data.content_type}">',
         '    <div class="grid-stack-item-content">',
-        '      <div class="widget-type-preview text-center tooltip-holder" data-bind="attr:{\'data-widget-type-icon\': $data.content_type}, click: function(){ $root.edit_content($data, event)}"><i class="fa"></i></div>',
+        '      <div class="widget-type-preview text-center tooltip-holder" onclick="editContent(this);" data-bind="attr:{\'data-widget-type-icon\': $data.content_type}"><i class="fa"></i></div>',
         '     </div>',
         '     <div class="grid-btn-holder">',
-        '       <button class="delete-content" data-bind="click: function(){ $root.delete_content($data, event) }"><i class="fa fa-close"></i></button>',
+        '       <button class="delete-content" onclick="deleteContent(this);"><i class="fa fa-close"></i></button>',
         '       <div class="edit-holder">',
-        '         <span class="type-holder" data-bind="text: $data.content_type"></span><span class="separator">|</span><span class="edit-content" data-bind="click: function(){ $root.edit_content($data, event) }"><i class="fa fa-gear"></i></span>',
+        '         <span class="type-holder" data-bind="text: $data.content_type"></span><span class="separator">|</span><span class="edit-content" onclick="editContent(this);"><i class="fa fa-gear"></i></span>',
         '       </div>',
         '     </div>',
         '  </div>',
@@ -355,21 +396,21 @@ function initColumnContainer( $column, id )
     [
       '<div class="column-wrapper" id="' + columnWrapperName + '">',
       '  <div class="column-empty-notice">',
-      '   <a href="javascript:void(0)" data-bind="click: function(){ $root.edit_content($data, event) }">Add widget here</a>',
+      '   <a class="easypopup-link" onclick="editContent(this);">Add widget here</a>',
       '  </div>',
       '  <div class="column-menu-holder">',
       '    <header class="next-pane__header">',
       '      <h3>Add widget to the column</h3>',
       '    </header>',
       '    <ul class="column-menu next-list--divided">',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'text\')}">Text</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'image\')}">Image</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'html\')}">HTML</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'social\')}">Social Buttons</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'button\')}">Button</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'share\')}">Share Buttons</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'video\')}">Video</a></li>',
-      '      <li><a href="javascript:void(0)" data-bind="click: function(){ add_new_content($data, \'subscribe\')}">Subscribe</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'text\')}">Text</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'image\')}">Image</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'html\')}">HTML</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'social\')}">Social Buttons</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'button\')}">Button</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'share\')}">Share Buttons</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'video\')}">Video</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'subscribe\')}">Subscribe</a></li>',
       '    </ul>',
       '  </div>',
       '  <div id="' + columnHolderName + '" class="column-widget-holder" data-bind="component: {name: \'' + columnHolderName + '\', params: $data}">',
@@ -399,7 +440,7 @@ function showWidgetsMenu( $column )
   $('#editor-sidebar-form-container').show();
 }
 
-function editWidgetContent(params, $editingWidget)
+function editWidgetContent(contentType, $editingWidget)
 {
   if( ajaxIsActive || !$editingWidget || !$editingWidget.length ) return false;
 
@@ -407,13 +448,17 @@ function editWidgetContent(params, $editingWidget)
   $('#editor-sidebar-header').hide();
   $('#editor-sidebar-form-holder').hide();
   $('#editor-sidebar-form-container').show();
-  $('body').animate({ scrollTop: $('#editor-sidebar-form-holder').offset().top }, 500);
+  $('body').animate({ scrollTop: $("body").offset().top }, 500);
 
   $editingElement = $editingWidget;
   var widgetId = $editingElement.attr('data-content-id');
-  var contentType = params.content_type;
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_form', 'id': widgetId, 'type' : contentType});
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_form', 'id': widgetId, 'type': contentType },
+    { 'response_type': 'html', 'disabled_block': '#easypopup_page_layout_editor div.wrapper' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -434,7 +479,7 @@ function editWidgetContent(params, $editingWidget)
 function editPreviewingWidgetContent(widgetId, widgetType)
 {
   var $editingWidget = $('#layout-row').find('.layout-widget[data-content-id=' + widgetId + ']');
-  editWidgetContent({content_type: widgetType}, $editingWidget);
+  editWidgetContent(widgetType, $editingWidget);
 }
 
 function saveWidgetContentParams()
@@ -450,7 +495,12 @@ function saveWidgetContentParams()
     $('#editor-sidebar-form-loader').show();
     $('#editor-sidebar-form-holder').hide();
 
-    var request = ajaxCallForm(globalBaseUrl, data, 'JSON');
+    var request = ajaxCallForm(
+      globalBaseUrl,
+      data,
+      { 'task': 'ajax_layout_editor', 'action': '', 'disabled_block': '#easypopup_page_layout_editor div.wrapper' }
+    );
+
     if( request ) {
       request.done(function(response) {
         if( !ajaxCheckResponse(response) ) return;
@@ -465,6 +515,7 @@ function saveWidgetContentParams()
           if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Widget content saved");
 
           popupUpdated = true;
+          $('#popup-save-inprogress').show();
         } else {
           $('#widget-edit-error').text(response.error).show();
           $('#editor-sidebar-form-holder').show();
@@ -500,7 +551,12 @@ function saveAllColumnsParams()
     data.push(cp);
   });
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'save_containers', 'content_id': layoutId, 'data' : data}, 'JSON');
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_editor', 'action': 'save_containers', 'content_id': layoutId, 'data': data },
+    { 'disabled_block': '#easypopup_page_layout_editor div.wrapper' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -509,6 +565,7 @@ function saveAllColumnsParams()
       if( typeof response.preview === 'string' ) updateQuickPreviewContent( response.preview );
 
       popupUpdated = true;
+      $('#popup-save-inprogress').show();
     });
   }
 }
@@ -533,7 +590,12 @@ function saveAllWidgetsParams( containerId, doubleCall )
     data.push(wp);
   });
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_editor', 'action': 'save_widgets', 'content_id': containerId, 'data' : data}, 'JSON', 'POST', doubleCall);
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_editor', 'action': 'save_widgets', 'content_id': containerId, 'data': data },
+    { 'disabled_block': '#easypopup_page_layout_editor div.wrapper', 'double_ajax': doubleCall }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -542,6 +604,7 @@ function saveAllWidgetsParams( containerId, doubleCall )
       if( typeof response.preview === 'string' ) updateQuickPreviewContent( response.preview );
 
       popupUpdated = true;
+      $('#popup-save-inprogress').show();
     });
   }
 }
@@ -615,8 +678,14 @@ function updateQuickPreviewContent( html )
   if( typeof html === 'string' ) {
     $holder.html( html );
     checkManageBtnContainer($holder.find('.grid__item'));
+
   } else {
-    var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_show', 'layout_id': layoutId, 'preview': 1, 'quick_preview': 1});
+    var request = ajaxCall(
+      globalBaseUrl,
+      { 'task': 'ajax_layout_show', 'layout_id': layoutId, 'preview': 1, 'quick_preview': 1 },
+      { 'response_type': 'html', 'disabled_block': '#easypopup_page_layout_editor div.wrapper' }
+    );
+
     if( request ) {
       request.done(function(response) {
         if( !ajaxCheckResponse(response) ) return;
@@ -634,6 +703,7 @@ function updateQuickPreviewContent( html )
 $.fn.extend({setPreviewWidgetStyle : function() {
   var previewId = '#widget-preview-object ' + $(this).attr('data-preview-selector');
   var previewStyle = $(this).attr('data-style');
+  var id = $(this).attr('id');
   var value = $(this).val();
 
   if( previewStyle && previewId ) {
@@ -729,6 +799,10 @@ $.fn.extend({setPreviewWidgetStyle : function() {
         case 'width-full':
                   previewStyle = 'width';
                   value = $(this).is(':checked') ? '100%' : 'auto';
+
+                  if( id == 'widget_setting_stretch' ) {
+                    $(this).parent().closest('form').find('#widget_setting_text_align').prop('disabled', (value == '100%'));
+                  }
                   break;
 
         case 'btn-size':
@@ -760,6 +834,10 @@ $.fn.extend({setPreviewWidgetStyle : function() {
         case 'display-block':
                   previewStyle = 'display';
                   value = $(this).is(':checked') ? 'block' : '';
+
+                  if( id == 'widget_setting_btn_full_width' ) {
+                    $(this).parent().closest('form').find('#widget_setting_text_align').prop('disabled', !!value);
+                  }
                   break;
 
         case 'placeholder':
@@ -792,7 +870,18 @@ $.fn.extend({setPreviewWidgetStyle : function() {
 $.fn.extend({setPreviewWidgetValue : function() {
   var previewId = '#widget-preview-object ' + $(this).attr('data-preview-selector');
   var $previewElement = $(previewId);
-  if( $previewElement.length ) $previewElement.html( $(this).val() );
+  if( !$previewElement.length ) return;
+
+  var value = $(this).val();
+  if( $(this).prev('.mce-tinymce').length ) {
+    var $mceFrame = $(this).prev('.mce-tinymce').find('iframe');
+    if( $mceFrame.length ) {
+      value = $mceFrame.contents().find('body').html();
+      $(this).val(value);
+    }
+  }
+
+  $previewElement.html( value );
 }});
 
 $.fn.extend({setPreviewWidgetAttr : function() {
@@ -807,6 +896,7 @@ $.fn.extend({setPreviewWidgetAttr : function() {
 // --------------------------------------------- Layout Actions ---------------------------------------------
 function editLayout( layoutId )
 {
+  if( ajaxIsActive ) return;
   layoutId = layoutId || 0;
 
   $('#layout-list-container').addClass('large--two-thirds medium--two-thirds');
@@ -814,7 +904,12 @@ function editLayout( layoutId )
   $('#layout-edit-loader').show();
   $('#layout-edit-container').show();
 
-  var request = ajaxCall(globalBaseUrl, {'task': 'ajax_form', 'id': layoutId, 'type': 'layout' });
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_form', 'id': layoutId, 'type': 'layout' },
+    { 'response_type': 'html', 'disabled_block': '#easypopup_page_main > .wrapper' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -843,7 +938,12 @@ function duplicateLayout( layoutId )
 
   $('#layout-list-holder').addClass('easypopup-disabled');
 
-  var request = ajaxCall(globalBaseUrl, {'task': 'ajax_layout_actions',  'action': 'duplicate', 'layout_id': layoutId });
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_actions', 'action': 'duplicate', 'layout_id': layoutId },
+    { 'disabled_block': '#easypopup_page_main > .wrapper' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -884,7 +984,12 @@ function saveLayoutSettings()
     data.append('action', 'save');
     $('#layout-list-holder').addClass('easypopup-disabled');
 
-    var request = ajaxCallForm(globalBaseUrl, data, 'JSON');
+    var request = ajaxCallForm(
+      globalBaseUrl,
+      data,
+      { 'disabled_block': '#easypopup_page_main > .wrapper' }
+    );
+
     if( request ) {
       request.done(function(response) {
         if( !ajaxCheckResponse(response) ) return;
@@ -931,7 +1036,12 @@ function layoutStatusToggle( layoutId )
   $statusEl.children('.tool-tip').text('Saving...');
   $('#layout-list-holder').addClass('easypopup-disabled');
 
-  var request = ajaxCall(globalBaseUrl, {'task': 'ajax_layout_actions',  'action': 'change_status', 'layout_id': layoutId, 'status': status });
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_actions', 'action': 'change_status', 'layout_id': layoutId, 'status': status },
+    { 'disabled_block': '#easypopup_page_main > .wrapper' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -974,7 +1084,12 @@ function deleteLayout( layoutId )
 
     $('#layout-list-holder').addClass('easypopup-disabled');
 
-    var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_actions', 'action': 'delete', 'layout_id': layoutId});
+    var request = ajaxCall(
+      globalBaseUrl,
+      { 'task': 'ajax_layout_actions', 'action': 'delete', 'layout_id': layoutId },
+      { 'disabled_block': '#easypopup_page_main > .wrapper' }
+    );
+
     if( request ) {
       request.done(function(response) {
         if( !ajaxCheckResponse(response) ) return;
@@ -996,20 +1111,26 @@ function showPopup( layoutId, previewMode )
   $popup.find('.layout-preview-loader').show();
   var fl = $.featherlight($popup, {uniqueClass: 'easypopup_container_' + layoutId});
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_layout_show', 'layout_id': layoutId, 'preview': preview});
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_show', 'layout_id': layoutId, 'preview': preview },
+    { 'response_type': 'html' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
 
       if( response ) {
-        var content = $('.ep_featherlight-content .layout-preview-content');
-        if( content.length ) {
-          content.html(response);
-          content.find('a').click(function(event){
+        var $content = $('.ep_featherlight-content .layout-preview-content');
+        if( $content.length ) {
+          $content.html(response);
+          $content.find('a').attr('oncontextmenu', 'return false').click(function(event){
             event.preventDefault();
           });
         }
       } else {
+        fl.close();
         if( isset(ShopifyApp) ) {
           ShopifyApp.Modal.alert('Popup is empty. Please fill it.');
         } else {
@@ -1035,12 +1156,17 @@ function createLayoutButtonToggle( createOn )
           callback: function(message, data){ editLayout(); }
         }],
         secondary: [{
+          label: 'More Apps...',
+          href: globalAppStoreMoreUrl,
+          target: '_blank'
+        },{
           label: "Instuctions",
           loading: false,
           callback: function(message, data){ window.location.href = globalBaseUrl + '&task=instructions'; }
         }]
       }
     });
+
   } else {
     ShopifyApp.Bar.initialize({
       title: "Popups List",
@@ -1052,6 +1178,10 @@ function createLayoutButtonToggle( createOn )
           callback: function(message, data){ saveLayoutSettings(); }
         }],
         secondary: [{
+          label: 'More Apps...',
+          href: globalAppStoreMoreUrl,
+          target: '_blank'
+        },{
           label: "Instuctions",
           loading: false,
           callback: function(message, data){ window.location.href = globalBaseUrl + '&task=instructions'; }
@@ -1067,7 +1197,12 @@ function reinstallCode()
 
   $('#instructions-container').addClass('easypopup-disabled');
 
-  var request = ajaxCall(globalBaseUrl, {'task': 'ajax_layout_actions',  'action': 'reinstall' });
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_actions', 'action': 'reinstall' },
+    { 'disabled_block': '#easypopup_page_instructions' }
+  );
+
   if( request ) {
     request.done(function(response) {
       if( !ajaxCheckResponse(response) ) return;
@@ -1075,6 +1210,79 @@ function reinstallCode()
       $('#instructions-container').removeClass('easypopup-disabled');
       if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Install complete");
     });
+  }
+}
+
+function showTemplatesPopup(firstTime)
+{
+  firstTime = firstTime || false;
+  var $popup = $('#templates-container');
+  if( !$popup.length || !layoutId || ajaxIsActive ) return;
+
+  $popup.find('.templates-loader').show();
+  var fl = $.featherlight($popup, {uniqueClass: 'templates-popup'});
+
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_layout_editor', 'action': 'get_templates' },
+    {}
+  );
+
+  if( request ) {
+    request.done(function(response) {
+      if( !ajaxCheckResponse(response) ) return;
+
+      if( response ) {
+        var $content = $('.ep_featherlight-content .templates-content');
+        if( $content.length && response.data) {
+          $content.html('<h4>Select one of our templates for a quick start.</h4>');
+          $.each(response.data, function(i, el){
+            $content.append([
+                '<div class="grid__item large--one-fifth medium--one-fifth small--one-whole" onclick="$(this).siblings().removeClass(\'active\'); $(this).addClass(\'active\') " data-id="' + el.template_id + '">',
+                '  <div>',
+                '    <div class="template-cell-image" style="background: url(' +  el.image + ') no-repeat center center; background-size: contain;"></div>',
+                '    <div class="template-cell-title"><div><div>' +  el.title + '</div></div></div>',
+                '  </div>',
+                '</div>'
+              ].join('')
+            );
+          });
+
+          var cancelPhrase = !firstTime ? 'Cancel' : 'Start with empty template';
+          $content.append('<div class="grid__item one-whole templates-popup-buttons"><button class="btn btn-primary float-right" onclick="popupFromTemplate();">Ok</button><button class="btn float-right ep_featherlight-close">' + cancelPhrase + '</button></div>');
+        }
+      }
+    });
+  }
+}
+
+function popupFromTemplate()
+{
+  var $template = $('.ep_featherlight .templates-content').find('div.active');
+  if( !$template.length || !$template.data('id') ) return;
+
+  var _sendForm = function(){
+    $('#easypopup_page_layout_editor div.wrapper').addClass('easypopup-disabled');
+    var $form = $('<form>', {'action': '', 'method': 'post'});
+    $form.append( $('<input>', {
+      'type': 'hidden',
+      'name': 'popup_from_template_id',
+      'value': $template.data('id')
+    }));
+
+    $('.ep_featherlight .templates-content').hide();
+    $('.ep_featherlight .templates-loader').show();
+    $form.appendTo('#templates-container').submit();
+  }
+
+  if( $('#layout-row .layout-column').length ) {
+    if( isset(ShopifyApp) ) {
+      ShopifyApp.Modal.confirm('All your changes in current popup will be lost. Are you sure you\'d like to proceed?', function(result){ if(result) _sendForm(); } );
+    } else {
+      if( confirm('All your changes in current popup will be lost. Are you sure you\'d like to proceed?') ) _sendForm();
+    }
+  } else {
+    _sendForm();
   }
 }
 
@@ -1105,6 +1313,8 @@ function initWYSIWYG()
 {
   var $wysiwygEl = $('textarea[data-spec=wysiwyg]');
   if( $wysiwygEl.length ) {
+    var $valueEl = $wysiwygEl.next('[data-spec=wysiwyg-init-value]');
+    if( $valueEl.length ) $wysiwygEl.val($valueEl.html());
 
     var editor = new tinymce.Editor($wysiwygEl.attr('id'), {
       menubar: false,
@@ -1117,7 +1327,7 @@ function initWYSIWYG()
       toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,",
       fontsize_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
       lineheight_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
-      font_formats: 'Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;'
+      font_formats: "Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;Comfortaa=Comfortaa;Courgette=Courgette;Federo=Federo;Josefin Slab=Josefin Slab;Montserrat=Montserrat;Niconne=Niconne;Old Standard TT=Old Standard TT;Open Sans=Open Sans;Raleway=Raleway;Roboto Condensed=Roboto Condensed;Titillium Web=Titillium Web;"
 
     }, tinymce.EditorManager);
 
@@ -1145,5 +1355,20 @@ function checkManageBtnContainer($widgetManageBtn)
         $(el).find('.type-holder,.separator').removeClass('hidden-widget-info');
       }
     });
+  }
+}
+
+function reloadDesktopView(url)
+{
+  if( isset(ShopifyApp) ) {
+    ShopifyApp.Modal.confirm('You may loose all the changes performed to Tablet View. Are you sure?', function(result){ if(result) _reload(); } );
+  } else {
+    if( confirm('You may loose all the changes performed to Tablet View. Are you sure?') ) _reload();
+  }
+
+  function _reload()
+  {
+    $('#easypopup_page_layout_editor > .wrapper').addClass('easypopup-disabled');
+    window.location.href = url;
   }
 }

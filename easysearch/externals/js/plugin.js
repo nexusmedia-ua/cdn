@@ -451,18 +451,19 @@ function initExcelTable()
               callback: function(message, data){ saveCSV(); }
             }
           ],
-          secondary: [
-            {
-              label: "Restore",
-              loading: false,
-              callback: function(message, data){ loadCSV(); }
-            },
-            {
+          secondary: [{
+            label: 'More Apps...',
+            href: globalAppStoreMoreUrl,
+            target: '_blank'
+          },{
+            label: "Restore",
+            loading: false,
+            callback: function(message, data){ loadCSV(); }
+          },{
               label: "Clear",
               loading: false,
               callback: function(message, data){ clearDatabase(); }
-            }
-          ]
+          }]
         }
       });
     });
