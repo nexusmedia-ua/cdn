@@ -153,7 +153,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       // Fix for Boundless theme
-      ev$('.product__photo > img').each(function(){
+      ev$('.product__photo > img, .mobile-gallery > .slides > li > img').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
@@ -166,8 +166,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
           ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
         }
-      });
-      
+      });   
 
       var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
       var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
