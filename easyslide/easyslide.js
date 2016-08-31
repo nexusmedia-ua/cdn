@@ -27,6 +27,9 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
         if (jQuery191("#easyslide_all_closed").size() > 0 && jQuery191("#easyslide_all_closed").val() == "1") {
             params.active = false;
         } 
+
+        console.log(navigator.userAgent);
+
         if (jQuery191("#easyslide_all_openable").size() > 0 && jQuery191("#easyslide_all_openable").val() == "1") {
 
                 params.beforeActivate = function(event, ui) {
