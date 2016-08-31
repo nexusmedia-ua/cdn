@@ -28,8 +28,6 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
             params.active = false;
         } 
 
-        console.log(navigator.userAgent);
-
         if (jQuery191("#easyslide_all_openable").size() > 0 && jQuery191("#easyslide_all_openable").val() == "1") {
 
                 params.beforeActivate = function(event, ui) {
@@ -63,7 +61,7 @@ loadScript("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js", functio
         jQuery191(".product-description-slider").accordion( params );
 
         if (jQuery191("#scroll_to_accordion").val() == "1") jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).parent().offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-50)}, 100).finish(100);   });
-        if (navigator.userAgent.indexOf("Opera") != -1 || navigator.userAgent.indexOf("Windows") != -1) {
+        if (navigator.userAgent.indexOf("Opera") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
           setTimeout(function(){
 
           	var params = { collapsible: true, heightStyle: "content", animate: 100 };
