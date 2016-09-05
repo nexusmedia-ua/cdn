@@ -64,3 +64,7 @@ label > .note {
   display: inline-block;
   vertical-align: top;
 }
+
+#import-prepare-form .ssb .ui-banner--status-warning {
+  margin: 0px 20px 5px;
+}
