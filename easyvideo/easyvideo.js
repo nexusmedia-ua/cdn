@@ -28,6 +28,7 @@ function hideMainImage(ev$, ev_main_img) {
     ev$('.MagicZoomPlus figure > img').hide();
     ev$('.MagicZoomPlus > img').hide();
     ev$('.zoomContainer').css('height', '0px');
+    ev$('.mousetrap').css('display', 'none');    
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 50);
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 150);
     setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 300);
@@ -238,7 +239,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
             // fix for ElevateZoom
             ev$('.zoomContainer').css('height', ev_main_img_parent.find("img").first().height() + 'px').css('width', ev_main_img_parent.find("img").first().width() + 'px')
-
+            ev$('.mousetrap').css('display', '');  
             ev$('#easyvideo_video').hide();
           } else {
             ev_video_is_show = false;
