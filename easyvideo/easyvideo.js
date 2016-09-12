@@ -29,9 +29,9 @@ function hideMainImage(ev$, ev_main_img) {
     ev$('.MagicZoomPlus > img').hide();
     ev$('.zoomContainer').css('height', '0px');
     ev$('.mousetrap').css('display', 'none');    
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 50);
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 150);
-    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); }, 300);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); ev$('.mousetrap').css('display', 'none'); }, 50);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); ev$('.mousetrap').css('display', 'none'); }, 150);
+    setTimeout(function(){ ev$('.MagicZoomPlus figure > img').hide(); ev$('.MagicZoomPlus > img').hide(); ev$('.zoomContainer').css('height', '0px'); ev_main_img.hide(); ev$('.mousetrap').css('display', 'none'); }, 300);
 }
 
 function showVideoBlock(ev$) {
