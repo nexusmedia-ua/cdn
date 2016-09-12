@@ -89,7 +89,7 @@ if( typeof easysearch == 'undefined' || typeof easysearch.jq191Src == 'undefined
             });
 
             var index = '';
-            var $selects = easysearch.jq('#easysearch-holder > .easysearch-select-holder').children('select');
+            var $selects = easysearch.jq('#easysearch-holder > .easysearch-select-holder').find('select');
             var preSelect = easysearch.getCookie('easysearch-preselect');
 
             if( !preSelect ) {
