@@ -178,7 +178,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });
 
       // Fix for Boundless theme
-      ev$('.product__photo > img, .mobile-gallery > .slides > li > img, #ProductPhoto #ProductPhotoImg').each(function(){
+      ev$('.product__photo > img, .mobile-gallery > .slides > li > img').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
