@@ -734,6 +734,7 @@ function saveFormSettings()
     data.append('action', 'save_form_settings');
 
     $('#easyorder-tabs-loader').show();
+    $('body').animate({ scrollTop: $("body").offset().top }, 500);
 
     var request = ajaxCallForm(globalBaseUrl, data, 'JSON');
     if( request ) {
