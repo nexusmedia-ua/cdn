@@ -686,6 +686,18 @@ function changeRelatingOptions(el)
   }
 }
 
+function changeRequiredCheckbox(el)
+{
+  var $tooltipHolder = $(el).parent().next('.required-tooltip-text-holder');
+  if( !$tooltipHolder.length ) return;
+
+  if( el.checked ) {
+    $tooltipHolder.show();
+  } else {
+    $tooltipHolder.hide();
+  }
+}
+
 function populateOptions($data, event)
 {
   if( ajaxIsActive ) return;
