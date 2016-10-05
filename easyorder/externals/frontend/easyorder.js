@@ -55,7 +55,7 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
       });
 
       $easyorderPopup.find('input[type=radio]').change(function(){
-        $field = easyorder.jq(this).parent().parent();
+        $field = easyorder.jq(this).parent().closest('.radio-holder');
         easyorder.updateFieldsTree($field, true);
       });
 
@@ -150,7 +150,7 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
               $productsList.append('<h4 class="easyorder-text-left">Total: ' + currency + '<span>' + totalPrice + '</span></h4>');
             } else {
               easyorder.jq.each(data.items, function(){
-                $('.easyorder-popup-form-fields:first').append(
+                easyorder.jq('.easyorder-popup-form-fields:first').append(
                   [
                     '<div class="easyorder-field-holder">',
                       '<input type="hidden" name="id[' + this.variant_id + ']" value="' + this.quantity + '" />',
@@ -225,7 +225,7 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
       });
 
       visibleFields.find('input[type=email]').each(function(){
-        if( (this.value == "" && $(this).parent().parent().attr('data-required') == 1) || (this.value != "" && !easyorder.isValidEmailAddress(this.value)) ) {
+        if( (this.value == "" && easyorder.jq(this).parent().closest('.easyorder-field-holder').attr('data-required') == 1) || (this.value != "" && !easyorder.isValidEmailAddress(this.value)) ) {
           easyorder.jq(this).addClass("error"); error = true;
         } else easyorder.jq(this).removeClass("error");
       });
@@ -248,8 +248,8 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
 
         var isChecked = fieldsRadios.filter(':checked').length;
         if( !isChecked ) {
-          fieldsRadios.parent().parent().addClass("error"); error = true;
-        } else fieldsRadios.parent().parent().removeClass("error");
+          fieldsRadios.parent().closest('.checkbox-holder').addClass("error"); error = true;
+        } else fieldsRadios.parent().closest('.checkbox-holder').removeClass("error");
       });
 
       requiredFields.each(function(){
@@ -258,8 +258,8 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
 
         var isChecked = fieldsCheckboxes.filter(':checked').length;
         if( !isChecked ) {
-          fieldsCheckboxes.parent().parent().addClass("error"); error = true;
-        } else fieldsCheckboxes.parent().parent().removeClass("error");
+          fieldsCheckboxes.parent().closest('.radio-holder').addClass("error"); error = true;
+        } else fieldsCheckboxes.parent().closest('.radio-holder').removeClass("error");
       });
 
       return error;
