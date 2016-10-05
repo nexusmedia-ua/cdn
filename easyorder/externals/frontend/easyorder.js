@@ -248,8 +248,8 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
 
         var isChecked = fieldsRadios.filter(':checked').length;
         if( !isChecked ) {
-          fieldsRadios.parent().closest('.checkbox-holder').addClass("error"); error = true;
-        } else fieldsRadios.parent().closest('.checkbox-holder').removeClass("error");
+          fieldsRadios.parent().closest('.radio-holder').addClass("error"); error = true;
+        } else fieldsRadios.parent().closest('.radio-holder').removeClass("error");
       });
 
       requiredFields.each(function(){
@@ -258,8 +258,8 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
 
         var isChecked = fieldsCheckboxes.filter(':checked').length;
         if( !isChecked ) {
-          fieldsCheckboxes.parent().closest('.radio-holder').addClass("error"); error = true;
-        } else fieldsCheckboxes.parent().closest('.radio-holder').removeClass("error");
+          fieldsCheckboxes.parent().closest('.checkbox-holder').addClass("error"); error = true;
+        } else fieldsCheckboxes.parent().closest('.checkbox-holder').removeClass("error");
       });
 
       return error;
