@@ -287,99 +287,230 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         ev$('.MagicZoomPlus').css('display','block');
       });
 
-      if (ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
-          hideMainImage(ev$, ev_main_img);
 
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+      if (ev$('#easyvideo_popup').attr('content') == "1") {
 
-          showVideoBlock(ev$);
-      }
+        var waitForFinalEvent = (function () {
+          var timers = {};
+          return function (callback, ms, uniqueId) {
+            if (!uniqueId) {
+              uniqueId = "Don't call this twice without a uniqueId";
+            }
+            if (timers[uniqueId]) {
+              clearTimeout (timers[uniqueId]);
+            }
+            timers[uniqueId] = setTimeout(callback, ms);
+          };
+        })();
 
-      ev$("img[alt*='youtu.be/']").on("touchend click", function(){
-        if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
-          ev_video_is_show = true;
-
-          hideMainImage(ev$, ev_main_img);
-
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-           if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-
-          showVideoBlock(ev$);
+        function evClosePopupWindow() {
+          console.log('closing');
+          $(document).unbind("keyup", escKeyHandler);
+          ev$("#easyvideo_popup_wrapper").css("opacity", 0);
+          setTimeout(function(){
+            ev$("#easyvideo_popup_wrapper").remove();
+          },201);
         }
-      });
 
-
-
-      if (ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
-          hideMainImage(ev$, ev_main_img);
-
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-
-          showVideoBlock(ev$);
-      }
-
-      ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
-        if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
-          ev_video_is_show = true;
-          hideMainImage(ev$, ev_main_img);
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-          showVideoBlock(ev$);
+        var escKeyHandler = function(e){
+          if(e.keyCode === 27) evClosePopupWindow();
         }
-      });
 
+        function evShowPopupVideo(e, type) {
+          if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
 
-      ev$("img[alt*='//vimeo.com/']").on("touchend click", function(){
-        if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
-          ev_video_is_show = true;
+            if (type == "youtube") {
+              var lnk = "https://www.youtube.com/watch?v=";
+              var src = "https://www.youtube.com/embed/";
+            } else if (type == "youtu.be") {
+              var lnk = "https://youtu.be/";
+              var src = "https://www.youtube.com/embed/";
+            } else if (type == "vimeo") {
+              var lnk = "https://vimeo.com/";
+              var src = "https://player.vimeo.com/video/";
+            } else return false;
 
-          hideMainImage(ev$, ev_main_img);
+            var youtubelink = e.prop('alt').replace(lnk, "");
 
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
-          }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+            var wrapper = jQuery('<div/>', {
+                id: 'easyvideo_popup_wrapper'
+            }).css("position","fixed")
+              .css("top","0")
+              .css("bottom","0")
+              .css("left","0")
+              .css("right","0")
+              .css("background","rgba(0,0,0,.6)")
+              .css("z-index","999999")
+              .css("opacity", "0")
+              .css("transition", "visibility 0s, opacity 0.2s linear")
+              .appendTo('body')
+              .html('<iframe width="100%" id="easyvideo_popup_video" style="max-width: 800px; margin: auto" src="' + src + youtubelink + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe><a id="easyvideo_popup_close" href="#"><img width="50" height="50" src="https://nexusmedia-ua.github.io/cdn/easyvideo/cross.svg" /></a>');
 
-          showVideoBlock(ev$);
+            var video_width = ev$('#easyvideo_popup_video').width();
+            wrapper.css( "opacity", 1 );
+            ev$("#easyvideo_popup_video").attr("height", Math.round(video_width * ev_dimensions))
+              .css("width", video_width + "px")
+              .css('position', 'absolute')
+              .css('top', '50%')
+              .css('left', '50%')
+              .css('margin-left', '-' + Math.round(video_width/2) + 'px')
+              .css('margin-top', '-' + Math.round(video_width * ev_dimensions / 2) + 'px');
+
+            ev$("#easyvideo_popup_close")
+              .css("position", "absolute")
+              .css("top", "50%")
+              .css("left", "50%")
+              .css("color", "#ffffff")
+              .css('margin-left', ( Math.round(video_width/2) - 43 ) + 'px')
+              .css('margin-top', '-' + ( Math.round(video_width * ev_dimensions / 2) +50 ) + 'px').click(function(e){
+                 e.preventDefault();
+                 evClosePopupWindow();
+              });
+
+            ev$('#easyvideo_popup_wrapper').click(function(){
+               evClosePopupWindow();
+            });
+
+            $(document).bind("keyup", escKeyHandler);
+
+          }          
         }
-      });
 
-      if (ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
-          hideMainImage(ev$, ev_main_img);
+        ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
+          e.preventDefault();
+          evShowPopupVideo(ev$(this), "youtube");
+        });
 
-          ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe src="https://player.vimeo.com/video/' + ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round( video_width * ev_dimensions ));
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
+        ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
+          e.preventDefault();
+          evShowPopupVideo(ev$(this), "youtu.be");
+        });
+
+        ev$("img[alt*='//vimeo.com/']").on("touchend click", function(e){
+          e.preventDefault();
+          evShowPopupVideo(ev$(this), "vimeo");
+        });
+
+        if (typeof $ == 'function') {
+          $("img[alt*='youtube.com/watch']").unbind("click").parent().unbind("click");
+          $("img[alt*='youtu.be/']").unbind("click").parent().unbind("click");
+          $("img[alt*='vimeo.com/']").unbind("click").parent().unbind("click");
+        }
+
+        ev$(window).resize(function () {
+            waitForFinalEvent(function(){
+              ev$("#easyvideo_popup_video").css("width", "100%");
+              var d_video_width = ev$('#easyvideo_popup_video').width();
+
+              ev$("#easyvideo_popup_video").attr("height", Math.round(d_video_width * ev_dimensions))
+                .css("width", d_video_width + "px")
+                .css('margin-left', '-' + Math.round(d_video_width/2) + 'px')
+                .css('margin-top', '-' + Math.round(d_video_width * ev_dimensions / 2) + 'px');  
+
+              ev$("#easyvideo_popup_close")
+                .css('margin-left', ( Math.round(d_video_width/2) - 50 ) + 'px')
+                .css('margin-top', '-' + ( Math.round(d_video_width * ev_dimensions / 2) + 50 ) + 'px');
+
+            }, 200, "ev_win_resize");
+        });
+
+      } else {
+
+        if (ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
+            hideMainImage(ev$, ev_main_img);
+
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtu.be/']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+              video_width = ev$('#easyvideo_video').find("iframe").width();
+              ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            }
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+
+            showVideoBlock(ev$);
+        }
+
+        ev$("img[alt*='youtu.be/']").on("touchend click", function(){
+          if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
+            ev_video_is_show = true;
+
+            hideMainImage(ev$, ev_main_img);
+
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://youtu.be/", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+             if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+              video_width = ev$('#easyvideo_video').find("iframe").width();
+              ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            }
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+
+            showVideoBlock(ev$);
           }
-          setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+        });
 
-          showVideoBlock(ev$);
+
+
+        if (ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
+            hideMainImage(ev$, ev_main_img);
+
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+              video_width = ev$('#easyvideo_video').find("iframe").width();
+              ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            }
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+
+            showVideoBlock(ev$);
+        }
+
+        ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
+          if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
+            ev_video_is_show = true;
+            hideMainImage(ev$, ev_main_img);
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "") + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+              video_width = ev$('#easyvideo_video').find("iframe").width();
+              ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            }
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+            showVideoBlock(ev$);
+          }
+        });
+
+
+        ev$("img[alt*='//vimeo.com/']").on("touchend click", function(){
+          if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
+            ev_video_is_show = true;
+
+            hideMainImage(ev$, ev_main_img);
+
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe src="https://player.vimeo.com/video/' + ev$(this).prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
+            if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+              video_width = ev$('#easyvideo_video').find("iframe").width();
+              ev$('#easyvideo_video').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
+            }
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+
+            showVideoBlock(ev$);
+          }
+        });
+
+        if (ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
+            hideMainImage(ev$, ev_main_img);
+
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe src="https://player.vimeo.com/video/' + ev$("img[alt*='//vimeo.com/']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://", "").replace("http://", "").replace("vimeo.com/","") + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round( video_width * ev_dimensions ));
+            if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+              video_width = ev$('#easyvideo_video').find("iframe").width();
+              ev$('#easyvideo_video').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
+            }
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+
+            showVideoBlock(ev$);
+        }
+
+        ev$("img").not("img[alt*='youtu.be/']").not("img[alt*='youtube.com/watch']").not("img[alt*='//vimeo.com/']").on("touchend click", function(){
+            ev_video_is_show = false;
+        });
+        
       }
-
-      ev$("img").not("img[alt*='youtu.be/']").not("img[alt*='youtube.com/watch']").not("img[alt*='//vimeo.com/']").on("touchend click", function(){
-          ev_video_is_show = false;
-      });
 
     }
 });
