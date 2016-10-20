@@ -370,7 +370,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
                evClosePopupWindow();
             });
 
-            $(document).bind("keyup", escKeyHandler);
+            ev$(document).bind("keyup", escKeyHandler);
 
           }          
         }
@@ -391,13 +391,12 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         });
 
         if (typeof $ == 'function') {
-          $("img[alt*='youtube.com/watch']").unbind("click");
-          $("img[alt*='youtube.com/watch']").parent().unbind("click");
-          $("img[alt*='youtu.be/']").unbind("click");
-          $("img[alt*='youtu.be/']").parent().unbind("click");
-          $("img[alt*='vimeo.com/']").unbind("click");
-          $("img[alt*='vimeo.com/']").parent().unbind("click");
-          $("#ProductPhotoImg").unbind("click");
+          $("img[alt*='youtube.com/watch']").off("click");
+          $("img[alt*='youtube.com/watch']").parent("a").off("click");
+          $("img[alt*='youtu.be/']").off("click");
+          $("img[alt*='youtu.be/']").parent("a").off("click");
+          $("img[alt*='vimeo.com/']").off("click");
+          $("img[alt*='vimeo.com/']").parent("a").off("click");
         }
 
         ev$(window).resize(function () {
