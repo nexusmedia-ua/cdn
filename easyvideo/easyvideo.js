@@ -391,12 +391,13 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         });
 
         if (typeof $ == 'function') {
-          $("img[alt*='youtube.com/watch']").unbind("click").off("click");
-          $("img[alt*='youtube.com/watch']").parent().unbind("click").off("click");
-          $("img[alt*='youtu.be/']").unbind("click").off("click");
-          $("img[alt*='youtu.be/']").parent().unbind("click").off("click");
-          $("img[alt*='vimeo.com/']").unbind("click").off("click");
-          $("img[alt*='vimeo.com/']").parent().unbind("click").off("click");
+          $("img[alt*='youtube.com/watch']").unbind("click");
+          $("img[alt*='youtube.com/watch']").parent().unbind("click");
+          $("img[alt*='youtu.be/']").unbind("click");
+          $("img[alt*='youtu.be/']").parent().unbind("click");
+          $("img[alt*='vimeo.com/']").unbind("click");
+          $("img[alt*='vimeo.com/']").parent().unbind("click");
+          $("#ProductPhotoImg").unbind("click");
         }
 
         ev$(window).resize(function () {
