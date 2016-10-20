@@ -304,7 +304,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         })();
 
         function evClosePopupWindow() {
-          console.log('closing');
           $(document).unbind("keyup", escKeyHandler);
           ev$("#easyvideo_popup_wrapper").css("opacity", 0);
           setTimeout(function(){
@@ -392,9 +391,15 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         });
 
         if (typeof $ == 'function') {
-          $("img[alt*='youtube.com/watch']").unbind("click").parent().unbind("click");
-          $("img[alt*='youtu.be/']").unbind("click").parent().unbind("click");
-          $("img[alt*='vimeo.com/']").unbind("click").parent().unbind("click");
+          $("img[alt*='youtube.com/watch']").unbind("click");
+          $("img[alt*='youtube.com/watch']").parent().unbind("click");
+          $("img[alt*='youtube.com/watch']").parent().parent().unbind("click");
+          $("img[alt*='youtu.be/']").unbind("click");
+          $("img[alt*='youtu.be/']").parent().unbind("click");
+          $("img[alt*='youtu.be/']").parent().parent().unbind("click");
+          $("img[alt*='vimeo.com/']").unbind("click");
+          $("img[alt*='vimeo.com/']").parent().unbind("click");
+          $("img[alt*='vimeo.com/']").parent().parent().unbind("click");
         }
 
         ev$(window).resize(function () {
