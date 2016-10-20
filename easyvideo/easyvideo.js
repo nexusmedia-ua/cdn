@@ -304,7 +304,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         })();
 
         function evClosePopupWindow() {
-          $(document).unbind("keyup", escKeyHandler);
+          ev$(document).unbind("keyup", escKeyHandler);
           ev$("#easyvideo_popup_wrapper").css("opacity", 0);
           setTimeout(function(){
             ev$("#easyvideo_popup_wrapper").remove();
