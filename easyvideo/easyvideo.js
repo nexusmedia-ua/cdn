@@ -393,18 +393,18 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         if (typeof $ == 'function') {
           if (typeof $.off !== 'undefined') {
             $("img[alt*='youtube.com/watch']").off("click");
-            $("img[alt*='youtube.com/watch']").parent("a").off("click");
+            $("img[alt*='youtube.com/watch']").parent().off("click");
             $("img[alt*='youtu.be/']").off("click");
-            $("img[alt*='youtu.be/']").parent("a").off("click");
+            $("img[alt*='youtu.be/']").parent().off("click");
             $("img[alt*='vimeo.com/']").off("click");
-            $("img[alt*='vimeo.com/']").parent("a").off("click");
+            $("img[alt*='vimeo.com/']").parent().off("click");
           } else {
             $("img[alt*='youtube.com/watch']").unbind("click");
-            $("img[alt*='youtube.com/watch']").parent("a").unbind("click");
+            $("img[alt*='youtube.com/watch']").parent().unbind("click");
             $("img[alt*='youtu.be/']").unbind("click");
-            $("img[alt*='youtu.be/']").parent("a").unbind("click");
+            $("img[alt*='youtu.be/']").parent().unbind("click");
             $("img[alt*='vimeo.com/']").unbind("click");
-            $("img[alt*='vimeo.com/']").parent("a").unbind("click");          
+            $("img[alt*='vimeo.com/']").parent().unbind("click");          
           }
         }
 
