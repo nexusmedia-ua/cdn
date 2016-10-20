@@ -164,16 +164,18 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       // Fix for Brooklyn theme
       ev$('.product-single__photos .product-single__photo').each(function(){
         var video_link = ev$(this).attr('alt');
-        flexwidth = ev$(this).parent().parent().width();
-        if (parseInt(flexwidth) == 0) flexwidth = 505;
-        if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
-          ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").replace("&", "?").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
-        }
-        if ( video_link.toLowerCase().indexOf("youtu.be/") >= 0 ) {
-          ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
-        }
-        if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
-          ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
+        if (video_link) {
+          flexwidth = ev$(this).parent().parent().width();
+          if (parseInt(flexwidth) == 0) flexwidth = 505;
+          if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
+            ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").replace("&", "?").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
+          }
+          if ( video_link.toLowerCase().indexOf("youtu.be/") >= 0 ) {
+            ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
+          }
+          if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
+            ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
+          }
         }
       });
 
