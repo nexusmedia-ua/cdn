@@ -496,6 +496,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
 
             showVideoBlock(ev$);
           }
@@ -526,6 +527,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
             showVideoBlock(ev$);
           }
         });
@@ -543,6 +545,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
 
             showVideoBlock(ev$);
           }
