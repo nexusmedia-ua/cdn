@@ -86,6 +86,12 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           video_width = ev$('#easyvideo_video').find("iframe").width();
           ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
         }
+        setTimeout(function(){
+          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+            video_width = ev$('#easyvideo_video').find("iframe").width();
+            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+          }
+        }, 300);
       });
       ev$("#product-images-portrait .owl-item div img[alt*='youtube.com/watch']").each(function(){
         var video_link = ev$(this).prop("alt");
@@ -118,6 +124,12 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           video_width = ev$('#easyvideo_video').find("iframe").width();
           ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
         }
+        setTimeout(function(){
+          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+            video_width = ev$('#easyvideo_video').find("iframe").width();
+            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+          }
+        }, 300);        
       });
       ev$("#product-images-portrait .owl-item div img[alt*='youtu.be/']").each(function(){
         var video_link = ev$(this).prop("alt");
@@ -150,6 +162,12 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           video_width = ev$('#easyvideo_video').find("iframe").width();
           ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
         }
+        setTimeout(function(){
+          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
+            video_width = ev$('#easyvideo_video').find("iframe").width();
+            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+          }
+        }, 300);        
       });
       ev$("#product-images-portrait .owl-item div img[alt*='//vimeo.com/']").each(function(){
         var video_link = ev$(this).prop("alt");
