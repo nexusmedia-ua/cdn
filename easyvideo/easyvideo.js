@@ -36,12 +36,16 @@ function hideMainImage(ev$, ev_main_img) {
 
 function showVideoBlock(ev$) {
 
+    var ev_dimensions = ev$("#easyvideo_dimensions").attr("content");
+    if (!ev_dimensions) ev_dimensions = 0.5625;
+
     ev$('#easyvideo_video').show();
 
     // Adding delay for touch events
-    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 50);
-    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 150);
-    setTimeout(function(){ ev$('#easyvideo_video').show(); }, 300);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 50);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
+    setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
+
 
 
 }
@@ -79,20 +83,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
         }
       });
-      ev$(".product-photo-thumbs .owl-item div img[alt*='youtube.com/watch']").each(function(){
-        var video_link = ev$(this).prop("alt");
-        ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(ev$("#product-images").width() * ev_dimensions)).css("height", Math.round(ev$("#product-images").width() * ev_dimensions) + "px");
-        if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-          video_width = ev$('#easyvideo_video').find("iframe").width();
-          ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-        }
-        setTimeout(function(){
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-        }, 300);
-      });
       ev$("#product-images-portrait .owl-item div img[alt*='youtube.com/watch']").each(function(){
         var video_link = ev$(this).prop("alt");
         ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(ev$("#product-images-portrait").width() * ev_dimensions)).css("height", Math.round(ev$("#product-images-portrait").width() * ev_dimensions) + "px");
@@ -117,20 +107,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
         }
       });
-      ev$(".product-photo-thumbs .owl-item div img[alt*='youtu.be/']").each(function(){
-        var video_link = ev$(this).prop("alt");
-        ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(ev$("#product-images").width() * ev_dimensions)).css("height", Math.round(ev$("#product-images").width() * ev_dimensions) + "px");
-        if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-          video_width = ev$('#easyvideo_video').find("iframe").width();
-          ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-        }
-        setTimeout(function(){
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-        }, 300);        
-      });
       ev$("#product-images-portrait .owl-item div img[alt*='youtu.be/']").each(function(){
         var video_link = ev$(this).prop("alt");
         ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(ev$("#product-images-portrait").width() * ev_dimensions)).css("height", Math.round(ev$("#product-images-portrait").width() * ev_dimensions) + "px");
@@ -154,20 +130,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           video_width = ev$('#easyvideo_video').find("iframe").width();
           ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
         }
-      });
-      ev$(".product-photo-thumbs .owl-item div img[alt*='//vimeo.com/']").each(function(){
-        var video_link = ev$(this).prop("alt");
-        ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim() + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round(ev$("#product-images").width() * ev_dimensions)).css("height", Math.round(ev$("#product-images").width() * ev_dimensions) + "px");
-        if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-          video_width = ev$('#easyvideo_video').find("iframe").width();
-          ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-        }
-        setTimeout(function(){
-          if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
-            video_width = ev$('#easyvideo_video').find("iframe").width();
-            ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
-          }
-        }, 300);        
       });
       ev$("#product-images-portrait .owl-item div img[alt*='//vimeo.com/']").each(function(){
         var video_link = ev$(this).prop("alt");
@@ -496,7 +458,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
 
             showVideoBlock(ev$);
           }
@@ -527,7 +488,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
             showVideoBlock(ev$);
           }
         });
@@ -545,7 +505,6 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round( video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-            setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
 
             showVideoBlock(ev$);
           }
