@@ -270,6 +270,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             // fix for ElevateZoom
             ev$('.zoomContainer').css('height', ev_main_img_parent.find("img").first().height() + 'px').css('width', ev_main_img_parent.find("img").first().width() + 'px')
             //ev$('.mousetrap').css('display', '');  
+            ev$('#easyvideo_video iframe').remove();
             ev$('#easyvideo_video').hide();
           } else {
             ev_video_is_show = false;
@@ -285,6 +286,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 50);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 150);
             setTimeout(function(){ ev$('.MagicZoomPlus figure > img').show(); ev$('.MagicZoomPlus > img').show(); }, 300);
+            ev$('#easyvideo_video iframe').remove();
             ev$('#easyvideo_video').hide();
           } else {
             ev_video_is_show = false;
