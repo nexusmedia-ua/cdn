@@ -79,7 +79,7 @@ return isNaN(t)?d:t},g=p(l[0]),m=Math.max(g,p(l[1]||"")),g=a?Math.max(g,a.getFul
         jQuery191(".product-description-slider > div").unbind('keydown');
         jQuery191(".product-description-slider > h3").unbind('keydown');
 
-        if (jQuery191("#scroll_to_accordion").val() == "1") jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ theOffset = jQuery191(this).offset().top; console.log(theOffset); jQuery191("html, body").animate({scrollTop: (theOffset-50)}, 100).finish(100);   });
+        if (jQuery191("#scroll_to_accordion").val() == "1") jQuery191(".product-description-slider .ui-accordion-header").bind("click",function(){ setTimeout(function(){ theOffset = jQuery191(this).offset().top; jQuery191("html, body").animate({scrollTop: (theOffset-50)}, 100).finish(100); }, 105);  });
         if (navigator.userAgent.indexOf("Opera") != -1 || navigator.userAgent.indexOf("Trident") != -1) {
           setTimeout(function(){
 
