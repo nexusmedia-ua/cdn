@@ -422,3 +422,8 @@
   font-style: inherit;
   font-weight: inherit;
 }
+
+.eorder_featherlight .easyorder-add-error {
+  padding: 10px 0 20px !important;
+  color: red !important;
+}

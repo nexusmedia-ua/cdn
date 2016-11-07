@@ -91,7 +91,12 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
             easyorder.initOrderPopup(actionUrl);
             easyorder.popupUpdate();
           },
-          error: function(XMLHttpRequest, textStatus) {}
+          error: function(XMLHttpRequest, textStatus) {
+            var error = JSON.parse(XMLHttpRequest.responseText);
+
+            easyorder.initOrderPopup(actionUrl);
+            easyorder.popupUpdate(error.description);
+          }
         };
 
         if( singlePurchase ) {
@@ -104,19 +109,22 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
       }
     },
 
-    popupUpdate: function()
+    popupUpdate: function( errorMessage )
     {
+      errorMessage = errorMessage || '';
+
       easyorder.jq.ajax({
         type: 'GET',
         url: '/cart.js',
         dataType: 'json',
         success: function(data) {
+          var $easyorderPopup = easyorder.jq('.eorder_featherlight #easyorder-popup');
+          var $productsList = $easyorderPopup.find('.easyorder-popup-products').empty().show();
+          if( errorMessage ) $productsList.append('<div class="easyorder-add-error">' + errorMessage + '</div>');
+
           if (data.items.length > 0) {
-
             if( easyorder.showProducts ) {
-              var $productsList = easyorder.jq('.easyorder-popup-products:first').empty().show();
-
-              var currencyEl = easyorder.jq('.easyorder-popup-currency:first');
+              var currencyEl = $easyorderPopup.find('.easyorder-popup-currency:first');
               var currency = currencyEl.length ? currencyEl.text() : '';
               var totalPrice = parseFloat(data.total_price / 100).toFixed(2);
 
@@ -150,7 +158,7 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
               $productsList.append('<h4 class="easyorder-text-left">Total: ' + currency + '<span>' + totalPrice + '</span></h4>');
             } else {
               easyorder.jq.each(data.items, function(){
-                easyorder.jq('.easyorder-popup-form-fields:first').append(
+                $easyorderPopup.find('.easyorder-popup-form-fields:first').append(
                   [
                     '<div class="easyorder-field-holder">',
                       '<input type="hidden" name="id[' + this.variant_id + ']" value="' + this.quantity + '" />',
@@ -161,7 +169,7 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
             }
 
           } else {
-            easyorder.jq.featherlight.close();
+            if( !errorMessage ) easyorder.jq.featherlight.close();
           }
         }
       });
@@ -174,7 +182,7 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
         url: '/cart/change.js',
         data: "id=" + id + "&quantity=0",
         dataType: 'json',
-        success: function(data, textStatus) { easyorder.popupUpdate(true) },
+        success: function(data, textStatus) { easyorder.popupUpdate() },
         error: function(XMLHttpRequest, textStatus) {API.onError(XMLHttpRequest);}
       };
       easyorder.jq.ajax(params);
