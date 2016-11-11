@@ -398,8 +398,10 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
           }          
         }
 
+        console.log('setting up');
         ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
           e.preventDefault();
+          console.log('here');
           evShowPopupVideo(ev$(this), "youtube");
         });
 
