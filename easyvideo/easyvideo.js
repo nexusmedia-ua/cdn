@@ -231,9 +231,9 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });          
         
       // Fix for Blockshop theme
-      ev$('.slick-slide > a > img').each(function(){
+      ev$('.slick-slide > img').each(function(){
         var video_link = ev$(this).attr('alt');
-        flexwidth = ev$(this).parent().parent().width();
+        flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
           ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").replace("&", "?").trim() + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
