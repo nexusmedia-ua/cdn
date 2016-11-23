@@ -134,7 +134,12 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
                     '<div class="easyorder-products-holder grid">',
                       '<div class="grid__item two-fifths easyorder-product-image-holder">',
                         '<div class="easyorder-field-holder">',
-                          '<input type="hidden" name="id[' + this.variant_id + ']" value="' + this.quantity + '" />',
+                          '<input type="hidden" name="id[' + this.variant_id + '][quantity]"   value="' + this.quantity + '" />',
+                          '<input type="hidden" name="id[' + this.variant_id + '][properties]" value="' + encodeURIComponent(JSON.stringify(this.properties)) + '" />',
+                          '<input type="hidden" name="id[' + this.variant_id + '][gift_card]"  value="' + (this.gift_card ? 1 : 0) + '" />',
+                          '<input type="hidden" name="id[' + this.variant_id + '][grams]" value="' + this.grams + '" />',
+                          '<input type="hidden" name="id[' + this.variant_id + '][sku]"   value="' + this.sku + '" />',
+                          '<input type="hidden" name="id[' + this.variant_id + '][requires_shipping]" value="' + (this.requires_shipping ? 1 : 0) + '" />',
                         '</div>',
                         '<a href="' + this.url + '">',
                           '<img src="' + this.image + '" />',
@@ -161,7 +166,12 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
                 $easyorderPopup.find('.easyorder-popup-form-fields:first').append(
                   [
                     '<div class="easyorder-field-holder">',
-                      '<input type="hidden" name="id[' + this.variant_id + ']" value="' + this.quantity + '" />',
+                      '<input type="hidden" name="id[' + this.variant_id + '][quantity]"   value="' + this.quantity + '" />',
+                      '<input type="hidden" name="id[' + this.variant_id + '][properties]" value="' + encodeURIComponent(JSON.stringify(this.properties)) + '" />',
+                      '<input type="hidden" name="id[' + this.variant_id + '][gift_card]"  value="' + (this.gift_card ? 1 : 0) + '" />',
+                      '<input type="hidden" name="id[' + this.variant_id + '][grams]" value="' + this.grams + '" />',
+                      '<input type="hidden" name="id[' + this.variant_id + '][sku]"   value="' + this.sku + '" />',
+                      '<input type="hidden" name="id[' + this.variant_id + '][requires_shipping]" value="' + (this.requires_shipping ? 1 : 0) + '" />',
                     '</div>'
                   ].join('')
                 );
