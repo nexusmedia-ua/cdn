@@ -369,7 +369,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
 
             var youtubelink = e.prop('alt').replace(lnk, "");
 
-            ev$('easyvideo_popup_wrapper').remove();
+            ev$('#easyvideo_popup_wrapper').remove();
 
             var wrapper = ev$('<div/>', {
                 id: 'easyvideo_popup_wrapper'
