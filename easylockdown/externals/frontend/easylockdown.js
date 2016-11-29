@@ -134,7 +134,7 @@ if( typeof easylockdown == 'undefined' || typeof easylockdown.router == 'undefin
               var h = response.h;
               easylockdown.jq('#easylockdown-password-error').hide();
               easylockdown.jq('#easylockdown-password').removeClass('easylockdown-error');
-              easysearch.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activeId, h);
+              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activeId, h);
               window.location.reload(true);
             } else {
               easylockdown.jq('#easylockdown-password-error').show();
