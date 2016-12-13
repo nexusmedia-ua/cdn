@@ -230,7 +230,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
         }
       });          
         
-      ev$('.slick-slide > img, .swiper-slide > img').each(function(){
+      ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
