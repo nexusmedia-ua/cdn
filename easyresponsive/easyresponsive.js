@@ -89,7 +89,15 @@ documentReady(function(){
       };
     }
 
+    er.resizeImmediately = function(video, newWidth){
+      er._resize(video, newWidth, true);
+    }
+
     er.resize = function(video, newWidth) {  
+      er._resize(video, newWidth, false);    
+    } 
+
+    er._resize = function(video, newWidth, fast) {  
 
 	  var isGMap = /(google.com\/maps)/i; 
       if (isGMap.test(video.getAttribute('src'))) { 
@@ -116,7 +124,7 @@ documentReady(function(){
 	    var oldWidth = video.style.width;      
 	    video.style.width = newWidth.toString() + "px";
 	    video.style.height = newHeight.toString() + "px";
-	    setTimeout(function(){ video.style.transition = "width 1s, height 1s"; }, 1000);
+	    if (!fast) setTimeout(function(){ video.style.transition = "width 1s, height 1s"; }, 1000);
 
 	    // If that's map - reload it on resize
         if (isGMap.test(video.getAttribute('src')) && (newWidth.toString() + "px") !== oldWidth) {
@@ -139,12 +147,19 @@ documentReady(function(){
       });
     }; // End of resizing all videos
 
+    var resizeVideosImmediately = function() {
+      er.each(videos, function(video) {
+        var newWidth = video.parentElement.offsetWidth;
+        er.resizeImmediately(video, newWidth);
+      });
+    }; // End of resizing all videos
+
     resizeVideos();
 
     er.listen(window, 'resize', er.debounce(resizeVideos, 70));  
     var tabs = document.getElementsByClassName('ui-tabs-anchor');
     for (var i = 0; i < tabs.length; i++) {
-        er.listen(tabs[i], 'click', er.debounce(resizeVideos, 200));
+        er.listen(tabs[i], 'click', er.debounce(resizeVideosImmediately, 200));
     }
                                                         
 
