@@ -114,7 +114,7 @@ documentReady(function(){
         }
       }
 
-      if (fast) { video.style.transition = "width 0s, height 0s"; console.log('removing transition delay'); }
+      if (fast) { video.style.transition = "width 0s, height 0s"; }
 
       if (height > 0 && width > 0 && (newWidth.toString() + "px") !== oldWidth) {
         var ASPECT_RATIO = height/width; // 16:9
