@@ -114,6 +114,8 @@ documentReady(function(){
         }
       }
 
+      if (fast) { video.style.transition = "width 1s, height 1s"; }
+
       if (height > 0 && width > 0 && (newWidth.toString() + "px") !== oldWidth) {
         var ASPECT_RATIO = height/width; // 16:9
         var newHeight    = (ASPECT_RATIO * newWidth);
@@ -124,7 +126,7 @@ documentReady(function(){
 	    var oldWidth = video.style.width;      
 	    video.style.width = newWidth.toString() + "px";
 	    video.style.height = newHeight.toString() + "px";
-	    if (!fast) setTimeout(function(){ video.style.transition = "width 1s, height 1s"; }, 1000);
+      setTimeout(function(){ video.style.transition = "width 1s, height 1s"; }, 1000);
 
 	    // If that's map - reload it on resize
         if (isGMap.test(video.getAttribute('src')) && (newWidth.toString() + "px") !== oldWidth) {
