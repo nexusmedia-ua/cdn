@@ -142,6 +142,10 @@ documentReady(function(){
     resizeVideos();
 
     er.listen(window, 'resize', er.debounce(resizeVideos, 70));  
-    er.listen(document.getElementsByClassName('ui-tabs-anchor'), 'click', er.debounce(resizeVideos, 200));                                                    
+    var tabs = document.getElementsByClassName('ui-tabs-anchor');
+    for (var i = 0; i < tabs.length; i++) {
+        er.listen(tabs[i], 'click', er.debounce(resizeVideos, 200));
+    }
+                                                        
 
 });
