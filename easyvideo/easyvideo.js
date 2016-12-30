@@ -215,7 +215,7 @@ loadScriptEasyVideo("//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"
       });   
 
       // Fix for Blockshop theme
-      ev$('.photos > .container > .photo > img').each(function(){
+      ev$('.photos > .container > .photo > img, .transform-to-video img').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
