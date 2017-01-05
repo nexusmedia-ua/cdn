@@ -217,7 +217,7 @@ function showContent(el)
   var $holder = $('#lockdown-content-holder').empty();
   var $select = $('<select id="lockdown-content-id" name="lockdown_content_id">');
 
-  if( type == 'page' || type == 'blog' || type == 'collection' ) {
+  if( type == 'page' || type == 'blog' || type == 'collection' || type == 'collection_product' ) {
     $holder.append($select);
     $('.content-type-loader').show();
 
@@ -262,7 +262,7 @@ function addContent()
   var $hidden  = $('<input type="hidden">');
   var typeTitle = getContentTitleByType(type);
 
-  if( type == 'page' || type == 'collection' || type == 'blog' || type == 'product' || type == 'product_view_only' ) {
+  if( type == 'page' || type == 'collection' || type == 'collection_product' || type == 'blog' || type == 'product' || type == 'product_view_only' ) {
     if( !id ) {
       if( type == 'product' || type == 'product_view_only' ) $('input.ui-autocomplete-input').addClass('field-error');
       else $('#lockdown-content-id').addClass('field-error');
@@ -295,18 +295,104 @@ function removeContent(el)
   $(el).parent().remove();
 }
 
+function showException(el)
+{
+  var type = $(el).val();
+  var $container = $('#lockdown-exception-container').hide();
+  var $holder = $('#lockdown-exception-holder').empty();
+  var $select = $('<select id="lockdown-exception-id" name="lockdown_exception_id">');
+
+  if( type == 'page' || type == 'blog' || type == 'collection' || type == 'collection_product' ) {
+    $holder.append($select);
+    $('.exception-type-loader').show();
+
+    var request = ajaxCall(
+      globalBaseUrl,
+      { 'task': 'ajax_controller', 'action': 'get_content', 'type': type }
+    );
+
+    if( request ) {
+      request.done(function(response) {
+        if( response && response.data ) {
+          $.each(response.data, function(id, item){
+            $('<option>').text(item.title).attr('value', id).appendTo($select);
+          });
+          $container.show();
+        }
+      });
+    }
+  }
+
+  if( type == 'product' ) {
+    var value = "";
+    var label = "";
+    $select.addClass('autocomplete-combobox').html('<option value="' + value + '">' + label + '</option>');
+    $holder.append($select).append('<div class="autocomplete-loader loader"><div class="next-spinner"><svg class="next-icon next-icon--20" preserveAspectRatio="xMinYMin"><circle class="next-spinner__ring" cx="50%" cy="50%" r="45%"></circle></svg></div></div>');
+    $container.show();
+
+    initAutocomplete( $holder );
+  }
+}
+
+function addException()
+{
+  $('#lockdown-exceptions-holder').find('.field-error').removeClass('field-error');
+  var type  = $('#lockdown-exception-type').val();
+  var id    = $('#lockdown-exception-id').val();
+  var title = $('#lockdown-exception-id').children('option:selected').text();
+
+  if( !type ) return;
+
+  var $content = $('<span>');
+  var $hidden  = $('<input type="hidden">');
+  var typeTitle = getContentTitleByType(type);
+
+  if( type == 'page' || type == 'collection' || type == 'collection_product' || type == 'blog' || type == 'product' ) {
+    if( !id ) {
+      if( type == 'product' ) $('input.ui-autocomplete-input').addClass('field-error');
+      else $('#lockdown-exception-id').addClass('field-error');
+      return;
+    }
+
+    $content.append( '<b>' + typeTitle + ':</b> ' + title + '<span class="close" onclick="removeException(this);">x</span>' );
+    $content.append( $hidden.attr('name', 'lockdown_exceptions[' + type + 's][' + id + ']').val(title) );
+
+  } else {
+    $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeException(this);">x</span>' );
+    $content.append( $hidden.attr('name', 'lockdown_exceptions[' + type + ']').val(1) );
+  }
+
+  $('#lockdown-exceptions-errors').remove();
+  $('#lockdown-exceptions-values').append($content);
+  cancelException();
+}
+
+function cancelException()
+{
+  $('#lockdown-exception-type').val('');
+  $('#lockdown-exception-container').hide();
+  $('#lockdown-exception-holder').empty();
+  $('#add-exception-form').hide();
+}
+
+function removeException(el)
+{
+  $(el).parent().remove();
+}
+
 function getContentTitleByType( type )
 {
   switch(type) {
     case 'website':    return 'Whole Website'; break;
     case 'page':       return 'Page'; break;
     case 'blog':       return 'Blog'; break;
-    case 'collection': return 'Collection'; break;
+    case 'collection': return 'Collection only'; break;
     case 'product':    return 'Product'; break;
     case 'cart':       return 'Cart'; break;
     case 'search':     return 'Search'; break;
     case 'product_view_only':      return 'Product (view only)'; break;
     case 'all_products_view_only': return 'All products (view only)'; break;
+    case 'collection_product':     return 'Collection and products'; break;
   }
   return '';
 }
@@ -322,17 +408,26 @@ function selectCustomersType(el)
   if( selectedType == 'logged_in' ) {
     $('#lockdown-customers-filters-holder').hide();
     $('#lockdown-customers-password-holder').hide();
+    $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
+    $('#additional-settings-section').show();
+    $('#hide-links-holder').show();
 
   } else if( selectedType == 'selected' ) {
     $('#lockdown-customers-filters-holder').show();
     $('#lockdown-customers-password-holder').hide();
+    $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
+    $('#additional-settings-section').show();
+    $('#hide-links-holder').show();
 
   } else if( selectedType == 'authorized' ) {
     $('#lockdown-customers-filters-holder').hide();
     $('#lockdown-customers-password-holder').show();
+    $('#who-may-access-section > hr').hide();
     $('#how-to-lock-section').hide();
+    $('#additional-settings-section').hide();
+    $('#hide-links-holder').hide();
   }
 }
 

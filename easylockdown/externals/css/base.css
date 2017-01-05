@@ -852,7 +852,7 @@ p.note { margin-top: 0; }
     background-repeat: no-repeat;
     background-image: url(//cdn.shopify.com/s/assets/admin/icon-sprite-fd0620cf871991a01f2321ba21b521b4502c86d282ea36fbd5e9b58aa6f2e072.png);
     background-position: -9px -3363px;
-    height: 26px;
+    height: 100%;
     width: 22px;
     border: none;
     border-left: 1px solid #d4e2f3;

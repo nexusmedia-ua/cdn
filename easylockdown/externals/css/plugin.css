@@ -42,6 +42,7 @@ hr {
 }
 
 #add-content-form,
+#add-exception-form,
 #add-filter-form,
 #lockdown-customers-password-holder,
 #lock-page-holder {
@@ -59,14 +60,17 @@ hr {
   margin: 0;
 }
 
-#add-content-form {
+#add-content-form,
+#add-exception-form {
   overflow: visible;
 }
-#add-content-form-type {
+#add-content-form-type,
+#add-exception-form-type {
   position: relative;
   padding-right: 36px;
 }
-#add-content-form-type .content-type-loader {
+#add-content-form-type .content-type-loader,
+#add-exception-form-type .exception-type-loader {
   position: absolute;
   top: 0;
   right: 0;
@@ -76,7 +80,8 @@ hr {
   overflow: hidden;
 }
 
-#lockdown-content-container {
+#lockdown-content-container,
+#lockdown-exception-container {
   position: relative;
   display: none;
 }
@@ -86,6 +91,7 @@ input.ui-autocomplete-input {
   margin: 0;
 }
 .content-type-loader,
+.exception-type-loader,
 .autocomplete-loader,
 .remove-lockdown-loader {
   display: none;
@@ -96,12 +102,14 @@ input.ui-autocomplete-input {
   padding: 0;
 }
 .content-type-loader .next-spinner > .next-icon,
+.exception-type-loader .next-spinner > .next-icon,
 .autocomplete-loader .next-spinner > .next-icon,
 .remove-lockdown-loader .next-spinner > .next-icon {
   width: 20px;
   height: 20px;
 }
-.content-type-loader {
+.content-type-loader,
+.exception-type-loader {
   margin: 4px 0 0 0;
 }
 .remove-lockdown-loader {
@@ -115,7 +123,8 @@ input.ui-autocomplete-input {
 #form-lockdown section {
   padding: 5px 0 0;
 }
-#lockdown-content-holder ul.ui-autocomplete {
+#lockdown-content-holder ul.ui-autocomplete,
+#lockdown-exception-holder ul.ui-autocomplete {
   position: absolute !important;
   z-index: 999;
   overflow: auto;
@@ -128,7 +137,8 @@ input.ui-autocomplete-input {
   cursor: pointer;
 }
 
-#lockdown-content-holder ul.ui-autocomplete li {
+#lockdown-content-holder ul.ui-autocomplete li,
+#lockdown-exception-holder ul.ui-autocomplete li {
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -140,6 +150,7 @@ input.ui-autocomplete-input {
 }
 
 #lockdown-content-values,
+#lockdown-exception-values,
 #lockdown-customers-filters {
   line-height: 0;
   font-size: 0;
@@ -247,6 +258,9 @@ input.ui-autocomplete-input {
 
 #no-lockdown {
   display: none;
+}
+#installation-holder > hr {
+  margin: 20px -20px;
 }
 
 .lockdown-status i.fa {
