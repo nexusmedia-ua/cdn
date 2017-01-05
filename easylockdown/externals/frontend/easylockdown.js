@@ -94,6 +94,18 @@ if( typeof easylockdown == 'undefined' || typeof easylockdown.router == 'undefin
       }
     },
 
+    unhide: function( h )
+    {
+      if( easylockdown.activeId && h ) {
+        var ch = easylockdown.getCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activeId);
+        if( ch && ch == h ) {
+          easylockdown.jq("form[action='/cart/add']").show();
+          easylockdown.showContent = true;
+          return;
+        }
+      }
+    },
+
     getSearchParameters: function()
     {
       var prmstr = window.location.search.substr(1);
