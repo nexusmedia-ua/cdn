@@ -152,8 +152,12 @@ if( typeof easyorder == 'undefined' || typeof easyorder.jq191Src == 'undefined' 
                           '</a>',
                         '</h4>',
                         (easyorder.showVendor ? '<p>' + this.vendor + '</p>' : ''),
-                        '<p><b>' + currency + parseFloat(this.line_price / 100).toFixed(2) + '</b>, <small>' + this.quantity + ' x ' + currency + parseFloat(this.price / 100).toFixed(2) + '</small></p>',
-                        '<p><a href="#" onclick="easyorder.popupRemove(' + this.variant_id + ');return false;">Remove</a></p>',
+                        '<p class="easyorder-item-price-holder">',
+                          '<b class="easyorder-item-price-price">' + currency + parseFloat(this.line_price / 100).toFixed(2) + '</b>',
+                          '<span class="easyorder-item-price-separator">, </span>',
+                          '<small><span class="easyorder-item-price-quantity">' + this.quantity + '</span> x ' + currency + parseFloat(this.price / 100).toFixed(2) + '</small>',
+                        '</p>',
+                        '<p class="easyorder-item-remove-holder"><a href="#" onclick="easyorder.popupRemove(' + this.variant_id + ');return false;">Remove</a></p>',
                       '</div>',
                     '</div>'
                   ].join('')
