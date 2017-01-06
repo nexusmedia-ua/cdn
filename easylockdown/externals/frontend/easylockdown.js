@@ -181,6 +181,4 @@ if( typeof easylockdown == 'undefined' || typeof easylockdown.router == 'undefin
       }
     }
   }
-
-  easylockdown.loadScript(easylockdown.jq191Src, easylockdown.initPage);
 }
