@@ -81,3 +81,9 @@ function addZero(x,n) {
   }
   return x;
 }
+
+function checkboxToggle(checkbox, el)
+{
+  if( checkbox.checked ) $(el).show();
+  else $(el).hide();
+}

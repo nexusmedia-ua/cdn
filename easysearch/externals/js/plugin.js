@@ -4,7 +4,7 @@ var $editingElement = null;
 var mainGridController;
 
 $(document).ready(function(){
-  $('document').on('click', '.easysearch-disabled', function(e){
+  $('document').on('click', '.easy-disabled', function(e){
     e.preventDefault();
     e.stopImmediatePropagation();
   });
@@ -190,11 +190,15 @@ $.fn.extend({editFieldSettings : function(){
   $editingElement.addClass('editing');
   $('body').animate({ scrollTop: $("body").offset().top }, 500);
 
-  $('#fields-holder').addClass('easysearch-disabled');
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_get_form', 'type': 'field', 'id': fieldId});
+  $('#fields-holder').addClass('easy-disabled');
+  var request = ajaxCall(
+    globalBaseUrl,
+    {'task': 'ajax_get_form', 'type': 'field', 'id': fieldId},
+    {'response_type': 'html'}
+  );
+
   if( request ) {
     request.done(function(response) {
-      if( !ajaxCheckResponse(response) ) return;
       if( !response ) {
         closeEditFieldForm();
         return;
@@ -203,7 +207,7 @@ $.fn.extend({editFieldSettings : function(){
       $('#editor-sidebar-form-loader').hide();
       $('#editor-sidebar-form-holder').html(response).show();
       if( fieldId ) {
-        $('#fields-holder').removeClass('easysearch-disabled');
+        $('#fields-holder').removeClass('easy-disabled');
       }
 
       bindFieldPreview();
@@ -225,11 +229,14 @@ function saveFieldSettings()
     $('#editor-sidebar-form-loader').show();
     $('#editor-sidebar-form-holder').hide();
 
-    var request = ajaxCallForm(globalBaseUrl, data, 'JSON', '#fields-holder');
+    var request = ajaxCallForm(
+      globalBaseUrl,
+      data,
+      { 'disabled_block': '#fields-holder' }
+    );
+
     if( request ) {
       request.done(function(response) {
-        if( !ajaxCheckResponse(response) ) return;
-
         $('#editor-sidebar-form-loader').hide();
         if( !response.error ) {
           $editingElement.attr('id', response.data.name).attr('data-field-id', response.data.id);
@@ -252,7 +259,7 @@ function cancelEditField()
   if( $editingElement && $editingElement.length && !parseInt($editingElement.attr('data-field-id')) ) {
     var $gridStack = $editingElement.closest('.grid-stack');
     $gridStack.data('gridstack').remove_widget($editingElement[0], true);
-    $('#fields-holder').removeClass('easysearch-disabled');
+    $('#fields-holder').removeClass('easy-disabled');
   }
   closeEditFieldForm();
 }
@@ -275,10 +282,14 @@ function saveFieldsParams(removedFieldID)
     data.push(fp);
   });
 
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'save_fields', 'form_id': formId, 'removed_field_id': removedFieldID, 'data' : data}, 'JSON', '', '#fields-holder');
+  var request = ajaxCall(
+    globalBaseUrl,
+    {'task' : 'ajax_controller', 'action': 'save_fields', 'form_id': formId, 'removed_field_id': removedFieldID, 'data' : data},
+    { 'disabled_block': '#fields-holder' }
+  );
+
   if( request ) {
     request.done(function(response) {
-      if( !ajaxCheckResponse(response) ) return;
       $('#easysearch-tabs-loader').hide();
     });
   }
@@ -329,6 +340,7 @@ function addField()
 
 
 // Database Editor
+
 function loadCSV( noAlert, url )
 {
   var noAlert = noAlert || false;
@@ -368,11 +380,14 @@ function saveCSV()
   var csv = Papa.unparse(excelTable.getData());
 
   $('#easysearch-tabs-loader').show();
-  var request = ajaxCall(globalBaseUrl, {'task' : 'ajax_controller', 'action': 'save_database', 'content': csv}, 'JSON');
+  var request = ajaxCall(
+    globalBaseUrl,
+    {'task' : 'ajax_controller', 'action': 'save_database', 'content': csv},
+    { 'disabled_block': '#database-container' }
+  );
+
   if( request ) {
     request.done(function(response) {
-      if( !ajaxCheckResponse(response) ) return;
-
       if( response.data && response.data.url ) {
         $('#export-link').attr('href', response.data.url).show();
       } else {
@@ -476,7 +491,7 @@ function fillSelects()
   if( !globalDatabaseUrl ) return;
   var selectName = '';
 
-  $('#fields-holder').addClass('easysearch-disabled');
+  $('#fields-holder').addClass('easy-disabled');
   $('#easysearch-tabs-loader').show();
 
   Papa.parse(globalDatabaseUrl, {
@@ -510,7 +525,7 @@ function fillSelects()
         });
       }
 
-      $('#fields-holder').removeClass('easysearch-disabled');
+      $('#fields-holder').removeClass('easy-disabled');
       $('#easysearch-tabs-loader').hide();
     },
     error: function() {}
@@ -518,8 +533,30 @@ function fillSelects()
 }
 
 
-// Instalation Settings
+// Rules
 
+function rangeToggle(checkbox)
+{
+  var $block  = $(checkbox).parent().closest('.grid');
+  var $elFrom = $block.find('.field-value-from-holder');
+  var $elTo   = $block.find('.field-value-to-holder');
+  var $elStep = $block.find('.field-step-holder');
+
+  if( checkbox.checked ) {
+    $elTo.show();
+    $elStep.show();
+    $elFrom.find('.label-from').attr('style', 'display: inline');
+    $elFrom.children('input').attr('placeholder', '2013');
+  } else {
+    $elTo.hide();
+    $elStep.hide();
+    $elFrom.find('.label-from').removeAttr('style');
+    $elFrom.children('input').attr('placeholder', gFieldPlaceholder);
+  }
+}
+
+
+// Instalation Settings
 function saveInstallationSettings()
 {
   if( ajaxIsActive ) return;
@@ -532,13 +569,340 @@ function saveInstallationSettings()
 
     $('#easysearch-tabs-loader').show();
 
-    var request = ajaxCallForm(globalBaseUrl, data, 'JSON');
+    var request = ajaxCallForm(globalBaseUrl, data, { 'disabled_block': '#installation-container' });
     if( request ) {
       request.done(function(response) {
-        if( !ajaxCheckResponse(response) ) return;
-
-        if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Saved");
+        $('#easysearch-tabs-loader').hide();
+        if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Your changes have been saved");
       });
     }
+  }
+}
+
+
+function removeRule(id)
+{
+  if( ajaxIsActive || !id ) return;
+
+  if( isset(ShopifyApp) ) {
+    ShopifyApp.Modal.confirm('Are you sure?', function(result){ if(result) _deleteRule(id); } );
+  } else {
+    if( confirm('Are you sure?') ) _deleteRule(id);
+  }
+
+  var _deleteRule = function(id) {
+    var $row = $('#rule-row-holder-' + id);
+    $row.find('.rule-actions').html('<div class="remove-rule-loader loader"><div class="next-spinner"><svg class="next-icon next-icon--20" preserveAspectRatio="xMinYMin"><circle class="next-spinner__ring" cx="50%" cy="50%" r="45%"></circle></svg></div></div>');
+
+    var request = ajaxCall(
+      globalBaseUrl,
+      { 'task': 'ajax_controller', 'action': 'remove_rule', 'id': id },
+      { 'disabled_block': '#rules-list' }
+    );
+
+    if( request ) {
+      if( isset(ShopifyApp) ) ShopifyApp.Bar.loadingOn();
+
+      request.done(function(response) {
+        $row.remove();
+        if( isset(ShopifyApp) ) ShopifyApp.Bar.loadingOff();
+        if( $('#rules-list tr').length <= 1) {
+          $('#rules-list-holder').hide();
+          $('#no-rules').show();
+        }
+      });
+    }
+  }
+}
+
+function ruleStatusToggle( id )
+{
+  if( ajaxIsActive || !id ) return;
+
+  var $statusEl = $('#rule-row-holder-' + id + ' .rule-status');
+  if( !$statusEl.length ) return;
+
+  var status = parseInt($statusEl.attr('data-status'));
+  $statusEl.children('i').attr('class', 'fa fa-gears');
+
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_controller', 'action': 'change_status', 'id': id, 'status': status },
+    { 'disabled_block': '#rules-list' }
+  );
+
+  if( request ) {
+    request.done(function(response) {
+      if( status ) {
+        $statusEl.children('i').attr('class', 'fa fa-toggle-off');
+        $statusEl.attr('data-status', 0);
+      } else {
+        $statusEl.children('i').attr('class', 'fa fa-toggle-on');
+        $statusEl.attr('data-status', 1);
+      }
+    });
+  }
+}
+
+
+(function( $ ) {
+  var selected = false;
+  $.widget( "custom.combobox", {
+    _create: function() {
+      this.wrapper = $("<span>").addClass("fa custom-combobox").insertAfter( this.element );
+      this.element.hide();
+      this._createAutocomplete();
+    },
+
+    _createAutocomplete: function() {
+      var selected = this.element.children(":selected");
+      var value = selected.val() ? selected.text() : "";
+      var $holder = this.wrapper.parent();
+
+      this.input = $( "<input>" )
+        .appendTo( this.wrapper )
+        .val( value )
+        .attr("title", "")
+        .attr("placeholder", "Type product title here")
+        .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
+        .autocomplete({
+          delay: 500,
+          minLength: 1,
+          source: $.proxy( this, "_source" ),
+          appendTo: '#' + $holder.attr('id'),
+
+          select: function( event, ui ) {
+            event.preventDefault();
+            selected = true;
+
+            var $a = $('#ac-li-item-' + ui.item.value + ' > a');
+            if( $a.length ) {
+              if( $a.hasClass('selected-product') ) $a.removeClass('selected-product');
+              else $a.addClass('selected-product');
+            }
+
+            $holder.find('.ui-autocomplete-input').val( ui.item.label );
+            if( $('#product-' + ui.item.value).length ) {
+              removeRouteProduct(document.getElementById('product-' + ui.item.value));
+            } else {
+              addRouteProduct(ui.item);
+            }
+            $('.custom-combobox-input').val('');
+          },
+
+          focus: function (event, ui) {
+            event.preventDefault();
+          },
+
+          search: function(event, ui) {
+            if( ajaxRequest !== null ) ajaxRequest.abort();
+            $holder.find('.autocomplete-loader').show();
+          },
+
+          response: function(event, ui) {
+            $holder.find('.autocomplete-loader').hide();
+            $holder.find('.autocomplete-tooltip').show();
+          },
+
+          create: function () {
+            $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
+              var $li = $('<li>').attr('id', 'ac-li-item-' + item.value);
+              if( $('#product-' + item.value).length ) {
+                $li.append('<a class="selected-product"><i class="fa fa-check"></i><div class="ac-title">' + item.label + '</div></a>');
+              } else {
+                $li.append('<a><i class="fa fa-check"></i><div class="ac-title">' + item.label + '</div></a>');
+              }
+              return $li.appendTo(ul);
+            };
+          },
+
+          close: function(event, ui) {
+            $holder.find('.autocomplete-tooltip').hide();
+          }
+        }).on('focus', function(){ $(this).autocomplete("search"); } );
+
+        var originalCloseMethod = this.input.data('ui-autocomplete').close;
+        this.input.data("ui-autocomplete").close = function(event) {
+          if (!selected){
+            //close requested by someone else, let it pass
+            console.log('close');
+            originalCloseMethod.apply( this, arguments );
+          }
+          selected = false;
+        };
+
+      this._on( this.input, {
+        autocompleteselect: function( event, ui ) {
+          ui.item.option.selected = true;
+          this._trigger( "select", event, {
+            item: ui.item.option
+          });
+        },
+
+        autocompletechange: "_removeIfInvalid"
+      });
+    },
+
+    _source: function(text, callback){
+      var $select = this.element;
+      if( ajaxRequest !== null ) ajaxRequest.abort();
+
+      var request = ajaxCall(
+        globalBaseUrl,
+        { 'task': 'ajax_controller', 'action': 'get_content', 'type': 'product', 'text': text.term }
+      );
+
+      if( request ) {
+        request.done(function(response) {
+          $select.empty();
+
+          if( response && response.data ) {
+            $.each(response.data, function(i, value){
+              var $opt = $('<option>').text(value.title).attr('value', value.value);
+              if( typeof value.image !== 'undefined' && typeof value.image.src !== 'undefined' ) $opt.attr('data-img', value.image.src);
+              $opt.appendTo($select);
+            });
+
+            callback( $select.children("option").map(function() {
+              return {
+                label: $(this).text(),
+                value: $(this).val(),
+                image: $(this).attr('data-img'),
+                option: this
+              };
+            }));
+          } else {
+            callback([]);
+          }
+        });
+      }
+    },
+
+    _removeIfInvalid: function( event, ui ) {
+      // Selected an item, nothing to do
+      if ( ui.item ) return;
+
+      // Search for a match (case-insensitive)
+      var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+
+      this.element.children("option").each(function() {
+        if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+          this.selected = valid = true;
+          return false;
+        }
+      });
+
+      // Found a match, nothing to do
+      if ( valid ) return;
+
+      // Remove invalid value
+      //this.input.val("");
+      this.input.autocomplete( "instance" ).term = "";
+      this.element.val("");
+      this.element.parent().find('.autocomplete-loader').hide();
+    },
+
+    _destroy: function() {
+      this.wrapper.remove();
+      this.element.show();
+    }
+  });
+})( jQuery );
+
+function initAutocomplete($holder)
+{
+  var $comboboxHolder = $holder.find('.autocomplete-combobox');
+  $comboboxHolder.combobox($holder);
+}
+
+function showRoute(el)
+{
+  $('.route-value-holder').hide();
+  $('#route-value-' + $(el).val() + '-holder').show();
+}
+
+function addRouteProduct(item)
+{
+  gSortedProductList.push(item.label);
+  gSortedProductList.sort();
+  var newRowPosition = gSortedProductList.indexOf(item.label);
+
+  var row = [
+    '<tbody id="product-' + item.value + '">',
+      '<tr>',
+        '<td style="width: 40px">',
+          '<div class="image-holder">',
+            '<img src="' + item.image + '" title="' + item.label + '">',
+          '</div>',
+        '</td>',
+        '<td>',
+          item.label,
+          '<input type="hidden" name="route[data][products][' + item.value + ']" value="' + item.label + '" />',
+        '</td>',
+        '<td style="width: 40px">',
+          '<button type="button" class="btn btn--plain btn--plain--flush-right" onclick="removeRouteProduct(this)">',
+            '<i class="fa fa-close"></i>',
+          '</button>',
+        '</td>',
+      '</tr>',
+    '</tbody>'
+  ].join('');
+
+  if( newRowPosition == 0 ) {
+    $('#route-product-values').prepend(row);
+  } else if( newRowPosition >= gSortedProductList.length - 1 ) {
+    $('#route-product-values').append(row);
+  } else {
+    $('#route-product-values tbody:eq(' + newRowPosition + ')').before(row);
+  }
+}
+
+function removeRouteProduct(el)
+{
+  $(el).closest('tbody').remove();
+
+  gSortedProductList = [];
+  $('#route-product-values input[type=hidden]').each(function(i, el){
+    gSortedProductList.push(el.value);
+  });
+  gSortedProductList.sort();
+}
+
+function checkImportQueueStatus()
+{
+  var request = simpleAjaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_controller', 'action': 'check_import_queue' }
+  );
+
+  if( request ) {
+    request.done(function(response) {
+      if( response && response.data ) {
+        if( response.data.empty_queue ) {
+          $('#import-errors, #import-notice-holder').remove();
+          $('#import-form-holder').show();
+        }
+      }
+    });
+  }
+}
+
+function checkRulesQueueStatus()
+{
+  var request = simpleAjaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_controller', 'action': 'check_rules_queue' }
+  );
+
+  if( request ) {
+    request.done(function(response) {
+      if( response && response.data ) {
+        if( response.data.empty_queue ) {
+          $('#rule-url-notice, #rule-url-errors').remove();
+        }
+      }
+    });
   }
 }

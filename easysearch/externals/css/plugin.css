@@ -36,10 +36,10 @@ select[multiple] {
 #editor-sidebar-form-container select {
   width: 100%;
 }
-.easysearch-disabled {
+.easy-disabled {
   position: relative;
 }
-.easysearch-disabled:after {
+.easy-disabled:after {
   content: '';
   position: absolute;
   z-index: 99999;
@@ -47,7 +47,8 @@ select[multiple] {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.5);
+  cursor: wait !important;
 }
 .stat--red {
   color: red;
@@ -187,6 +188,7 @@ select[multiple] {
 
 #fields-container {
   position: relative;
+  background: white;
 }
 #fields-container .next-pane__header {
   position: relative;
@@ -230,6 +232,10 @@ select[multiple] {
   margin-bottom: 0;
 }
 
+.elements-holder .btn-large {
+  margin: 0;
+}
+
 .hidden-title {
   opacity: 0.15;
 }
@@ -239,6 +245,7 @@ select[multiple] {
   margin-right: 8px;
 }
 #import-box {
+  margin: 1em 0;
   display: none;
 }
 #import-file {
@@ -248,4 +255,290 @@ select[multiple] {
 }
 #database-holder {
   margin-top: 8px;
+}
+#database-actions {
+  position: relative;
+  padding-right: 140px;
+}
+#database-actions .import-db-btn {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin-top: -22px;
+}
+#import-example table {
+  table-layout: fixed;
+  width: 100%;
+}
+#import-notice {
+  margin: 0;
+}
+
+.field-value-to-holder,
+.field-step-holder {
+  display: none;
+}
+.field-range-holder {
+  clear: both;
+}
+#form-rule {
+  padding-bottom: 60px;
+}
+#form-rule .grid__item {
+  padding-bottom: 0;
+}
+
+
+
+.tag > span {
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+.tag.green-tag > span.active {
+  background: #b5ea9f;
+  border-color: #99d899;
+}
+.tag.green-tag > span.active .close,
+.tag.green-tag > span.active .add-or {
+  border-color: #99d899;
+}
+
+#no-rules {
+  display: none;
+}
+#rules-list td {
+  vertical-align: top;
+  padding-top: 10px;
+  line-height: 0;
+}
+#rules-list td.tag {
+  font-size: 0;
+}
+.rule-actions {
+  width: 130px;
+}
+.rule-actions .btn {
+  padding: 7px 15px;
+  margin-bottom: 4px;
+  vertical-align: top;
+}
+.rule-status i.fa {
+  font-size: 18px;
+  line-height: 28px;
+  cursor: pointer;
+  vertical-align: top;
+  color: #d9d9d9
+}
+.rule-status i.fa-toggle-on {
+  color: #90d246;
+}
+
+.rule-edit-text {
+  display: inline-block;
+}
+.rule-edit-icon {
+  display: none;
+}
+
+@media only screen and (max-width: 640px) {
+  .rule-actions {
+    width: 94px;
+  }
+  .rule-edit-text {
+    display: none;
+  }
+  .rule-edit-icon {
+    display: inline-block;
+  }
+}
+
+span.label-from {
+  display: none;
+}
+
+.remove-rule-loader {
+  float: right;
+  width: 20px;
+  height: 20px;
+  margin: 4px 11px;
+  padding: 0;
+}
+.remove-rule-loader .next-spinner > .next-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.tag > span.empty-rule {
+  background: #fff7b2;
+  border-color: #efce6d;
+}
+
+.route-value-holder {
+  display: none;
+}
+
+
+input.ui-autocomplete-input {
+  padding: 0 30px;
+  margin: 0;
+  background: white;
+  border-color: #d3dbe2 !important;
+}
+.autocomplete-loader {
+  display: none;
+  float: right;
+  width: 20px;
+  height: 20px;
+  margin: -24px 4px 0 0;
+  padding: 0;
+}
+.autocomplete-loader .next-spinner > .next-icon {
+  width: 20px;
+  height: 20px;
+}
+.ui-autocomplete {
+  max-height: 204px;
+}
+.custom-combobox {
+  position: relative;
+  width: 100%;
+}
+span.custom-combobox:before {
+  content: "\f002";
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  right: auto;
+  font-size: 14px;
+  margin-top: -0.5em;
+  color: #95a7b7;
+}
+
+
+#route-value-products-subholder {
+  position: relative;
+  padding-bottom: 2px !important;
+}
+#route-value-products-subholder ul.ui-autocomplete {
+  position: absolute !important;
+  z-index: 99;
+  top: 40px !important;
+  overflow: auto;
+  max-width: 100%;
+  padding: 5px 0;
+  margin: -1px 0 20px;
+  background: white;
+  border: 1px #d3dbe2 solid;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+#route-value-products-subholder ul.ui-autocomplete li {
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  background: white;
+  border: none;
+  font-size: 13px;
+  line-height: 20px;
+  text-overflow: ellipsis;
+}
+#route-value-products-subholder ul.ui-autocomplete li a {
+  display: -webkit-flex; /* Safari */
+  display: flex;
+  padding: 5px 10px;
+}
+#route-value-products-subholder ul.ui-autocomplete li a.selected-product {
+  background: #eff9fd;
+  color: #798c9c;
+}
+#route-value-products-subholder ul.ui-autocomplete li a:hover {
+  background: #0078bd;
+  color: white;
+}
+#route-value-products-subholder ul.ui-autocomplete li a i.fa {
+  visibility: hidden;
+  padding: 4px 9px 4px 4px;
+}
+#route-value-products-subholder ul.ui-autocomplete li a.selected-product i.fa {
+  visibility: visible;
+}
+
+.autocomplete-tooltip {
+  display: none;
+  overflow: hidden;
+  position: absolute;
+  z-index: 100;
+  top: 20px;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  pointer-events: none;
+}
+.autocomplete-tooltip:before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  background-color: rgba(255,255,255,0.98);
+  border: 1px #d3dbe2 solid;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+#route-product-values {
+  clear: both;
+  padding-top: 15px;
+}
+#route-product-values td {
+  border-bottom: 1px solid #ebeef0;
+}
+td .image-holder {
+  display: block;
+  position: relative;
+  width: 40px;
+  padding: 0 0 40px;
+  background: #fafbfc;
+}
+td .image-holder img {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+#route-product-values button {
+  border: none;
+}
+#route-product-values button i.fa {
+  font-size: 16px;
+}
+
+.hr {
+  overflow: hidden;
+  clear: both;
+  margin: 0 -20px;
+}
+.hr hr {
+  margin: 15px 0;
+}
+
+.template-rule #form-rule > div {
+  overflow: visible;
+}
+
+.tour-step-1 {
+  margin-top: -20px;
+  height: 0;
+  width: 200px;
 }
