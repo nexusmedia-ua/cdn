@@ -75,11 +75,13 @@ if( typeof easysearch == 'undefined' || typeof easysearch.jq191Src == 'undefined
         complete: function(resp){
 
           if( resp.data ) {
+            var $searchIndexConvertor = $('<div>');
             easysearch.jq.each(resp.data, function(i, row){
               searchRowName = '';
 
               easysearch.jq.each(row, function(j, value){
                 value = value.replace(/"/g, "'");
+                value = $searchIndexConvertor.html(value).text();
                 if( typeof easysearch.tree[searchRowName] === 'undefined' ) easysearch.tree[searchRowName] = [];
                 if( easysearch.jq.inArray(value, easysearch.tree[searchRowName]) === -1 ) easysearch.tree[searchRowName].push(value);
                 searchRowName += value + ",";
