@@ -80,8 +80,9 @@ if( typeof easysearch == 'undefined' || typeof easysearch.jq191Src == 'undefined
               searchRowName = '';
 
               easysearch.jq.each(row, function(j, value){
-                value = value.replace(/"/g, "'");
+                value = value.replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                 value = $searchIndexConvertor.html(value).text();
+
                 if( typeof easysearch.tree[searchRowName] === 'undefined' ) easysearch.tree[searchRowName] = [];
                 if( easysearch.jq.inArray(value, easysearch.tree[searchRowName]) === -1 ) easysearch.tree[searchRowName].push(value);
                 searchRowName += value + ",";
@@ -140,6 +141,7 @@ if( typeof easysearch == 'undefined' || typeof easysearch.jq191Src == 'undefined
       var optionsList = [];
 
       easysearch.jq.each(easysearch.tree[index], function(j, value){
+        value = value.replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         if( value ) {
           if( disabled ) {
             $sel.attr('disabled', false);
