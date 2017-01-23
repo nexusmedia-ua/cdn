@@ -59,6 +59,17 @@ hr {
 #lockdown-customers-password-holder input {
   margin: 0;
 }
+#lockdown-customers-password-holder .mce-ico {
+  width: 13px;
+  height: 13px;
+  line-height: 18px;
+  font-size: 13px;
+}
+#lockdown-customers-password-holder .mce-listbox button {
+  padding-right: 20px;
+  line-height: 18px;
+  font-size: 13px;
+}
 
 #add-content-form,
 #add-exception-form {
@@ -76,6 +87,9 @@ hr {
   right: 0;
 }
 
+.hidden {
+  display: none;
+}
 .ohidden {
   overflow: hidden;
 }

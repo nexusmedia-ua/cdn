@@ -258,7 +258,7 @@ function addContent()
 
   if( !type ) return;
 
-  var $content = $('<span>');
+  var $content = $('<span data-type="' + type + '">');
   var $hidden  = $('<input type="hidden">');
   var typeTitle = getContentTitleByType(type);
 
@@ -275,6 +275,8 @@ function addContent()
   } else {
     $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeContent(this);">x</span>' );
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + ']').val(1) );
+
+    if( type == 'website' ) $('#hide-links-holder').hide();
   }
 
   $('#lockdown-content-errors').remove();
@@ -292,7 +294,13 @@ function cancelContent()
 
 function removeContent(el)
 {
-  $(el).parent().remove();
+  var $parent = $(el).parent();
+  if( $parent.siblings('span[data-type=website]').length ) {
+    $('#hide-links-holder').hide();
+  } else {
+    $('#hide-links-holder').show();
+  }
+  $parent.remove();
 }
 
 function showException(el)
@@ -384,6 +392,7 @@ function getContentTitleByType( type )
 {
   switch(type) {
     case 'website':    return 'Whole Website'; break;
+    case 'index':      return 'Home Page'; break;
     case 'page':       return 'Page'; break;
     case 'blog':       return 'Blog'; break;
     case 'collection': return 'Collection only'; break;
@@ -411,7 +420,7 @@ function selectCustomersType(el)
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
     $('#additional-settings-section').show();
-    $('#hide-links-holder').show();
+    if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
 
   } else if( selectedType == 'selected' ) {
     $('#lockdown-customers-filters-holder').show();
@@ -419,7 +428,7 @@ function selectCustomersType(el)
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
     $('#additional-settings-section').show();
-    $('#hide-links-holder').show();
+    if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
 
   } else if( selectedType == 'authorized' ) {
     $('#lockdown-customers-filters-holder').hide();
@@ -560,4 +569,30 @@ function removeFilter(el)
   $(el).parent().remove();
 
   $('span[data-group=' + group + ']').last().addClass('group-tag-last');
+}
+
+function initWYSIWYG()
+{
+  var $wysiwygEl = $('textarea[data-spec=wysiwyg]');
+  if( $wysiwygEl.length ) {
+    var $valueEl = $wysiwygEl.next('[data-spec=wysiwyg-init-value]');
+    if( $valueEl.length ) $wysiwygEl.val($valueEl.html());
+
+    var editor = new tinymce.Editor($wysiwygEl.attr('id'), {
+      menubar: false,
+      statusbar: false,
+      height: 160,
+      content_css : "externals/css/base.css,externals/libraries/tinymce/base.css",
+      plugins: [
+        "advlist link textcolor code hr directionality lineheight"
+      ],
+      toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,",
+      fontsize_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
+      lineheight_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
+      font_formats: "Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;Comfortaa=Comfortaa;Courgette=Courgette;Federo=Federo;Josefin Slab=Josefin Slab;Montserrat=Montserrat;Niconne=Niconne;Old Standard TT=Old Standard TT;Open Sans=Open Sans;Raleway=Raleway;Roboto Condensed=Roboto Condensed;Titillium Web=Titillium Web;"
+
+    }, tinymce.EditorManager);
+
+    editor.render();
+  }
 }

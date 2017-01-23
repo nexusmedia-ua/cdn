@@ -71,7 +71,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( easylockdown.activeId && h ) {
         var ch = easylockdown.getCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activeId);
         if( ch && ch == h ) {
-          easylockdown.jq("form[action='/cart/add']").show();
+          easylockdown.jq("form[action='/cart/add'] input[type=submit], form[action='/cart/add'] button[type=submit]").show();
           easylockdown.showContent = true;
           return;
         }
