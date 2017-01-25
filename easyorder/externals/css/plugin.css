@@ -17,9 +17,32 @@ select[multiple] {
   height: 74px;
 }
 
+:focus {
+  outline: none;
+};
+
 .btn-default, .btn {
   max-width: 100%;
   box-sizing: border-box;
+}
+
+.wrapper {
+  overflow: hidden;
+}
+
+.easy-disabled {
+  position: relative;
+}
+.easy-disabled:after {
+  content: '';
+  position: absolute;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.5);
+  cursor: wait !important;
 }
 
 #editor-sidebar-header > .next-pane__header {
@@ -36,10 +59,6 @@ select[multiple] {
 #editor-sidebar-form-container select {
   width: 100%;
 }
-.easyorder-disabled {
-  cursor: wait;
-  opacity: 0.4 !important;
-}
 .stat--red {
   color: red;
 }
@@ -54,13 +73,6 @@ select[multiple] {
 
 .lightbox {
   display: none;
-}
-
-.grid-stack {
-  background: white;
-  border-width: 5px 0;
-  border-style: solid;
-  border-color: white;
 }
 
 #field-edit-error,
@@ -96,76 +108,10 @@ select[multiple] {
   margin-right: 90px;
 }
 
-.delete-field,
-.delete-option,
-.edit-field,
-.edit-option,
-.info-field {
-  position: absolute;
-  top: 50%;
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  border: none;
-  font-size: 0;
-}
-.delete-field,
-.delete-option {
-  right: 40px;
-  background: transparent url('../images/icon-close.png') no-repeat;
-  background-size: 100%;
-}
-.edit-field,
-.edit-option {
-  right: 60px;
-  background: transparent url('../images/icon-gear.png') no-repeat;
-  background-size: 100%;
-  opacity: 0.8;
-}
-.info-field {
-  right: 80px;
-  background: transparent url('../images/icon-question.png') no-repeat;
-  background-size: 100%;
-  opacity: 0.8;
-}
-.move-icon {
-  opacity: 0.2;
-  position: absolute;
-  top: 50%;
-  right: 0;
-  width: 16px;
-  height: 16px;
-  margin-top: -8px;
-  background: transparent url('../images/icon-arrow-move.png') no-repeat;
-  background-size: 100%;
-  border: none;
-  font-size: 0;
-  cursor: move;
-}
-
-.form-field[data-field-type=text] .delete-field,
-.form-field[data-field-type=text] .edit-field,
-.form-field[data-field-type=text] .info-field,
-.form-field[data-field-type=email] .delete-field,
-.form-field[data-field-type=email] .edit-field,
-.form-field[data-field-type=email] .info-field,
-.form-field[data-field-type=select] .delete-field,
-.form-field[data-field-type=select] .edit-field,
-.form-field[data-field-type=select] .info-field {
-  top: auto;
-  bottom: 20px;
-}
-.form-field[data-field-type=text] .move-icon,
-.form-field[data-field-type=email] .move-icon,
-.form-field[data-field-type=select] .move-icon {
-  top: auto;
-  bottom: 8px;
-}
-
 .field-form-info-holder {
   position: relative;
   top: -12px;
-  right: -14px;
+  right: -12px;
   margin: 0;
 }
 .field-form-tooltip-holder {
@@ -173,51 +119,12 @@ select[multiple] {
   top: 0;
   right: 0;
   margin: 0;
-  width: 12px;
-  height: 12px;
-  background: transparent url('../images/icon-question.png') no-repeat;
-  background-size: 100%;
   opacity: 0.8;
 }
-
-.grid-stack {
-  border: none;
-}
-.grid-stack > .grid-stack-item > .ui-resizable-se {
-  display: none !important;
-}
-
-.grid-stack-item.editing {
-  background-color: rgba(173, 255, 47, 0.4);
-  border-width: 1px 0px;
-  border-style: dashed;
-  border-color: cadetblue;
-}
-.grid-stack > .grid-stack-item > .grid-stack-item-content {
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-}
-
-#options-holder {
-  display: none;
-}
-#options-holder .grid-stack > .grid-stack-item > .grid-stack-item-content {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0 10px;
-}
-#options-container .grid-stack-item.row-checked {
-  background: greenyellow;
-}
-#options-holder .grid-stack-item {
-  border-bottom: 1px solid #ebeef0;
-}
-#options-holder .move-icon {
-  right: 10px;
+.field-form-tooltip-holder i.fa {
+  font-size: 16px;
+  line-height: 14px;
+  vertical-align: top;
 }
 
 .option-edit-row {
@@ -259,11 +166,6 @@ select[multiple] {
 #field_setting_edit_option {
   overflow: hidden;
 }
-#field_setting_new_option .grid__item,
-#field_setting_edit_option .grid__item {
-  padding-bottom: 0;
-}
-
 #field_setting_options {
   table-layout: fixed;
   padding-bottom: 15px;
@@ -291,11 +193,11 @@ select[multiple] {
   display: none;
 }
 
-#relating_options_container {
+#relating-options-container {
   display: none;
   margin-top: 15px;
 }
-.relating_options_list {
+.relating-options-list {
   display: none;
 }
 
@@ -310,11 +212,6 @@ select[multiple] {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/*
-#options-holder .grid-stack > div.grid-stack-placeholder + div.grid-stack-item .grid__item {
-  line-height: 28px;
-}
-*/
 
 #options-container .grid__item:first-child {
   padding-left: 0;
@@ -362,4 +259,178 @@ select[multiple] {
 }
 .easyorder-disabled #install-text #easyorder-tabs-loader {
   display: block !important;
+}
+
+
+.delete-field,
+.delete-option,
+.edit-field,
+.edit-option,
+.info-field,
+.check-option {
+  position: absolute;
+  border: none;
+  background: none;
+}
+
+#fields-container ol {
+  margin: 0;
+  padding: 0;
+}
+#fields-container ol > li {
+  position: relative;
+  min-height: 28px;
+  padding: 10px 10px 20px;
+  background: white;
+  border-bottom: 1px solid #ebeef0;
+  list-style-type: none;
+}
+#fields-container ol > li:first-child,
+#fields-container ol > li.ui-sortable-helper {
+  border-top: 1px solid #ebeef0;
+}
+#fields-container ol > li.editing {
+  background-color: rgba(173, 255, 47, 0.4);
+  border-color: cadetblue;
+  border-width: 1px 0px;
+  border-style: dashed;
+}
+
+#fields-container ol .heading-row,
+#fields-container ol .checkbox-row,
+#fields-container ol .radio-row {
+  padding-bottom: 10px;
+}
+
+#fields-container ol .field-actions {
+  position: absolute;
+  top: 50%;
+  bottom: auto;
+  right: 10px;
+  width: 90px;
+  margin-top: -9px;
+}
+
+#fields-container ol .email-row .field-actions,
+#fields-container ol .select-row .field-actions,
+#fields-container ol .text-row .field-actions {
+  top: 39px;
+  margin: 0;
+}
+
+.field-actions > button {
+  top: 0;
+  margin: 0;
+  padding: 0;
+}
+.field-actions > button.info-field {
+  left: 8px;
+}
+.field-actions > button.edit-field {
+  left: 27px;
+}
+.field-actions > button.delete-field {
+  left: 48px;
+}
+
+.field-actions > button i {
+  display: block;
+  line-height: 17px;
+  font-size: 17px;
+  font-weight: normal;
+  color: #333;
+}
+.field-actions > button.edit-field i {
+  font-size: 15px;
+}
+
+.field-actions > i.fa-arrows {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #ccc;
+  font-size: 18px;
+  line-height: 18px;
+  cursor: move;
+}
+#fields-container ol > li.editing .field-actions > i.fa-arrows {
+  color: #aaa;
+}
+
+#options-holder {
+  padding: 0;
+  margin: 0;
+}
+#options-holder > li {
+  position: relative;
+  min-height: 24px;
+  padding: 3px;
+  border-bottom: 1px solid #ebeef0;
+  list-style-type: none;
+}
+#options-holder > li:first-child,
+#options-holder > li.ui-sortable-helper {
+  border-top: 1px solid #ebeef0;
+}
+
+#options-holder > li .option-title {
+  margin-right: 82px;
+  line-height: 24px;
+  text-overflow: ellipsis;
+}
+#options-holder > li .option-actions {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  right: 3px;
+  width: 90px;
+  font-size: 16px
+}
+.option-actions > button {
+  top: 2px;
+}
+.option-actions > button.check-option {
+  left: 4px;
+  color: #ccc;
+}
+.option-actions > button.edit-option {
+  left: 24px;
+}
+.option-actions > button.delete-option {
+  left: 44px;
+}
+#options-holder .row-checked .option-actions > button.check-option {
+  color: #55dc73;
+}
+
+.option-actions > i.fa-arrows {
+  position: absolute;
+  top: 5px;
+  right: 0;
+  color: #ccc;
+}
+
+#edit-option-holder button,
+#create-option-holder button {
+  padding: 6px 6px 7px;
+  vertical-align: top;
+}
+#edit-option-holder table,
+#create-option {
+  width: 100%;
+  table-layout: fixed;
+}
+#edit-option-holder table td {
+  padding: 6px 0;
+  border: none;
+}
+#create-option td {
+  padding: 0 0 6px;
+  border: none;
+}
+#edit-option-holder .edit-option-actions {
+  width: 120px;
+}
+#create-option-holder .new-option-actions {
+  width: 45px;
 }

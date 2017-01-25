@@ -1,15 +1,15 @@
+"use strict";
+
 function isset()
 {
   var a = arguments;
   var l = a.length;
   var i = 0;
 
-  if( l == 0 ) {
-    throw new Error('Empty isset');
-  }
+  if( l == 0 ) return false;
 
   while( i != l ) {
-    if( typeof(a[i])=='undefined' || a[i]===null ) {
+    if( typeof(a[i]) == 'undefined' || a[i] === null ) {
       return false;
     } else {
       i++;
@@ -75,9 +75,39 @@ function trim(str, charlist)
   return whitespace.indexOf(str.charAt(0)) === -1 ? str : '';
 }
 
-function addZero(x,n) {
-  while (x.toString().length < n) {
-      x = "0" + x;
+function addZero(x, n)
+{
+  while( x.toString().length < n ) {
+    x = "0" + x;
   }
   return x;
+}
+
+function getTimedId( prefix )
+{
+  prefix = prefix || '';
+
+  var d = new Date();
+  var h = addZero(d.getHours(), 2);
+  var m = addZero(d.getMinutes(), 2);
+  var s = addZero(d.getSeconds(), 2);
+  var ms = addZero(d.getMilliseconds(), 3);
+  return prefix + h + "_" + m + "_" + s + "_" + ms;
+}
+
+function getRandomInt(min, max)
+{
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function escapeHtml(text) {
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }

@@ -2,31 +2,35 @@
 
 var ajaxRequest = null;
 var ajaxIsActive = false;
+var $ajaxDisabledBlock = null;
 
 window.onbeforeunload = function()
 {
+  if( isset(ShopifyApp) ) ShopifyApp.Bar.loadingOn();
+
   if( ajaxRequest !== null ) {
     ajaxRequest.abort();
   }
 };
 
-
-function ajaxCall(url, params, dt, rt)
+function ajaxCall(url, data, config)
 {
   if( ajaxIsActive ) return false;
 
-  var dataType    = dt || 'html';
-  var requestType = rt || 'POST';
-  var ajaxParams  = {'ajax' : true, 'ahmac' : globalAhmac};
+  var ajaxParams   = {'ajax' : true, 'ahmac' : globalAhmac};
+  var responseType = config && typeof config['response_type'] === 'string' ? config['response_type'] : 'json';
+  var requestType  = config && typeof config['request_type']  === 'string' ? config['request_type']  : 'POST';
+  $ajaxDisabledBlock = config && typeof config['disabled_block'] === 'string' && $(config['disabled_block']).length ? $(config['disabled_block']) : null;
 
-  $.extend(ajaxParams, params);
-  ajaxBefore();
+  $.extend(ajaxParams, data);
+  ajaxBefore(data);
 
   ajaxRequest = $.ajax({
-    type: requestType,
-    url: url,
-    dataType: dataType,
-    data: ajaxParams,
+    type : requestType,
+    url  : url,
+    async: true,
+    dataType: responseType,
+    data : ajaxParams,
     complete: function(response) {
       ajaxAfter(response);
     }
@@ -35,56 +39,45 @@ function ajaxCall(url, params, dt, rt)
   return ajaxRequest;
 }
 
-
-function ajaxCallForm(url, form, dt)
+function ajaxCallForm(url, form, config)
 {
   if( ajaxIsActive ) return false;
 
-  var dataType = dt || 'html';
+  var responseType   = config && typeof config['response_type']  === 'string' ? config['response_type'] : 'json';
+  $ajaxDisabledBlock = config && typeof config['disabled_block'] === 'string' && $(config['disabled_block']).length ? $(config['disabled_block']) : null;
+
   form.append('ajax',  1);
   form.append('ahmac', globalAhmac);
-  ajaxBefore();
+  ajaxBefore(config);
 
   ajaxRequest = $.ajax({
     type: 'POST',
     url: url,
-    dataType: dataType,
+    dataType: responseType,
     data: form,
     processData: false,
     contentType: false,
     complete: function(response) {
       ajaxAfter(response);
     }
-  });
+  })
 
   return ajaxRequest;
 }
 
-function ajaxBefore()
+function ajaxBefore(params)
 {
-  $('#fields-holder, #editor-sidebar-form-holder').find('a, button').addClass('easyorder-disabled');
+  var params = params || {};
   ajaxIsActive = true;
+
+  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.addClass('easy-disabled');
 }
 
 function ajaxAfter(response)
 {
-  if( !ajaxCheckResponse(response) ) return;
+  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.removeClass('easy-disabled');
 
-  $('.loader').hide();
   ajaxIsActive = false;
-  $('#fields-holder, #editor-sidebar-form-holder').find('a, button').removeClass('easyorder-disabled');
-}
-
-function ajaxCheckResponse(response)
-{
-  if( globalAppCurrentUrl ) {
-    if( typeof(response) == 'string' && response == 'invalid shop' ) {
-      window.top.location.href = globalAppCurrentUrl;
-      return false;
-    } else if( typeof(response) == 'object' && isset(response.responseText) && response.responseText == 'invalid shop' ) {
-      window.top.location.href = globalAppCurrentUrl;
-      return false;
-    }
-  }
-  return true;
+  ajaxRequest = null;
+  $ajaxDisabledBlock = null;
 }
