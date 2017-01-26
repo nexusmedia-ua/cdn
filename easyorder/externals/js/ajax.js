@@ -20,6 +20,7 @@ function ajaxCall(url, data, config)
   var ajaxParams   = {'ajax' : true, 'ahmac' : globalAhmac};
   var responseType = config && typeof config['response_type'] === 'string' ? config['response_type'] : 'json';
   var requestType  = config && typeof config['request_type']  === 'string' ? config['request_type']  : 'POST';
+  var doubleAjax   = config && typeof config['double_ajax']   === 'boolean'? config['double_ajax']   : false;
   $ajaxDisabledBlock = config && typeof config['disabled_block'] === 'string' && $(config['disabled_block']).length ? $(config['disabled_block']) : null;
 
   $.extend(ajaxParams, data);
@@ -32,7 +33,7 @@ function ajaxCall(url, data, config)
     dataType: responseType,
     data : ajaxParams,
     complete: function(response) {
-      ajaxAfter(response);
+      if( !doubleAjax ) ajaxAfter(response);
     }
   });
 

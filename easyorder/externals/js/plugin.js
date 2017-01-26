@@ -8,13 +8,16 @@ $(document).ready(function(){
 // +
 function showMainMenu()
 {
+  if( ajaxIsActive ) return false;
+
   var $menu = $('#main-menu-hidden-holder > ul');
   if( $menu.length ) {
-    closeEditFieldForm();
-    $('#editor-sidebar-header').hide();
-    $('#editor-sidebar-form-holder').html($menu.clone()).show();
+    closeEditFieldForm( function(){
+      $('#editor-sidebar-header').hide();
+      $('#editor-sidebar-form-holder').html($menu.clone()).show();
+      $('body').animate({ scrollTop: $("body").offset().top }, 500);
+    });
   }
-  $('body').animate({ scrollTop: $("body").offset().top }, 500);
 }
 
 // +
@@ -149,8 +152,9 @@ function saveFieldSettings()
         $('#editor-sidebar-form-loader').hide();
 
         if( !response.error ) {
-          closeEditFieldForm();
-          if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Field settings saved");
+          closeEditFieldForm(function(){
+            if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Field settings saved");
+          });
         } else {
           $('#field-edit-error').text(response.error).show();
           $('#editor-sidebar-form-holder').show();
@@ -212,26 +216,28 @@ function deleteField( fieldId )
 
   var _deleteField = function(){
     $('#fields-holder > li[data-field-id=' + fieldId + ']').remove();
-    closeEditFieldForm();
 
-    $('#easyorder-tabs-loader').show();
-    var request = ajaxCall(
-      globalBaseUrl,
-      { 'task': 'ajax_controller', 'action': 'delete_field', 'field_id' : fieldId },
-      { 'disabled_block': '#template-main > .wrapper' }
-    );
+    closeEditFieldForm(function(){
+      $('#easyorder-tabs-loader').show();
+      var request = ajaxCall(
+        globalBaseUrl,
+        { 'task': 'ajax_controller', 'action': 'delete_field', 'field_id' : fieldId },
+        { 'disabled_block': '#template-main > .wrapper' }
+      );
 
-    if( request ) {
-      request.done(function(response) {
-        $('#easyorder-tabs-loader').hide();
-      });
-    }
+      if( request ) {
+        request.done(function(response) {
+          $('#easyorder-tabs-loader').hide();
+        });
+      }
+    }, true);
   }
 }
 
 // +
-function closeEditFieldForm()
+function closeEditFieldForm( afterCloseFunc, doubleAjax )
 {
+  doubleAjax = doubleAjax ? true : false;
   $('#editor-sidebar-form-holder').empty();
   $('#editor-sidebar-header').show();
 
@@ -242,7 +248,7 @@ function closeEditFieldForm()
     var request = ajaxCall(
       globalBaseUrl,
       { 'task': 'ajax_get_form', 'id': fieldId },
-      { 'response_type': 'html', 'disabled_block': '#template-main > .wrapper' }
+      { 'response_type': 'html', 'disabled_block': '#template-main > .wrapper', 'double_ajax': doubleAjax }
     );
 
     if( request ) {
@@ -258,9 +264,17 @@ function closeEditFieldForm()
           }
 
           $('#editor-sidebar-form-holder').empty().show();
+
+          if( typeof afterCloseFunc == 'function' ) {
+            if( doubleAjax ) ajaxAfter();
+            afterCloseFunc();
+          }
         }
       });
     }
+
+  } else {
+    if( typeof afterCloseFunc == 'function' ) afterCloseFunc();
   }
   $editingElement = null;
 }
@@ -338,7 +352,7 @@ function addField( type, typeSpec, typeName )
 
   if( request ) {
     request.done(function(response) {
-      if( response.error || !response.data ) window.location.reload();
+      //if( response.error || !response.data ) window.location.reload();
 
       $('#easyorder-tabs-loader').hide();
       var $li = $('<li class="field-row ' + type + '-row ui-sortable-handle"></li>').attr('data-field-id', response.data.id);
