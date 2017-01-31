@@ -9,6 +9,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     Papa: null,
     preSelect: '',
     curIndex: '',
+    DOMReady: false,
 
     dbSRC: '',
     tree: {'':[]},
@@ -1542,6 +1543,12 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     }
   }
   easysearch.initPage();
+  easysearch.jq(document).ready(function() { easysearch.DOMReady = true; });
 
   easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
+
+} else {
+  if( easysearch.DOMReady && easysearch.jq('div[id=easysearch-holder].easysearch-loading').length ) {
+    easysearch.initPage();
+  }
 }
