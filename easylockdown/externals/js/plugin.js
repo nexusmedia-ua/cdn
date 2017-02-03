@@ -419,7 +419,7 @@ function selectCustomersType(el)
     $('#lockdown-customers-password-holder').hide();
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
-    $('#additional-settings-section').show();
+    $('#locked-page-info').show();
     if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
 
   } else if( selectedType == 'selected' ) {
@@ -427,7 +427,7 @@ function selectCustomersType(el)
     $('#lockdown-customers-password-holder').hide();
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
-    $('#additional-settings-section').show();
+    $('#locked-page-info').show();
     if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
 
   } else if( selectedType == 'authorized' ) {
@@ -435,8 +435,8 @@ function selectCustomersType(el)
     $('#lockdown-customers-password-holder').show();
     $('#who-may-access-section > hr').hide();
     $('#how-to-lock-section').hide();
-    $('#additional-settings-section').hide();
-    $('#hide-links-holder').hide();
+    $('#locked-page-info').hide();
+    if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
   }
 }
 
