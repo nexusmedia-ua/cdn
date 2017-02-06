@@ -157,7 +157,7 @@ var dragging = false;
 
 
       // Fix for Retina theme
-      ev$('.flexslider .slides li .video-container').each(function(){
+      ev$('.flexslider .slides li .video-container, .flickity-slider > .gallery-cell').each(function(){
         var video_link = ev$(this).find('a').html();
         flexwidth = ev$('.flexslider').width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
