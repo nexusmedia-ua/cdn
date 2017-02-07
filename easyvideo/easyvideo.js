@@ -221,7 +221,7 @@ var dragging = false;
       });
 
       // Fix for Boundless theme
-      ev$('.product__photo > img, .mobile-gallery > .slides > li > img').each(function(){
+      ev$('.product__photo > img, .mobile-gallery > .slides > li > img, #proimage').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
