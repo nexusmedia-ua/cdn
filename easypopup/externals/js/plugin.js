@@ -1,7 +1,7 @@
 var $editingElement = null;
 var $draggableParent = null;
-var popupEnabledPhrase = '<i class="fa fa-toggle-on"></i><div class="tool-tip">Popup is now Enabled, click to Disable it</div>';
-var popupDisabledPhrase = '<i class="fa fa-toggle-off"></i><div class="tool-tip">Popup is now Disabled, click to Enable it</div>';
+var popupEnabledPhrase = '<i class="fa fa-toggle-on"></i><div class="tool-tip left">Popup is now Enabled, click to Disable it</div>';
+var popupDisabledPhrase = '<i class="fa fa-toggle-off"></i><div class="tool-tip left">Popup is now Disabled, click to Enable it</div>';
 var popupUpdated = false;
 
 $(document).ready(function(){
@@ -22,7 +22,7 @@ $(document).ready(function(){
     }
   });
 
-  $('div, a, button, span').on('click', '#editor-sidebar-form-container .next-list--divided > li > a', function(){
+  $('#editor-sidebar-form-holder, #layout-edit-form-holder').on('click', 'ul.dropdown > li > a', function(){
     var $li = $(this).parent();
     if( $li.hasClass('active') ) {
       $li.removeClass('active');
@@ -373,7 +373,7 @@ function koRegister(name) {
         '<div class="grid-stack" data-bind="foreach: {data: widgets, afterRender: afterAddWidget}">',
         '  <div class="grid-stack-item" data-bind="attr: { \'id\': $data.content_name, \'data-gs-x\': $data.x, \'data-gs-y\': $data.y, \'data-gs-width\': $data.width, \'data-gs-height\': $data.height, \'data-gs-auto-position\': $data.auto_position, \'data-gs-max-height\': $data.max_height, \'data-gs-min-height\':  $data.min_height, \'data-gs-min-width\':  $data.min_width, \'data-content-id\': $data.content_id, \'data-content-type\': $data.content_type}">',
         '    <div class="grid-stack-item-content">',
-        '      <div class="widget-type-preview text-center tooltip-holder" onclick="editContent(this);" data-bind="attr:{\'data-widget-type-icon\': $data.content_type}"><i class="fa"></i></div>',
+        '      <div class="widget-type-preview text-center tooltip-holder" onclick="editContent(this);" data-bind="attr:{\'data-widget-type-icon\': $data.content_type}"></div>',
         '     </div>',
         '     <div class="grid-btn-holder">',
         '       <button class="delete-content" onclick="deleteContent(this);"><i class="fa fa-close"></i></button>',
@@ -400,17 +400,41 @@ function initColumnContainer( $column, id )
       '  </div>',
       '  <div class="column-menu-holder">',
       '    <header class="next-pane__header">',
-      '      <h3>Add widget to the column</h3>',
+      '      <h3>Add widget to the container</h3>',
       '    </header>',
       '    <ul class="column-menu next-list--divided">',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'text\')}">Text</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'image\')}">Image</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'html\')}">HTML</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'social\')}">Social Buttons</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'button\')}">Button</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'share\')}">Share Buttons</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'video\')}">Video</a></li>',
-      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'subscribe\')}">Subscribe</a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'text\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/text.png" />',
+      '        <span>Text</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'image\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/image.png" />',
+      '        <span>Image</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'html\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/html.png" />',
+      '        <span>HTML</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'social\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/social.png" />',
+      '        <span>Social Buttons</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'button\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/button.png" />',
+      '        <span>Button</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'share\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/share.png" />',
+      '        <span>Share Buttons</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'video\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/video.png" />',
+      '        <span>Video</span>',
+      '      </a></li>',
+      '      <li><a class="easypopup-link" data-bind="click: function(){ add_new_content($data, \'subscribe\')}">',
+      '        <img src="' + globalCDNUrl + '/externals/images/widgets/subscribe.png" />',
+      '        <span>Subscribe</span>',
+      '      </a></li>',
       '    </ul>',
       '  </div>',
       '  <div id="' + columnHolderName + '" class="column-widget-holder" data-bind="component: {name: \'' + columnHolderName + '\', params: $data}">',
@@ -892,6 +916,26 @@ $.fn.extend({setPreviewWidgetAttr : function() {
   }
 }});
 
+function subscriptionServiceToggle(el)
+{
+  var v = parseInt(el.value);
+  if( !v ) {
+    $('#active-campaign-holder').hide();
+    $('#aweber-holder').hide();
+    $('#mailchimp-holder').show();
+
+  } else if( v == 1 ) {
+    $('#mailchimp-holder').hide();
+    $('#aweber-holder').hide();
+    $('#active-campaign-holder').show();
+
+  } else if( v == 2 ) {
+    $('#mailchimp-holder').hide();
+    $('#active-campaign-holder').hide();
+    $('#aweber-holder').show();
+  }
+}
+
 
 // --------------------------------------------- Layout Actions ---------------------------------------------
 function editLayout( layoutId )
@@ -919,9 +963,9 @@ function editLayout( layoutId )
       createLayoutButtonToggle(false);
       initColorpicker();
 
-      var eventSetting = $('#layout_setting_event');
-      layoutEditVariousSettingsToggle( eventSetting );
-      eventSetting.change( function(e){ layoutEditVariousSettingsToggle( $(this) ) } );
+      var $eventSetting = $('#layout_setting_event');
+      layoutEditVariousSettingsToggle( $eventSetting );
+      $eventSetting.change( function(e){ layoutEditVariousSettingsToggle( $(this) ) } );
     });
   }
 }
@@ -966,6 +1010,7 @@ function layoutEditFieldsToggle( el, type )
 {
   if( !isset(el) || !$(el).length ) return;
   var value = $(el).val();
+  if( value == 'product_collection' ) value = 'collection';
 
   $('.layout-setting-' + type  + '-holders').hide();
   $('#layout-setting-' + type  + '-' + value + 's-holder').show();
@@ -1096,7 +1141,10 @@ function deleteLayout( layoutId )
 
         $row.remove();
         $('#layout-list-holder').removeClass('easypopup-disabled');
-        if( !$('#layout-list-holder > li').length ) $('#no-layout').show();
+        if( !$('#layout-list-holder > tbody > tr').length ) {
+          $('#layout-list-holder').hide();
+          $('#no-layout').show();
+        }
       });
     }
   }
@@ -1160,7 +1208,7 @@ function createLayoutButtonToggle( createOn )
           href: globalAppStoreMoreUrl,
           target: '_blank'
         },{
-          label: "Instuctions",
+          label: "Instructions",
           loading: false,
           callback: function(message, data){ window.location.href = globalBaseUrl + '&task=instructions'; }
         }]
@@ -1182,7 +1230,7 @@ function createLayoutButtonToggle( createOn )
           href: globalAppStoreMoreUrl,
           target: '_blank'
         },{
-          label: "Instuctions",
+          label: "Instructions",
           loading: false,
           callback: function(message, data){ window.location.href = globalBaseUrl + '&task=instructions'; }
         }]

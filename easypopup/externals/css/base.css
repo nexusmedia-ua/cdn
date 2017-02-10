@@ -169,27 +169,28 @@ button {
 
 
 .btn {
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  cursor: pointer;
   display: inline-block;
-  padding: 8.5px 15px;
-  border-radius: 3px;
-  font-size: 13px;
-  line-height: 1;
-  height: auto;
-  white-space: nowrap;
-  text-transform: none;
-  font-family: "Roboto", Helvetica, Arial, sans-serif;
   position: relative;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 8.5px 15px;
+  font-size: 13px;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  line-height: 1;
+  text-transform: none;
+  white-space: nowrap;
   vertical-align: middle;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
   -webkit-appearance: none;
-  width: auto;
-  margin: 0;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 3px;
+  outline: none !important;
+  cursor: pointer;
 }
 .btn-default, .btn {
   background-color: white;
@@ -206,7 +207,11 @@ button {
   color: #c3cfd8;
   border: 1px solid #d3dbe2;
 }
-
+.btn-large {
+  font-size: 16px;
+  padding: 13px 30px;
+  margin: 15px 0;
+}
 
 
 .wrapper {

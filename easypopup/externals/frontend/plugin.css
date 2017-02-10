@@ -228,6 +228,30 @@
   margin: 5px 0;
   vertical-align: middle;
 }
+.ep_featherlight .popup-widget-subscribe .easypopup-aweber-elements input[type=text],
+.ep_featherlight .popup-widget-subscribe .easypopup-aweber-elements input[type=email],
+.ep_featherlight .popup-widget-subscribe .easypopup-aweber-elements select {
+  width: 100%;
+  margin: 0 0 5px;
+  vertical-align: middle;
+}
+.ep_featherlight .popup-widget-subscribe .easypopup-aweber-elements input[type=radio],
+.ep_featherlight .popup-widget-subscribe .easypopup-aweber-elements input[type=checkbox] {
+  height: auto;
+  width: auto;
+  margin: 2px 8px 0 0;
+}
+.ep_featherlight .popup-widget-subscribe textarea {
+  width: 100%;
+}
+.ep_featherlight .easypopup-aweber-element-item {
+  clear: both;
+  margin-bottom: 4px;
+}
+.ep_featherlight .easypopup-aweber-element-item[data-type=checkbox] {
+  margin: 16px 0;
+}
+
 .ep_featherlight .popup-widget-subscribe a {
   display: inline-block;
   vertical-align: middle;
@@ -263,4 +287,17 @@
 
   border-radius: 3px;
   box-sizing: border-box;
+}
+
+.ep_featherlight .easypopup-aweber-required {
+  border: 1px solid red;
+}
+.ep_featherlight .easypopup-aweber-element-item[data-type=radio] {
+  padding: 0 5px;
+}
+.ep_featherlight .easypopup-aweber-element-item[data-type=radio]:first-child {
+  padding: 5px 5px 0;
+}
+.ep_featherlight .easypopup-aweber-element-item[data-type=checkbox] {
+  padding: 5px 5px 4px;
 }
