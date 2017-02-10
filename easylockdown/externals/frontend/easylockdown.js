@@ -131,27 +131,29 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
   }
   easylockdown.jq = jQuery.noConflict(true);
 
-  var loginRegex = new RegExp('\/account\/login');
-  if( loginRegex.test(window.location.href)){
-    var params = easylockdown.getSearchParameters();
+  easylockdown.jq(document).ready(function(){
+    var loginRegex = new RegExp('\/account\/login');
+    if( loginRegex.test(window.location.href)){
+      var params = easylockdown.getSearchParameters();
 
-    if( typeof params['return_to'] == 'string' ) {
-      var returnToEl = document.getElementsByName("checkout_url");
+      if( typeof params['return_to'] == 'string' ) {
+        var returnToEl = document.getElementsByName("checkout_url");
 
-      if( typeof returnToEl[0] == 'object') {
-        returnToEl[0].setAttribute('value', params['return_to']);
+        if( typeof returnToEl[0] == 'object') {
+          returnToEl[0].setAttribute('value', params['return_to']);
 
-      } else {
-        var emailEl = document.getElementsByName("customer[email]");
+        } else {
+          var emailEl = document.getElementsByName("customer[email]");
 
-        if( typeof emailEl[0] == 'object') {
-          returnToEl = document.createElement("input");
-          returnToEl.setAttribute('type', 'hidden');
-          returnToEl.setAttribute('name', 'checkout_url');
-          returnToEl.setAttribute('value', params['return_to']);
-          easylockdown.insertAfter(emailEl[0], returnToEl);
+          if( typeof emailEl[0] == 'object') {
+            returnToEl = document.createElement("input");
+            returnToEl.setAttribute('type', 'hidden');
+            returnToEl.setAttribute('name', 'checkout_url');
+            returnToEl.setAttribute('value', params['return_to']);
+            easylockdown.insertAfter(emailEl[0], returnToEl);
+          }
         }
       }
     }
-  }
+  });
 }
