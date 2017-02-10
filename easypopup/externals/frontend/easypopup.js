@@ -674,7 +674,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     }
   }
 
-  easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/plugin.css');
+  easypopup.loadLink('https://nexusmedia-ua.github.io/cdn/easypopup/externals/frontend/plugin.min.css');
   easypopup.loadLink('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css');
   easypopup.initPage();
 }
