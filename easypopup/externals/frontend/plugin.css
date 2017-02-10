@@ -1,4 +1,6 @@
 /* ------------------------------------------------------ start of featherlight.css ----------------------------------------------- */
+  @charset "UTF-8";
+
   @media all {
     .ep_featherlight {
       display: none;
@@ -115,7 +117,6 @@
 
 
 /* ------------------------------------------------------ start of grid.css ----------------------------------------------- */
-  @charset "UTF-8";
   .ep_featherlight .grid {
     list-style: none;
     /* [1] */
