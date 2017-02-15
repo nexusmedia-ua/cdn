@@ -52,7 +52,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         complete: function(resp){
 
           if( resp.data ) {
-            var $searchIndexConvertor = $('<div>');
+            var $searchIndexConvertor = easysearch.jq('<div>');
             easysearch.jq.each(resp.data, function(i, row){
               searchRowName = '';
 
