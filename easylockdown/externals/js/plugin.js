@@ -141,7 +141,7 @@ function lockdownStatusToggle( id )
 
           if( response && response.data ) {
             $.each(response.data, function(i, value){
-              $('<option>').text(value.title).attr('value', value.value).appendTo($select);
+              $('<option>').text(value.title).attr('value', value.value).attr('data-handle', value.handle).appendTo($select);
             });
 
             callback( $select.children("option").map(function() {
@@ -252,13 +252,14 @@ function showContent(el)
 function addContent()
 {
   $('#lockdown-content-holder').find('.field-error').removeClass('field-error');
-  var type  = $('#lockdown-content-type').val();
-  var id    = $('#lockdown-content-id').val();
-  var title = $('#lockdown-content-id').children('option:selected').text();
+  var type   = $('#lockdown-content-type').val();
+  var id     = $('#lockdown-content-id').val();
+  var title  = $('#lockdown-content-id').children('option:selected').text();
+  var handle = $('#lockdown-content-id').children('option:selected').attr('data-handle');
 
   if( !type ) return;
 
-  var $content = $('<span data-type="' + type + '">');
+  var $content = $('<span>');
   var $hidden  = $('<input type="hidden">');
   var typeTitle = getContentTitleByType(type);
 
@@ -269,10 +270,13 @@ function addContent()
       return;
     }
 
+    $content.attr('data-type', type + 's');
+    if( handle ) $content.attr('data-handle', handle);
     $content.append( '<b>' + typeTitle + ':</b> ' + title + '<span class="close" onclick="removeContent(this);">x</span>' );
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + 's][' + id + ']').val(title) );
 
   } else {
+    $content.attr('data-type', type);
     $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeContent(this);">x</span>' );
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + ']').val(1) );
 
@@ -281,7 +285,9 @@ function addContent()
 
   $('#lockdown-content-errors').remove();
   $('#lockdown-content-values').append($content);
+
   cancelContent();
+  createQuickLinks();
 }
 
 function cancelContent()
@@ -301,6 +307,8 @@ function removeContent(el)
     $('#hide-links-holder').show();
   }
   $parent.remove();
+
+  createQuickLinks();
 }
 
 function showException(el)
@@ -595,4 +603,46 @@ function initWYSIWYG()
 
     editor.render();
   }
+}
+
+function createQuickLinks()
+{
+  var $contents = $('#lockdown-content-values > span');
+  var $qlHolder = $('#lockdown-customers-quicklinks').empty();
+  var shopURL = $('#shop-url').text();
+  var hash = '#easylockdownpwd' + $('#lockdown-customers-password').val();
+
+  $contents.each(function(i, el) {
+    var type = $(el).attr('data-type');
+    var link = '';
+
+    if( type == 'website' || type == 'index' ) {
+      link = shopURL + hash;
+
+    } else if( type == 'cart' ) {
+      link = shopURL + 'cart' + hash;
+
+    } else if( type == 'search' ) {
+      link = shopURL + 'search' + hash;
+
+    } else {
+      var handle = $(el).attr('data-handle') + '/' + hash;
+      if( handle ) {
+        if( type == 'pages' ) {
+          link = shopURL + 'pages/' + handle;
+
+        } else if( type == 'blogs' ) {
+          link = shopURL + 'blogs/' + handle;
+
+        } else if( type == 'collections' || type == 'collection_products' ) {
+          link = shopURL + 'collections/' + handle;
+
+        } else if( type == 'products' || type == 'product_view_onlys' ) {
+          link = shopURL + 'products/' + handle;
+        }
+      }
+    }
+
+    if( link ) $qlHolder.append('<span><a href="' + link + '" target="_blank">' + link +'</a></span>');
+  });
 }

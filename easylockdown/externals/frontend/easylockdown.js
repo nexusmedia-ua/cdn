@@ -84,6 +84,12 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       return prmstr != null && prmstr != '' ? easylockdown.transformToAssocArray(prmstr) : {};
     },
 
+    getHashParameters: function()
+    {
+      var prmstr = window.location.hash.substr(1);
+      return prmstr;
+    },
+
     transformToAssocArray: function( prmstr )
     {
       var params = {};
@@ -152,6 +158,18 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
             returnToEl.setAttribute('value', params['return_to']);
             easylockdown.insertAfter(emailEl[0], returnToEl);
           }
+        }
+      }
+
+    } else {
+      var hashParams = easylockdown.getHashParameters();
+      var prefix = 'easylockdownpwd';
+      if( hashParams.indexOf(prefix) == 0 ) {
+        var $btn = easylockdown.jq('#easylockdown-password-form-button');
+        var $field = easylockdown.jq('#easylockdown-password');
+        if( $btn.length && $field.length ) {
+          $field.val( hashParams.substr(prefix.length) );
+          easylockdown.checkUnlockPassword($btn[0]);
         }
       }
     }

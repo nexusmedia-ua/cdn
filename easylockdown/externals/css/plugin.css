@@ -217,6 +217,13 @@ input.ui-autocomplete-input {
   border-color: #99d899;
 }
 
+#lockdown-customers-quicklinks > span {
+  user-select: initial;
+}
+#lockdown-customers-quicklinks > span a {
+  font-weight: bold;
+}
+
 #lockdown-customers-filters span.group-tag-last {
   padding-right: 60px;
 }
