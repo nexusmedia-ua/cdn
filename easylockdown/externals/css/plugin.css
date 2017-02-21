@@ -218,6 +218,7 @@ input.ui-autocomplete-input {
 }
 
 #lockdown-customers-quicklinks > span {
+  padding: 3px 7px;
   user-select: initial;
 }
 #lockdown-customers-quicklinks > span a {
