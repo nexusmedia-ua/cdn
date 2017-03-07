@@ -44,9 +44,12 @@ function showVideoBlock(ev$) {
 
 }
 
-    var ev$;
+var ev$;
+ev$ = jQuery.noConflict(true);
+
+ev$(function(){
+
     var dragging = false;
-    ev$ = jQuery.noConflict(true);
     var ev_show_icon = parseInt(ev$("#easyvideo_overlay_icon").attr("content"));
     var youtube_parameters = ( ev$("#easyvideo_youtube_parameters").size() > 0 ) ? ev$("#easyvideo_youtube_parameters").attr("content") : "";
     var vimeo_parameters = ( ev$("#easyvideo_vimeo_parameters").size() > 0 ) ? ev$("#easyvideo_vimeo_parameters").attr("content") : "";
@@ -74,6 +77,8 @@ function showVideoBlock(ev$) {
     ev$(window).resize(function(){
       ev$('.video-container').parent().height(ev$('.video-container').parent().parent().height());
     });
+
+});
 
     function easyVideoSetup() {
 
