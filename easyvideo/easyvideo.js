@@ -46,10 +46,10 @@ function showVideoBlock(ev$) {
 
 var ev$;
 var dragging = false;
+ev$ = jQuery.noConflict(true);
 var ev_show_icon = parseInt(ev$("#easyvideo_overlay_icon").attr("content"));
 var youtube_parameters = ( ev$("#easyvideo_youtube_parameters").size() > 0 ) ? ev$("#easyvideo_youtube_parameters").attr("content") : "";
 var vimeo_parameters = ( ev$("#easyvideo_vimeo_parameters").size() > 0 ) ? ev$("#easyvideo_vimeo_parameters").attr("content") : "";
-ev$ = jQuery.noConflict(true);
 
 ev$(function(){
     if (ev$('#easyvideo_enabled').attr('content') == "1") {
