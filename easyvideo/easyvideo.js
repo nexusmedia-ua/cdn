@@ -253,6 +253,7 @@ ev$(function(){
         }
       });          
    
+   	  /*
       ev$('.product-single__thumbnail-image').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().width();
@@ -266,7 +267,7 @@ ev$(function(){
         if ( video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
           ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim().split('&')[0].split('?')[0] + vimeo_parameters + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
         }
-      });            
+      });            */
 
         
       ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').each(function(){
