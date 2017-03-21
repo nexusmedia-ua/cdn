@@ -137,6 +137,11 @@ input.ui-autocomplete-input {
 #form-lockdown section {
   padding: 5px 0 0;
 }
+#form-lockdown .section-summary {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 #lockdown-content-holder ul.ui-autocomplete,
 #lockdown-exception-holder ul.ui-autocomplete {
   position: absolute !important;
@@ -215,6 +220,16 @@ input.ui-autocomplete-input {
 .tag.green-tag > span.active .close,
 .tag.green-tag > span.active .add-or {
   border-color: #99d899;
+}
+.tag > span.yellow-tag {
+  background-color: #fff7b2;
+  border-color: khaki;
+  color: #4d4d4d;
+}
+.tag > span.red-tag {
+  background-color:#ff9797;
+  border-color: coral;
+  color: #4d4d4d;
 }
 
 #lockdown-customers-quicklinks > span {

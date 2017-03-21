@@ -230,7 +230,7 @@ function showContent(el)
       request.done(function(response) {
         if( response && response.data ) {
           $.each(response.data, function(id, item){
-            $('<option>').text(item.title).attr('value', id).appendTo($select);
+            $('<option>').text(item.title).attr('value', id).attr('data-handle', item.handle).appendTo($select);
           });
           $container.show();
         }
@@ -410,6 +410,7 @@ function getContentTitleByType( type )
     case 'product_view_only':      return 'Product (view only)'; break;
     case 'all_products_view_only': return 'All products (view only)'; break;
     case 'collection_product':     return 'Collection and products'; break;
+    case 'all_collections':        return 'All Collections and Products'; break;
   }
   return '';
 }
@@ -645,4 +646,22 @@ function createQuickLinks()
 
     if( link ) $qlHolder.append('<span><a href="' + link + '" target="_blank">' + link +'</a></span>');
   });
+}
+
+function changeAccessMode( el )
+{
+  if( (el.checked && el.value == '1') || (!el.checked && el.value != '1') ) {
+    $('#lockdown-customers-password-holder').hide();
+    $('#lockdown-customers-type-authorized-selector').hide();
+    if( $('#lockdown-customers-type-authorized').prop('checked') ) {
+      $('#lockdown-customers-type-logged-in').prop("checked", true);
+      $('#lockdown-customers-password-holder').hide();
+    }
+
+  } else {
+    $('#lockdown-customers-type-authorized-selector').show();
+    if( $('#lockdown-customers-type-authorized').prop('checked') ) {
+      $('#lockdown-customers-password-holder').show();
+    }
+  }
 }
