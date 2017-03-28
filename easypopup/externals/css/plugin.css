@@ -639,8 +639,15 @@ span.layout-item-status .tool-tip {
   text-align: center;
 }
 
-.easypopup-columns-row {
+.easypopup-columns-row,
+.easypopup-widgets-row {
+  display: block;
+  overflow: hidden;
+  clear: both;
   padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
 }
 .easypopup-columns-row > div > div {
   padding-bottom: 0;
@@ -650,12 +657,6 @@ span.layout-item-status .tool-tip {
 }
 .easypopup-columns-row label {
   font-weight: normal;
-}
-.easypopup-widgets-row  {
-  overflow: hidden;
-  clear: both;
-  padding: 0;
-  margin: 0;
 }
 
 #layout-editor-loader {
