@@ -10,11 +10,13 @@
 
 .easysearch-select-holder,
 .easysearch-btn-holder,
+.easysearch-clear-holder,
 #easysearch-holder .easysearch-preload-loader {
   display: inline-block !important;
   margin: 0 0 6px !important;
   vertical-align: top;
 }
+
 .easysearch-select-holder label,
 .easysearch-btn-holder label,
 #easysearch-holder .easysearch-preload-loader label {
@@ -104,6 +106,9 @@
   top: 50%;
   left: 50%;
   margin: -18px 0 0 -12px !important;
+}
+.easysearch-vertical-mode .easysearch-clear-holder {
+  float: right;
 }
 
 @media only screen and (max-width: 480px) {
