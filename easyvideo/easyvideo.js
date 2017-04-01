@@ -48,8 +48,14 @@ var ev$;
 var dragging = false;
 ev$ = jQuery.noConflict(true);
 var ev_show_icon = parseInt(ev$("#easyvideo_overlay_icon").attr("content"));
-var youtube_parameters = ( ev$("#easyvideo_youtube_parameters").size() > 0 ) ? ev$("#easyvideo_youtube_parameters").attr("content") : "";
-var vimeo_parameters = ( ev$("#easyvideo_vimeo_parameters").size() > 0 ) ? ev$("#easyvideo_vimeo_parameters").attr("content") : "";
+var youtube_parameters = ( ev$("#easyvideo_youtube_parameters_custom").size() > 0 ) ? ev$("#easyvideo_youtube_parameters_custom").attr("content") : false;
+var vimeo_parameters = ( ev$("#easyvideo_vimeo_parameters_custom").size() > 0 ) ? ev$("#easyvideo_vimeo_parameters_custom").attr("content") : false;
+if (!youtube_parameters) {
+    youtube_parameters = ( ev$("#easyvideo_youtube_parameters").size() > 0 ) ? ev$("#easyvideo_youtube_parameters").attr("content") : "";
+}
+if (!vimeo_parameters) {
+    vimeo_parameters = ( ev$("#easyvideo_vimeo_parameters").size() > 0 ) ? ev$("#easyvideo_vimeo_parameters").attr("content") : "";
+}
 
 ev$(function(){
     if (ev$('#easyvideo_enabled').attr('content') == "1") {
