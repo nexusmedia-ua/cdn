@@ -43,7 +43,7 @@ function showVideoBlock(ev$) {
     setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
 
 }
-
+console.log('easyvideo_init_started');
 var ev$;
 var dragging = false;
 ev$ = jQuery.noConflict(true);
@@ -58,6 +58,9 @@ if (!vimeo_parameters) {
 }
 
 ev$(function(){
+
+	console.log('easyvideo_dom_ready');
+
     if (ev$('#easyvideo_enabled').attr('content') == "1") {
       ev$("img[alt*='//vimeo.com/']").show().css("opacity", 1);
       ev$("img[alt*='youtube.com/watch']").show().css("opacity", 1);
@@ -84,6 +87,8 @@ ev$(function(){
 });
 
     function easyVideoSetup() {
+
+    	console.log('easyvideo_setup_called');
 
       var ev_dimensions = ev$("#easyvideo_dimensions").attr("content");
       if (!ev_dimensions) ev_dimensions = 0.5625;
