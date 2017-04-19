@@ -491,7 +491,7 @@ ev$(function(){
 	          e.preventDefault();
 	          evShowPopupVideo(ev$(this), "vimeo");
 	        });
-        }, 500);
+        }, 2000);
 
         if (typeof $ == 'function') {
           if (typeof $.off !== 'undefined') {
