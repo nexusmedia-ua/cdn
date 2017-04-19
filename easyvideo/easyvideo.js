@@ -325,7 +325,7 @@ ev$(function(){
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          //console.log('Main Img Load Fired: ' + ev_video_is_show);
+          console.log('Main Img Load Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             //console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
@@ -361,7 +361,7 @@ ev$(function(){
 
 
       if (ev$('#easyvideo_popup').attr('content') == "1") {
-
+      	console.log('easyvide_in_popup_mode');
         var waitForFinalEvent = (function () {
           var timers = {};
           return function (callback, ms, uniqueId) {
@@ -465,6 +465,8 @@ ev$(function(){
           e.preventDefault();
           evShowPopupVideo(ev$(this), "youtube");
         });
+
+      	console.log('easyvide_set handlers');
 
         ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
           if (dragging) return;
