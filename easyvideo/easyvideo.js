@@ -473,6 +473,8 @@ ev$(function(){
           evShowPopupVideo(ev$(this), "vimeo");
         });
 
+        console.log('inited');
+
         setTimeout(function(){ 
 	        ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
 	          if (dragging) return;
@@ -491,7 +493,10 @@ ev$(function(){
 	          e.preventDefault();
 	          evShowPopupVideo(ev$(this), "vimeo");
 	        });
-        }, 2000);
+
+	        console.log('inited 2nd time');
+
+        }, 5000);
 
         if (typeof $ == 'function') {
           if (typeof $.off !== 'undefined') {
