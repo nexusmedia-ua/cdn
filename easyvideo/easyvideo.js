@@ -279,9 +279,14 @@ ev$(function(){
         }
       });  
 
+      console.log('themes_fixes_applied');
+
       var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
       var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
       var ev_main_img = ev$( ev_main_img_selector );
+
+      console.log('main img is: ');
+      console.log(ev_main_img);
 
       if (ev_main_img.length < 2) {
         ev_main_img_url = ev$("#easyvideo_featured_product_image").attr("content");
