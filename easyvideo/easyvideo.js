@@ -473,6 +473,26 @@ ev$(function(){
           evShowPopupVideo(ev$(this), "vimeo");
         });
 
+        setTimeout(function(){ 
+	        ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
+	          if (dragging) return;
+	          e.preventDefault();
+	          evShowPopupVideo(ev$(this), "youtube");
+	        });
+
+	        ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
+	          if (dragging) return;
+	          e.preventDefault();
+	          evShowPopupVideo(ev$(this), "youtu.be");
+	        });
+
+	        ev$("img[alt*='//vimeo.com/']").on("touchend click", function(e){
+	          if (dragging) return;
+	          e.preventDefault();
+	          evShowPopupVideo(ev$(this), "vimeo");
+	        });
+        }, 500);
+
         if (typeof $ == 'function') {
           if (typeof $.off !== 'undefined') {
             $("img[alt*='youtube.com/watch']").off("click");
