@@ -43,7 +43,7 @@ function showVideoBlock(ev$) {
     setTimeout(function(){ ev$('#easyvideo_video').show(); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 300);
 
 }
-console.log('easyvideo_init_started');
+
 var ev$;
 var dragging = false;
 ev$ = jQuery.noConflict(true);
@@ -58,9 +58,6 @@ if (!vimeo_parameters) {
 }
 
 ev$(function(){
-
-	console.log('easyvideo_dom_ready');
-
     if (ev$('#easyvideo_enabled').attr('content') == "1") {
       ev$("img[alt*='//vimeo.com/']").show().css("opacity", 1);
       ev$("img[alt*='youtube.com/watch']").show().css("opacity", 1);
@@ -87,8 +84,6 @@ ev$(function(){
 });
 
     function easyVideoSetup() {
-
-    	console.log('easyvideo_setup_called');
 
       var ev_dimensions = ev$("#easyvideo_dimensions").attr("content");
       if (!ev_dimensions) ev_dimensions = 0.5625;
@@ -279,14 +274,9 @@ ev$(function(){
         }
       });  
 
-      console.log('themes_fixes_applied');
-
       var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
       var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
       var ev_main_img = ev$( ev_main_img_selector );
-
-      console.log('main img is: ');
-      console.log(ev_main_img);
 
       if (ev_main_img.length < 2) {
         ev_main_img_url = ev$("#easyvideo_featured_product_image").attr("content");
@@ -330,7 +320,7 @@ ev$(function(){
 
       ev_main_img.load(function () {
         setTimeout(function(){
-          console.log('Main Img Load Fired: ' + ev_video_is_show);
+          //console.log('Main Img Load Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
             //console.log('showing image by this selector: ' + ev_main_img_selector);
             ev_main_img_parent.find("img").first().show();
@@ -366,7 +356,7 @@ ev$(function(){
 
 
       if (ev$('#easyvideo_popup').attr('content') == "1") {
-      	console.log('easyvide_in_popup_mode');
+
         var waitForFinalEvent = (function () {
           var timers = {};
           return function (callback, ms, uniqueId) {
@@ -471,8 +461,6 @@ ev$(function(){
           evShowPopupVideo(ev$(this), "youtube");
         });
 
-      	console.log('easyvide_set handlers');
-
         ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
@@ -484,31 +472,6 @@ ev$(function(){
           e.preventDefault();
           evShowPopupVideo(ev$(this), "vimeo");
         });
-
-        console.log('inited');
-
-        setTimeout(function(){ 
-	        ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
-	          if (dragging) return;
-	          e.preventDefault();
-	          evShowPopupVideo(ev$(this), "youtube");
-	        });
-
-	        ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
-	          if (dragging) return;
-	          e.preventDefault();
-	          evShowPopupVideo(ev$(this), "youtu.be");
-	        });
-
-	        ev$("img[alt*='//vimeo.com/']").on("touchend click", function(e){
-	          if (dragging) return;
-	          e.preventDefault();
-	          evShowPopupVideo(ev$(this), "vimeo");
-	        });
-
-	        console.log('inited 2nd time');
-
-        }, 5000);
 
         if (typeof $ == 'function') {
           if (typeof $.off !== 'undefined') {
