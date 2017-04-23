@@ -1,6 +1,6 @@
 (function () {
 
-    const BASEURL = "http://dev.nexusmedia-ua.com/headsappapi/public";
+    const BASEURL = "https://dev.nexusmedia-ua.com/headsappapi/public";
     const CONFIG_URL = BASEURL + "/config";
     const PING_URL = BASEURL + "/ping";
     const EMAIL_URL = BASEURL + "/mail";
