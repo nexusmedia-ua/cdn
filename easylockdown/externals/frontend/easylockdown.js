@@ -133,44 +133,51 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           }
         });
       }
+    },
+
+    initPage: function()
+    {
+      var loginRegex = new RegExp('\/account\/login');
+      if( loginRegex.test(window.location.href)){
+        var params = easylockdown.getSearchParameters();
+
+        if( typeof params['return_to'] == 'string' ) {
+          var returnToEl = document.getElementsByName("checkout_url");
+
+          if( typeof returnToEl[0] == 'object') {
+            returnToEl[0].setAttribute('value', params['return_to']);
+
+          } else {
+            var emailEl = document.getElementsByName("customer[email]");
+
+            if( typeof emailEl[0] == 'object') {
+              returnToEl = document.createElement("input");
+              returnToEl.setAttribute('type', 'hidden');
+              returnToEl.setAttribute('name', 'checkout_url');
+              returnToEl.setAttribute('value', params['return_to']);
+              easylockdown.insertAfter(emailEl[0], returnToEl);
+            }
+          }
+        }
+
+      } else {
+        var hashParams = easylockdown.getHashParameters();
+        var prefix = 'easylockdownpwd';
+        if( hashParams.indexOf(prefix) == 0 ) {
+          var $btn = easylockdown.jq('#easylockdown-password-form-button');
+          var $field = easylockdown.jq('#easylockdown-password');
+          if( $btn.length && $field.length ) {
+            $field.val( hashParams.substr(prefix.length) );
+            easylockdown.checkUnlockPassword($btn[0]);
+          }
+        }
+      }
     }
   }
 
   easylockdown.jq(document).ready(function(){
-    var loginRegex = new RegExp('\/account\/login');
-    if( loginRegex.test(window.location.href)){
-      var params = easylockdown.getSearchParameters();
+    if( typeof InstantClick == 'object' ) InstantClick.on('change', easylockdown.initPage);
 
-      if( typeof params['return_to'] == 'string' ) {
-        var returnToEl = document.getElementsByName("checkout_url");
-
-        if( typeof returnToEl[0] == 'object') {
-          returnToEl[0].setAttribute('value', params['return_to']);
-
-        } else {
-          var emailEl = document.getElementsByName("customer[email]");
-
-          if( typeof emailEl[0] == 'object') {
-            returnToEl = document.createElement("input");
-            returnToEl.setAttribute('type', 'hidden');
-            returnToEl.setAttribute('name', 'checkout_url');
-            returnToEl.setAttribute('value', params['return_to']);
-            easylockdown.insertAfter(emailEl[0], returnToEl);
-          }
-        }
-      }
-
-    } else {
-      var hashParams = easylockdown.getHashParameters();
-      var prefix = 'easylockdownpwd';
-      if( hashParams.indexOf(prefix) == 0 ) {
-        var $btn = easylockdown.jq('#easylockdown-password-form-button');
-        var $field = easylockdown.jq('#easylockdown-password');
-        if( $btn.length && $field.length ) {
-          $field.val( hashParams.substr(prefix.length) );
-          easylockdown.checkUnlockPassword($btn[0]);
-        }
-      }
-    }
+    easylockdown.initPage();
   });
 }
