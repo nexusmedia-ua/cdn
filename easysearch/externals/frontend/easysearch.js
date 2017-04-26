@@ -208,7 +208,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       window.location.href = newUrl;
     },
 
-    collectionUrlHandleChecker( gotoUrl )
+    collectionUrlHandleChecker: function( gotoUrl )
     {
       var currentHandleExists = window.location.pathname.match(/\/collections\/(.+?)(?=[\/]|$)/i);
 
@@ -225,7 +225,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       return gotoUrl;
     },
 
-    collectionUrlTagChecker( gotoUrl )
+    collectionUrlTagChecker: function( gotoUrl )
     {
       if( !easysearch.currentTag ) return false;
 
