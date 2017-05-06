@@ -244,7 +244,7 @@ ev$(function(){
       });   
 
       // Fix for Blockshop theme
-      ev$('.photos > .container > .photo > img, .transform-to-video img').each(function(){
+      ev$('.photos > .container > .photo > img, .transform-to-video img, img.transform-to-video').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
