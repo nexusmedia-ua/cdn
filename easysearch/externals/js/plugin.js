@@ -885,7 +885,7 @@ function checkImportQueueStatus()
         if( response.data.empty_queue ) {
           $('#import-errors, #import-notice-holder').remove();
           $('#import-form-holder').show();
-          $('#database-wrapper').show();
+          $('#database-wrapper').removeAttr('style');
         }
       }
     });
