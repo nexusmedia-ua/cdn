@@ -528,7 +528,10 @@ function fillSelects()
       $('#fields-holder').removeClass('easy-disabled');
       $('#easysearch-tabs-loader').hide();
     },
-    error: function() {}
+    error: function() {
+      $('#fields-holder').removeClass('easy-disabled');
+      $('#easysearch-tabs-loader').hide();
+    }
   });
 }
 
@@ -725,7 +728,6 @@ function ruleStatusToggle( id )
         this.input.data("ui-autocomplete").close = function(event) {
           if (!selected){
             //close requested by someone else, let it pass
-            console.log('close');
             originalCloseMethod.apply( this, arguments );
           }
           selected = false;
@@ -883,6 +885,7 @@ function checkImportQueueStatus()
         if( response.data.empty_queue ) {
           $('#import-errors, #import-notice-holder').remove();
           $('#import-form-holder').show();
+          $('#database-wrapper').show();
         }
       }
     });
