@@ -54,7 +54,7 @@ jQuery191a(function() {
     if (navigator.userAgent.indexOf("Opera") != -1 || navigator.userAgent.indexOf("Trident") != -1) { 
       setTimeout(function(){
 
-      	var params = { collapsible: true, heightStyle: "content", animate: 100 };
+      	var params = { collapsible: true, heightStyle: "content", animate: 100, navigation: true };
 
         if (jQuery191a("#easyslide_all_closed").size() > 0 && jQuery191a("#easyslide_all_closed").val() == "1") {
             params.active = false;
