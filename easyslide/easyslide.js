@@ -15,6 +15,7 @@ jQuery191a(function() {
         params.active = false;
     } else {
     	var hash = parseInt(jQuery191a(location).attr("hash").replace('section','').replace('#',''))-1;
+    	if (!hash) hash = 0;
 	    params.active = hash;
     }
 
@@ -63,6 +64,7 @@ jQuery191a(function() {
             params.active = false;
         }  else {
         	var hash = parseInt(jQuery191a(location).attr("hash").replace('section','').replace('#',''))-1;
+        	if (!hash) hash = 0;
     	    params.active = hash;
         }
 
