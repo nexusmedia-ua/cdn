@@ -40,73 +40,15 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     {
       if( !easysearch.dbSRC ) return;
 
-      var orderName;
-      var searchRowName;
+      var ua = window.navigator.userAgent;
+      var msie = ua.indexOf("MSIE "); // ie 10-
+      var trident = ua.indexOf("Trident/"); // ie 11+
 
-      easysearch.Papa.parse(easysearch.dbSRC, {
-        download: true,
-        header: false,
-        skipEmptyLines: true,
-        complete: function(resp){
-
-          if( resp.data ) {
-            var $searchIndexConvertor = easysearch.jq('<div>');
-            easysearch.jq.each(resp.data, function(i, row){
-              searchRowName = '';
-
-              easysearch.jq.each(row, function(j, value){
-                value = value.replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                value = $searchIndexConvertor.html(value).text();
-
-                if( typeof easysearch.tree[searchRowName] === 'undefined' ) easysearch.tree[searchRowName] = [];
-                if( easysearch.jq.inArray(value, easysearch.tree[searchRowName]) === -1 ) easysearch.tree[searchRowName].push(value);
-                searchRowName += value + ",";
-              });
-            });
-
-            var $holders = easysearch.jq('div[id=easysearch-holder]');
-            var preSelect = easysearch.getCookie('easysearch-preselect');
-
-            easysearch.jq.each($holders, function(i, holder){
-              var index = '';
-              var $selects = easysearch.jq(holder).find('.easysearch-select-holder select');
-              $selects.first().attr('disabled', false);
-
-              if( !preSelect ) {
-                easysearch.jq.each($selects, function(i, sel){
-                  var $sel = easysearch.jq(sel);
-                  $sel.attr('disabled', true);
-
-                  if( typeof easysearch.tree[index] !== 'undefined' && easysearch.tree[index][0] !== 'undefined' ) {
-                    easysearch.fillSelect($sel, index);
-                  }
-                  index += ",";
-                });
-
-                if( typeof easysearch.tree[index] !== 'undefined' && easysearch.tree[index][0] !== 'undefined' && easysearch.tree[index][0] ) {
-                  easysearch.jq(holder).find('#easysearch-search').attr('disabled', false).attr('href', easysearch.tree[index][0]);
-                }
-                easysearch.curIndex = index;
-
-              } else {
-                easysearch.preSelect = preSelect.split('easysearch-preselect-delimiter');
-                easysearch.curIndex = easysearch.preSelect.join();
-                var value;
-
-                easysearch.fillSelect(easysearch.jq($selects[0]), index);
-                easysearch.jq.each($selects, function(i, sel){
-                  value = easysearch.preSelect[i] || '';
-                  easysearch.jq(sel).val(value).trigger('change');
-                });
-                if( !keepFilter ) easysearch.setCookie('easysearch-preselect', '');
-              }
-            });
-
-            $holders.removeClass('easysearch-loading');
-            easysearch.jq('.easysearch-preload-loader').attr('style', 'display: none !important;');
-          }
-        }
-      });
+      if( (msie && msie > 0) || (trident && trident > 0) || !window.Worker ) {
+        easysearch.simpleParser( keepFilter );
+      } else {
+        easysearch.workerParser( keepFilter );
+      }
     },
 
     fillSelect: function($sel, index)
@@ -157,7 +99,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         expires = options.expires = d;
       }
 
-      if (expires && expires.toUTCString) {
+      if( expires && expires.toUTCString ) {
         options.expires = expires.toUTCString();
       }
 
@@ -165,7 +107,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
       var updatedCookie = name + "=" + value;
 
-      for (var propName in options) {
+      for( var propName in options ) {
         updatedCookie += "; " + propName;
         var propValue = options[propName];
         if (propValue !== true) {
@@ -384,7 +326,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           parseNextFile();
         }
       }
-
 
       if (IS_PAPA_WORKER)
       {
@@ -1609,10 +1550,177 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       {
         return typeof func === 'function';
       }
+    },
+
+    papaWorker: function( funcObj )
+    {
+      var blobURL = URL.createObjectURL(new Blob(['(', funcObj.toString(), ')("', easysearch.dbSRC, '")'], {
+        type: 'application/javascript'
+      }));
+
+      var worker = new Worker( blobURL );
+      URL.revokeObjectURL( blobURL );
+
+      return worker;
+    },
+
+    workerParser: function( keepFilter )
+    {
+      var searchRowName;
+
+      var worker = easysearch.papaWorker(function (dbsrc) {
+        dbsrc = "https:" + dbsrc;
+        var blob = null;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", dbsrc);
+        xhr.responseType = "blob";
+        xhr.onload = function() {
+          blob = xhr.response;
+
+          var reader = new FileReader();
+
+          reader.onload = function (fileLoadedEvent) {
+            var textFromFileLoaded = fileLoadedEvent.target.result;
+            self.postMessage(textFromFileLoaded);
+          };
+
+          reader.readAsText(blob, "UTF-8");
+        }
+        xhr.send();
+      });
+
+      worker.addEventListener('message', function(ev) {
+        easysearch.Papa.parse(ev.data, {
+          header: false,
+          skipEmptyLines: true,
+          complete: function(resp){
+            if( resp.data ) {
+              easysearch.jq.each(resp.data, function(i, row){
+                searchRowName = '';
+
+                easysearch.jq.each(row, function(j, value){
+                  if( typeof easysearch.tree[searchRowName] === 'undefined' ) easysearch.tree[searchRowName] = [];
+                  if( easysearch.jq.inArray(value, easysearch.tree[searchRowName]) === -1 ) easysearch.tree[searchRowName].push(value);
+                  searchRowName += value + ",";
+                });
+              });
+
+              var $holders = easysearch.jq('div[id=easysearch-holder]');
+              var preSelect = easysearch.getCookie('easysearch-preselect');
+
+              easysearch.jq.each($holders, function(i, holder){
+                var index = '';
+                var $selects = easysearch.jq(holder).find('.easysearch-select-holder select');
+                $selects.first().attr('disabled', false);
+
+                if( !preSelect ) {
+                  easysearch.jq.each($selects, function(i, sel){
+                    var $sel = easysearch.jq(sel);
+                    $sel.attr('disabled', true);
+
+                    if( typeof easysearch.tree[index] !== 'undefined' && easysearch.tree[index][0] !== 'undefined' ) {
+                      easysearch.fillSelect($sel, index);
+                    }
+                    index += ",";
+                  });
+
+                  if( typeof easysearch.tree[index] !== 'undefined' && easysearch.tree[index][0] !== 'undefined' && easysearch.tree[index][0] ) {
+                    easysearch.jq(holder).find('#easysearch-search').attr('disabled', false).attr('href', easysearch.tree[index][0]);
+                  }
+                  easysearch.curIndex = index;
+
+                } else {
+                  easysearch.preSelect = preSelect.split('easysearch-preselect-delimiter');
+                  easysearch.curIndex = easysearch.preSelect.join();
+                  var value;
+
+                  easysearch.fillSelect(easysearch.jq($selects[0]), index);
+                  easysearch.jq.each($selects, function(i, sel){
+                    value = easysearch.preSelect[i] || '';
+                    easysearch.jq(sel).val(value).trigger('change');
+                  });
+                  if( !keepFilter ) easysearch.setCookie('easysearch-preselect', '');
+                }
+              });
+
+              $holders.removeClass('easysearch-loading');
+              easysearch.jq('.easysearch-preload-loader').attr('style', 'display: none !important;');
+            }
+          }
+        });
+
+        worker.terminate();
+      }, false);
+    },
+
+    simpleParser: function( keepFilter )
+    {
+      var start_time = performance.now();
+      var searchRowName;
+
+      easysearch.Papa.parse(easysearch.dbSRC, {
+        download: true,
+        header: false,
+        skipEmptyLines: true,
+        complete: function(resp){
+          if( resp.data ) {
+            easysearch.jq.each(resp.data, function(i, row){
+              searchRowName = '';
+
+              easysearch.jq.each(row, function(j, value){
+                if( typeof easysearch.tree[searchRowName] === 'undefined' ) easysearch.tree[searchRowName] = [];
+                if( easysearch.jq.inArray(value, easysearch.tree[searchRowName]) === -1 ) easysearch.tree[searchRowName].push(value);
+                searchRowName += value + ",";
+              });
+            });
+
+            var $holders = easysearch.jq('div[id=easysearch-holder]');
+            var preSelect = easysearch.getCookie('easysearch-preselect');
+
+            easysearch.jq.each($holders, function(i, holder){
+              var index = '';
+              var $selects = easysearch.jq(holder).find('.easysearch-select-holder select');
+              $selects.first().attr('disabled', false);
+
+              if( !preSelect ) {
+                easysearch.jq.each($selects, function(i, sel){
+                  var $sel = easysearch.jq(sel);
+                  $sel.attr('disabled', true);
+
+                  if( typeof easysearch.tree[index] !== 'undefined' && easysearch.tree[index][0] !== 'undefined' ) {
+                    easysearch.fillSelect($sel, index);
+                  }
+                  index += ",";
+                });
+
+                if( typeof easysearch.tree[index] !== 'undefined' && easysearch.tree[index][0] !== 'undefined' && easysearch.tree[index][0] ) {
+                  easysearch.jq(holder).find('#easysearch-search').attr('disabled', false).attr('href', easysearch.tree[index][0]);
+                }
+                easysearch.curIndex = index;
+
+              } else {
+                easysearch.preSelect = preSelect.split('easysearch-preselect-delimiter');
+                easysearch.curIndex = easysearch.preSelect.join();
+                var value;
+
+                easysearch.fillSelect(easysearch.jq($selects[0]), index);
+                easysearch.jq.each($selects, function(i, sel){
+                  value = easysearch.preSelect[i] || '';
+                  easysearch.jq(sel).val(value).trigger('change');
+                });
+                if( !keepFilter ) easysearch.setCookie('easysearch-preselect', '');
+              }
+            });
+
+            $holders.removeClass('easysearch-loading');
+            easysearch.jq('.easysearch-preload-loader').attr('style', 'display: none !important;');
+          }
+        }
+      });
     }
   }
 
-  easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.min.css');
+  easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
   easysearch.jq(document).ready(function() { easysearch.initPage(); easysearch.DOMReady = true; });
 
 } else {
