@@ -43,8 +43,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       var ua = window.navigator.userAgent;
       var msie = ua.indexOf("MSIE "); // ie 10-
       var trident = ua.indexOf("Trident/"); // ie 11+
+      var edge = ua.indexOf("Edge/"); // ie edge
 
-      if( (msie && msie > 0) || (trident && trident > 0) || !window.Worker ) {
+      if( (msie && msie > 0) || (trident && trident > 0) || (edge && edge > -1) || !window.Worker ) {
         easysearch.simpleParser( keepFilter );
       } else {
         easysearch.workerParser( keepFilter );
