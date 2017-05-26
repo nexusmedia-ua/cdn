@@ -1,0 +1,36 @@
+#easylockdown-password-form {
+  padding: 30px 0;
+  text-align: center;
+}
+#easylockdown-wrapper,
+.easylockdown-form-holder {
+  display: inline-block;
+}
+#easylockdown-password-error {
+  display: none;
+  color: #fb8077;
+  text-align: left;
+}
+#easylockdown-password-error.easylockdown-error {
+  border: 1px solid #fb8077;
+}
+#easylockdown-password-form-button {
+  display: inline-block !important;
+  height: auto !important;
+  padding: 8px 15px !important;
+  background: #777;
+  border-radius: 3px !important;
+  color: white !important;
+  text-decoration: none !important;
+  vertical-align: top;
+}
+.easylockdown-item-selector,
+.easylockdown-instantclick-fix {
+  position: absolute;
+  z-index: -999;
+  display: none;
+  height: 0;
+  width: 0;
+  font-size: 0;
+  line-height: 0;
+}

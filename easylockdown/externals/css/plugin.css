@@ -44,6 +44,7 @@ hr {
 #add-content-form,
 #add-exception-form,
 #add-filter-form,
+#lockdown-customers-location-holder,
 #lockdown-customers-password-holder,
 #lock-page-holder {
   display: none;

@@ -279,8 +279,36 @@ function addContent()
     $content.attr('data-type', type);
     $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeContent(this);">x</span>' );
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + ']').val(1) );
+  }
+
+  if( type == 'website' ) $('#lockdown-content-values > span').remove();
+  else $('#lockdown-content-values > span[data-type=website]').remove();
+
+  if( type == 'hide_price' ) {
+    $('#lockdown-content-values > span').remove();
+    $('#exceptions-section').hide();
+    $('#lockdown-customers-type-authorized-selector').hide();
+    $('#lockdown-customers-password-holder').hide();
+    $('#how-to-lock-section').show();
+    $('#additional-settings-section').hide();
+    $('#hide-links-holder').hide();
+
+    if( $('#lockdown-customers-type-authorized').prop('checked') ) {
+      $('#lockdown-customers-type-logged-in').prop("checked", true);
+    }
+
+  } else {
+    $('#lockdown-content-values > span[data-type=hide_price]').remove();
+    $('#exceptions-section').show();
+    $('#additional-settings-section').show();
+    $('#how-to-lock-section').show();
 
     if( type == 'website' ) $('#hide-links-holder').hide();
+    else $('#hide-links-holder').show();
+
+    if( $('#lockdown-customers-access-mode-0').prop('checked') ) {
+      $('#lockdown-customers-type-authorized-selector').show();
+    }
   }
 
   $('#lockdown-content-errors').remove();
@@ -398,19 +426,20 @@ function removeException(el)
 
 function getContentTitleByType( type )
 {
-  switch(type) {
+  switch( type ) {
     case 'website':    return 'Whole Website'; break;
     case 'index':      return 'Home Page'; break;
+    case 'cart':       return 'Cart Page'; break;
+    case 'search':     return 'Search Page'; break;
     case 'page':       return 'Page'; break;
     case 'blog':       return 'Blog'; break;
     case 'collection': return 'Collection only'; break;
     case 'product':    return 'Product'; break;
-    case 'cart':       return 'Cart'; break;
-    case 'search':     return 'Search'; break;
+    case 'all_collections':        return 'All Collections and Products'; break;
+    case 'collection_product':     return 'Collection and Products'; break;
     case 'product_view_only':      return 'Product (view only)'; break;
     case 'all_products_view_only': return 'All products (view only)'; break;
-    case 'collection_product':     return 'Collection and products'; break;
-    case 'all_collections':        return 'All Collections and Products'; break;
+    case 'hide_price':             return 'Prices (whole website)'; break;
   }
   return '';
 }
@@ -424,28 +453,35 @@ function selectCustomersType(el)
 
   var selectedType = $(el).val();
   if( selectedType == 'logged_in' ) {
-    $('#lockdown-customers-filters-holder').hide();
-    $('#lockdown-customers-password-holder').hide();
+    $('.lockdown-customers-holders').hide();
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
     $('#locked-page-info').show();
-    if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
 
   } else if( selectedType == 'selected' ) {
-    $('#lockdown-customers-filters-holder').show();
-    $('#lockdown-customers-password-holder').hide();
+    $('.lockdown-customers-holders').hide();
+    $('#lockdown-customers-selected-holder').show();
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
     $('#locked-page-info').show();
-    if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
+
+  } else if( selectedType == 'location' ) {
+    $('.lockdown-customers-holders').hide();
+    $('#lockdown-customers-location-holder').show();
+    $('#who-may-access-section > hr').show();
+    $('#how-to-lock-section').show();
+    $('#locked-page-info').show();
 
   } else if( selectedType == 'authorized' ) {
-    $('#lockdown-customers-filters-holder').hide();
+    $('.lockdown-customers-holders').hide();
     $('#lockdown-customers-password-holder').show();
     $('#who-may-access-section > hr').hide();
     $('#how-to-lock-section').hide();
     $('#locked-page-info').hide();
-    if( !$('#lockdown-content-values > span[data-type=website]').length ) $('#hide-links-holder').show();
+  }
+
+  if( !$('#lockdown-content-values > span[data-type=website], #lockdown-content-values > span[data-type=hide_price]').length ) {
+    $('#hide-links-holder').show();
   }
 }
 
@@ -655,11 +691,12 @@ function changeAccessMode( el )
     $('#lockdown-customers-type-authorized-selector').hide();
     if( $('#lockdown-customers-type-authorized').prop('checked') ) {
       $('#lockdown-customers-type-logged-in').prop("checked", true);
-      $('#lockdown-customers-password-holder').hide();
     }
 
   } else {
-    $('#lockdown-customers-type-authorized-selector').show();
+    if( !$('#lockdown-content-values > span[data-type=hide_price]').length ) {
+      $('#lockdown-customers-type-authorized-selector').show();
+    }
     if( $('#lockdown-customers-type-authorized').prop('checked') ) {
       $('#lockdown-customers-password-holder').show();
     }
