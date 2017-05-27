@@ -75,7 +75,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( easylockdown.activeId && h ) {
         var ch = easylockdown.getCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activeId);
         if( ch && ch == h ) {
-          easylockdown.jq('#easylockdown-content').show();
+          easylockdown.jq(document).ready(function(){
+            easylockdown.jq('#easylockdown-content').show();
+          });
           easylockdown.showContent = true;
           return;
         }
@@ -89,8 +91,10 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       function _routerByLocation()
       {
         if( (easylockdown.currentISO == loc && !cannot) || (easylockdown.currentISO != loc && cannot) ) {
-          easylockdown.jq('#easylockdown404').remove();
-          easylockdown.jq('#easylockdown-content').removeAttr('style');
+          easylockdown.jq(document).ready(function(){
+            easylockdown.jq('#easylockdown404').remove();
+            easylockdown.jq('#easylockdown-content').removeAttr('style');
+          });
         } else {
           easylockdown.jq('#easylockdown-content').remove();
           if( easylockdown.gotoUrl ) window.location.href = easylockdown.gotoUrl;

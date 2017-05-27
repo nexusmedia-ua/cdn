@@ -460,7 +460,7 @@ function selectCustomersType(el)
 
   } else if( selectedType == 'selected' ) {
     $('.lockdown-customers-holders').hide();
-    $('#lockdown-customers-selected-holder').show();
+    $('#lockdown-customers-filters-holder').show();
     $('#who-may-access-section > hr').show();
     $('#how-to-lock-section').show();
     $('#locked-page-info').show();
