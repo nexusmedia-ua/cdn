@@ -375,7 +375,8 @@ input.ui-autocomplete-input {
 
 #lockdown-hide-price-notice {
   display: none;
-  margin-top: 8px;
+  margin: 0 0 16px;
+  padding-left: 40px;
   font-size: 12px;
   line-height: 16px;
 }
