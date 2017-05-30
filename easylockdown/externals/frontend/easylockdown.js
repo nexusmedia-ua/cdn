@@ -255,7 +255,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
     },
 
-    hidePriceByLocation: function( sel, locsCan, locsCannot )
+    hidePriceByLocation: function( locsCan, locsCannot )
     {
       function _hidePriceByLocation()
       {
@@ -273,7 +273,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           });
         }
 
-        if( show ) easylockdown.jq(document).ready(function(){ easylockdown.jq(sel).show(); });
+        if( show ) easylockdown.jq(document).ready(function(){ easylockdown.jq('#easylockdown-hp-style').remove(); });
       }
 
       if( easylockdown.currentISO ) {

@@ -373,6 +373,12 @@ input.ui-autocomplete-input {
   border-bottom-width: 0;
 }
 
+#lockdown-hide-price-notice {
+  display: none;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 16px;
+}
 
 @media only screen and (max-width: 640px) {
   .lockdown-actions {

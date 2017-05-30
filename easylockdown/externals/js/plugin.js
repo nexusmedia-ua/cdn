@@ -292,6 +292,7 @@ function addContent()
     $('#how-to-lock-section').show();
     $('#additional-settings-section').hide();
     $('#hide-links-holder').hide();
+    $('#lockdown-hide-price-notice').show();
 
     if( $('#lockdown-customers-type-authorized').prop('checked') ) {
       $('#lockdown-customers-type-logged-in').prop("checked", true);
@@ -302,6 +303,7 @@ function addContent()
     $('#exceptions-section').show();
     $('#additional-settings-section').show();
     $('#how-to-lock-section').show();
+    $('#lockdown-hide-price-notice').hide();
 
     if( type == 'website' ) $('#hide-links-holder').hide();
     else $('#hide-links-holder').show();
