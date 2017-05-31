@@ -158,15 +158,17 @@ documentReady(function(){
 
     resizeVideos();
 
-    er.listen(window, 'resize', er.debounce(resizeVideos, 70));  
-    var tabs = document.getElementsByClassName('ui-tabs-anchor');
-    for (var i = 0; i < tabs.length; i++) {
-        er.listen(tabs[i], 'click', er.debounce(resizeVideosImmediately, 200));
-    }
-    var slides = document.getElementsByClassName('ui-accordion-header');
-    for (var i = 0; i < slides.length; i++) {
-        er.listen(slides[i], 'click', er.debounce(resizeVideosImmediately, 200));
-    }
+    er.listen(window, 'resize', er.debounce(resizeVideos, 70)); 
+    setTimeout(function(){ 
+      var tabs = document.getElementsByClassName('ui-tabs-anchor');
+      for (var i = 0; i < tabs.length; i++) {
+          er.listen(tabs[i], 'click', er.debounce(resizeVideosImmediately, 200));
+      }
+      var slides = document.getElementsByClassName('ui-accordion-header');
+      for (var i = 0; i < slides.length; i++) {
+          er.listen(slides[i], 'click', er.debounce(resizeVideosImmediately, 200));
+      }
+    }, 2000);
                                                         
 
 });
