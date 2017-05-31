@@ -168,7 +168,27 @@ documentReady(function(){
       for (var i = 0; i < slides.length; i++) {
           er.listen(slides[i], 'click', er.debounce(resizeVideosImmediately, 200));
       }
+    }, 500);
+    setTimeout(function(){ 
+      var tabs = document.getElementsByClassName('ui-tabs-anchor');
+      for (var i = 0; i < tabs.length; i++) {
+          er.listen(tabs[i], 'click', er.debounce(resizeVideosImmediately, 200));
+      }
+      var slides = document.getElementsByClassName('ui-accordion-header');
+      for (var i = 0; i < slides.length; i++) {
+          er.listen(slides[i], 'click', er.debounce(resizeVideosImmediately, 200));
+      }
+    }, 1000);
+    setTimeout(function(){ 
+      var tabs = document.getElementsByClassName('ui-tabs-anchor');
+      for (var i = 0; i < tabs.length; i++) {
+          er.listen(tabs[i], 'click', er.debounce(resizeVideosImmediately, 200));
+      }
+      var slides = document.getElementsByClassName('ui-accordion-header');
+      for (var i = 0; i < slides.length; i++) {
+          er.listen(slides[i], 'click', er.debounce(resizeVideosImmediately, 200));
+      }
     }, 2000);
-                                                        
+
 
 });
