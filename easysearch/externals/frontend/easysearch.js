@@ -48,7 +48,12 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( (msie && msie > 0) || (trident && trident > 0) || (edge && edge > -1) || !window.Worker ) {
         easysearch.simpleParser( keepFilter );
       } else {
-        easysearch.workerParser( keepFilter );
+        try {
+          var testBlobURL = URL.createObjectURL(new Blob(['testblob'], { type: 'text/xml' }));
+          easysearch.workerParser( keepFilter );
+        } catch( error) {
+          easysearch.simpleParser( keepFilter );
+        }
       }
     },
 
