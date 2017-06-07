@@ -289,7 +289,7 @@ function addContent()
     $('#exceptions-section').hide();
     $('#lockdown-customers-type-authorized-selector').hide();
     $('#lockdown-customers-password-holder').hide();
-    $('#how-to-lock-section').show();
+    $('#how-to-lock-section').hide();
     $('#additional-settings-section').hide();
     $('#hide-links-holder').hide();
     $('#lockdown-hide-price-notice').show();
@@ -331,13 +331,21 @@ function cancelContent()
 function removeContent(el)
 {
   var $parent = $(el).parent();
-  if( $parent.siblings('span[data-type=website]').length ) {
-    $('#hide-links-holder').hide();
-  } else {
+
+  if( $parent.attr('data-type') == 'website' ) {
     $('#hide-links-holder').show();
   }
-  $parent.remove();
 
+  if( $parent.attr('data-type') == 'hide_price' ) {
+    $('#exceptions-section').show();
+    $('#additional-settings-section').show();
+    $('#how-to-lock-section').show();
+    $('#lockdown-hide-price-notice').hide();
+
+    if( !$parent.siblings('span[data-type=website]').length ) $('#hide-links-holder').show();
+  }
+
+  $parent.remove();
   createQuickLinks();
 }
 
