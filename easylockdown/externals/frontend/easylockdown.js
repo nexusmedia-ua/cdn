@@ -197,30 +197,36 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     preparePurchaseForm: function( pwd )
     {
       if( pwd ) {
-        var f = easylockdown.jq("form[action='/cart/add']");
-        if( f.length ) {
+        var $forms = easylockdown.jq("form[action='/cart/add']");
+        if( $forms.length ) {
           if( !easylockdown.showContent ) {
-            f.attr('action', '').attr('onsubmit', 'return false;');
-            var cf = f.clone();
-            f.before(cf);
-            f.remove();
-            var btn = cf.find("input[type=submit], button[type=submit]");
-            btn.before(easylockdown.jq('#easylockdown-password-form'));
-            btn.remove();
+            $forms.each(function(){
+              var $f = easylockdown.jq(this);
+              $f.attr('action', '').attr('onsubmit', 'return false;');
+              var $cf = $f.clone();
+              $f.before($cf);
+              $f.remove();
+              var $btn = $cf.find("input[type=submit], button[type=submit]");
+              $btn.before(easylockdown.jq('#easylockdown-password-form'));
+              $btn.remove();
+            });
 
           } else {
-            f.find('input[type=submit], button[type=submit]').show();
+            $forms.find('input[type=submit], button[type=submit]').show();
           }
         }
 
       } else {
-        var f = easylockdown.jq("form[action='/cart/add']");
-        if( f.length ) {
-          f.attr('action', '').attr('onsubmit', 'return false;');
-          var cf = f.clone();
-          f.before(cf);
-          f.remove();
-          cf.find("input[type=submit], button[type=submit]").remove();
+        var $forms = easylockdown.jq("form[action='/cart/add']");
+        if( $forms.length ) {
+          $forms.each(function(){
+            var $f = easylockdown.jq(this);
+            $f.attr('action', '').attr('onsubmit', 'return false;');
+            $f.find("input[type=submit], button[type=submit]").remove();
+            var $cf = $f.clone();
+            $f.before($cf);
+            $f.remove();
+          });
         }
       }
     },
@@ -235,13 +241,16 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           easylockdown.jq("form[action='/cart/add'] input[type=submit]").show();
           easylockdown.jq("form[action='/cart/add'] button[type=submit]").show();
         } else {
-          var f = easylockdown.jq("form[action='/cart/add']");
-          if( f.length ) {
-            f.attr('action', '').attr('onsubmit', 'return false;');
-            var cf = f.clone();
-            f.before(cf);
-            f.remove();
-            cf.find("input[type=submit], button[type=submit]").remove();
+          var $forms = easylockdown.jq("form[action='/cart/add']");
+          if( $forms.length ) {
+            $forms.each(function(){
+              var $f = easylockdown.jq(this);
+              $f.attr('action', '').attr('onsubmit', 'return false;');
+              $f.find("input[type=submit], button[type=submit]").remove();
+              var $cf = $f.clone();
+              $f.before($cf);
+              $f.remove();
+            });
           }
         }
       }
