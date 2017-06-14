@@ -1617,4 +1617,7 @@
   .ep_featherlight .easypopup-aweber-element-item[data-type=checkbox] {
     padding: 5px 5px 4px;
   }
+  .easypopup-modal-open {
+    overflow: hidden !important;
+  }
 /* ------------------------------------------------------ end of plugin.css ----------------------------------------------- */

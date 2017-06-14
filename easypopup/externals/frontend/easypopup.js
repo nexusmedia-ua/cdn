@@ -371,6 +371,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         open: function(event){
           var self = this;
           self.$instance.hide().appendTo(self.root);
+          $('html,body').addClass('easypopup-modal-open');
+
           if((!event || !event.isDefaultPrevented())
             && self.beforeOpen(event) !== false) {
 
@@ -405,8 +407,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         /* closes the lightbox. "this" contains $instance with the lightbox, and with the config
           returns a promise, resolved after the lightbox is successfully closed. */
         close: function(event){
-          var self = this,
-            deferred = easypopup.jq.Deferred();
+          var self = this, deferred = easypopup.jq.Deferred();
+          $('html,body').addClass('easypopup-modal-open');
 
           if(self.beforeClose(event) === false) {
             deferred.reject();
