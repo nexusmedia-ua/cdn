@@ -371,7 +371,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         open: function(event){
           var self = this;
           self.$instance.hide().appendTo(self.root);
-          $('html,body').addClass('easypopup-modal-open');
+          easypopup.jq('html,body').addClass('easypopup-modal-open');
 
           if((!event || !event.isDefaultPrevented())
             && self.beforeOpen(event) !== false) {
@@ -408,7 +408,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           returns a promise, resolved after the lightbox is successfully closed. */
         close: function(event){
           var self = this, deferred = easypopup.jq.Deferred();
-          $('html,body').addClass('easypopup-modal-open');
+          easypopup.jq('html,body').removeClass('easypopup-modal-open');
 
           if(self.beforeClose(event) === false) {
             deferred.reject();
