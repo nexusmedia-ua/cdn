@@ -402,6 +402,10 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
     initPage: function()
     {
+      easylockdown.jq('.easylockdown-item-selector').next(':not(".easylockdown-item-selector")').addClass('easylockdown-item');
+      easylockdown.jq('.easylockdown-collection-item-selector').next(':not(".easylockdown-collection-item-selector")').addClass('easylockdown-collection-item');
+      easylockdown.jq('.easylockdown-item-selector,.easylockdown-collection-item-selector').remove();
+
       var loginRegex = new RegExp('\/account\/login');
       if( loginRegex.test(window.location.href)){
         var params = easylockdown.getSearchParameters();
@@ -463,9 +467,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
   easylockdown.jq(document).ready(function(){
     if( typeof InstantClick == 'object' ) InstantClick.on('change', easylockdown.initPage);
-    easylockdown.jq('.easylockdown-item-selector').next(':not(".easylockdown-item-selector")').addClass('easylockdown-item');
-    easylockdown.jq('.easylockdown-collection-item-selector').next(':not(".easylockdown-collection-item-selector")').addClass('easylockdown-collection-item');
-    easylockdown.jq('.easylockdown-item-selector,.easylockdown-collection-item-selector').remove();
 
     easylockdown.initPage();
   });
