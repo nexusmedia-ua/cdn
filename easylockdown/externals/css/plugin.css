@@ -60,13 +60,13 @@ hr {
 #lockdown-customers-password-holder input {
   margin: 0;
 }
-#lockdown-customers-password-holder .mce-ico {
+#form-lockdown .mce-ico {
   width: 13px;
   height: 13px;
   line-height: 18px;
   font-size: 13px;
 }
-#lockdown-customers-password-holder .mce-listbox button {
+#form-lockdown .mce-listbox button {
   padding-right: 20px;
   line-height: 18px;
   font-size: 13px;
@@ -232,6 +232,17 @@ input.ui-autocomplete-input {
   border-color: coral;
   color: #4d4d4d;
 }
+.tag .close, .tag .back {
+  background: none;
+  text-align: center;
+  text-indent: 0;
+}
+.tag .close::before,
+.tag .back::before {
+  content: "\f00d";
+  margin-left: -1px;
+  font: normal normal normal 11px/25px FontAwesome;
+}
 
 #lockdown-customers-quicklinks > span {
   padding: 3px 7px;
@@ -379,6 +390,10 @@ input.ui-autocomplete-input {
   padding-left: 40px;
   font-size: 12px;
   line-height: 16px;
+}
+
+#page404-message-holder {
+  margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 640px) {

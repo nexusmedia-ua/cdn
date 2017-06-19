@@ -281,42 +281,12 @@ function addContent()
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + ']').val(1) );
   }
 
-  if( type == 'website' ) $('#lockdown-content-values > span').remove();
-  else $('#lockdown-content-values > span[data-type=website]').remove();
-
-  if( type == 'hide_price' ) {
-    $('#lockdown-content-values > span').remove();
-    $('#exceptions-section').hide();
-    $('#lockdown-customers-type-authorized-selector').hide();
-    $('#lockdown-customers-password-holder').hide();
-    $('#how-to-lock-section').hide();
-    $('#additional-settings-section').hide();
-    $('#hide-links-holder').hide();
-    $('#lockdown-hide-price-notice').show();
-
-    if( $('#lockdown-customers-type-authorized').prop('checked') ) {
-      $('#lockdown-customers-type-logged-in').prop("checked", true);
-    }
-
-  } else {
-    $('#lockdown-content-values > span[data-type=hide_price]').remove();
-    $('#exceptions-section').show();
-    $('#additional-settings-section').show();
-    $('#how-to-lock-section').show();
-    $('#lockdown-hide-price-notice').hide();
-
-    if( type == 'website' ) $('#hide-links-holder').hide();
-    else $('#hide-links-holder').show();
-
-    if( $('#lockdown-customers-access-mode-0').prop('checked') ) {
-      $('#lockdown-customers-type-authorized-selector').show();
-    }
-  }
-
+  $('#lockdown-content-values').find('span[data-type=website],span[data-type=hide_price]').remove();
   $('#lockdown-content-errors').remove();
   $('#lockdown-content-values').append($content);
 
   cancelContent();
+  hideAndShow();
   createQuickLinks();
 }
 
@@ -330,22 +300,8 @@ function cancelContent()
 
 function removeContent(el)
 {
-  var $parent = $(el).parent();
-
-  if( $parent.attr('data-type') == 'website' ) {
-    $('#hide-links-holder').show();
-  }
-
-  if( $parent.attr('data-type') == 'hide_price' ) {
-    $('#exceptions-section').show();
-    $('#additional-settings-section').show();
-    $('#how-to-lock-section').show();
-    $('#lockdown-hide-price-notice').hide();
-
-    if( !$parent.siblings('span[data-type=website]').length ) $('#hide-links-holder').show();
-  }
-
-  $parent.remove();
+  $(el).parent().remove();
+  hideAndShow();
   createQuickLinks();
 }
 
@@ -460,39 +416,7 @@ function getContentTitleByType( type )
 function selectCustomersType(el)
 {
   cancelFilter();
-
-  var selectedType = $(el).val();
-  if( selectedType == 'logged_in' ) {
-    $('.lockdown-customers-holders').hide();
-    $('#who-may-access-section > hr').show();
-    $('#how-to-lock-section').show();
-    $('#locked-page-info').show();
-
-  } else if( selectedType == 'selected' ) {
-    $('.lockdown-customers-holders').hide();
-    $('#lockdown-customers-filters-holder').show();
-    $('#who-may-access-section > hr').show();
-    $('#how-to-lock-section').show();
-    $('#locked-page-info').show();
-
-  } else if( selectedType == 'location' ) {
-    $('.lockdown-customers-holders').hide();
-    $('#lockdown-customers-location-holder').show();
-    $('#who-may-access-section > hr').show();
-    $('#how-to-lock-section').show();
-    $('#locked-page-info').show();
-
-  } else if( selectedType == 'authorized' ) {
-    $('.lockdown-customers-holders').hide();
-    $('#lockdown-customers-password-holder').show();
-    $('#who-may-access-section > hr').hide();
-    $('#how-to-lock-section').hide();
-    $('#locked-page-info').hide();
-  }
-
-  if( !$('#lockdown-content-values > span[data-type=website], #lockdown-content-values > span[data-type=hide_price]').length ) {
-    $('#hide-links-holder').show();
-  }
+  hideAndShow();
 }
 
 function showFilterContent(el)
@@ -628,27 +552,30 @@ function removeFilter(el)
 
 function initWYSIWYG()
 {
-  var $wysiwygEl = $('textarea[data-spec=wysiwyg]');
-  if( $wysiwygEl.length ) {
-    var $valueEl = $wysiwygEl.next('[data-spec=wysiwyg-init-value]');
-    if( $valueEl.length ) $wysiwygEl.val($valueEl.html());
+  var $wysiwygEls = $('textarea[data-spec=wysiwyg]');
+  if( $wysiwygEls.length ) {
+    $wysiwygEls.each(function(){
+      var $wysiwygEl = $(this);
+      var $valueEl = $wysiwygEl.next('[data-spec=wysiwyg-init-value]');
+      if( $valueEl.length ) $wysiwygEl.val($valueEl.html());
 
-    var editor = new tinymce.Editor($wysiwygEl.attr('id'), {
-      menubar: false,
-      statusbar: false,
-      height: 160,
-      content_css : "externals/css/base.css,externals/libraries/tinymce/base.css",
-      plugins: [
-        "advlist link textcolor code hr directionality lineheight"
-      ],
-      toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,",
-      fontsize_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
-      lineheight_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
-      font_formats: "Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;Comfortaa=Comfortaa;Courgette=Courgette;Federo=Federo;Josefin Slab=Josefin Slab;Montserrat=Montserrat;Niconne=Niconne;Old Standard TT=Old Standard TT;Open Sans=Open Sans;Raleway=Raleway;Roboto Condensed=Roboto Condensed;Titillium Web=Titillium Web;"
+      var editor = new tinymce.Editor($wysiwygEl.attr('id'), {
+        menubar: false,
+        statusbar: false,
+        height: 160,
+        content_css : "externals/css/base.css,externals/libraries/tinymce/base.css",
+        plugins: [
+          "advlist link textcolor code hr directionality lineheight"
+        ],
+        toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,",
+        fontsize_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
+        lineheight_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
+        font_formats: "Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;Comfortaa=Comfortaa;Courgette=Courgette;Federo=Federo;Josefin Slab=Josefin Slab;Montserrat=Montserrat;Niconne=Niconne;Old Standard TT=Old Standard TT;Open Sans=Open Sans;Raleway=Raleway;Roboto Condensed=Roboto Condensed;Titillium Web=Titillium Web;"
 
-    }, tinymce.EditorManager);
+      }, tinymce.EditorManager);
 
-    editor.render();
+      editor.render();
+    });
   }
 }
 
@@ -694,21 +621,107 @@ function createQuickLinks()
   });
 }
 
-function changeAccessMode( el )
+function hideAndShow()
 {
-  if( (el.checked && el.value == '1') || (!el.checked && el.value != '1') ) {
-    $('#lockdown-customers-password-holder').hide();
-    $('#lockdown-customers-type-authorized-selector').hide();
+  var accessMode = parseInt($("input:radio[name='lockdown_customers[access_mode]']:checked").val());
+  var permissionType = $("input:radio[name='lockdown_customers[type]']:checked").val();
+  $('.lockdown-customers-holders').hide();
+
+  var $contentValuesBlock = $('#lockdown-content-values');
+  var hidePriceContent = $contentValuesBlock.children('span[data-type=hide_price]').length;
+  if( hidePriceContent ) {
+    $contentValuesBlock.children('span[data-type!=hide_price]').remove();
     if( $('#lockdown-customers-type-authorized').prop('checked') ) {
       $('#lockdown-customers-type-logged-in').prop("checked", true);
     }
 
+    $('#exceptions-section').hide();
+    $('#how-to-lock-section').hide();
+    $('#additional-settings-section').hide();
+
+    $('#who-may-access-section > hr').hide();
+    $('#lockdown-customers-type-authorized-selector').hide();
+    $('#lockdown-customers-password-holder').hide();
+
+    $('#hide-links-by-filters-holder').hide();
+    $('#hide-links-by-js-holder').hide();
+    $('#lockdown-hide-price-notice').show();
+
+    if( permissionType == 'selected' ) {
+      $('#lockdown-customers-filters-holder').show();
+
+    } else if( permissionType == 'location' ) {
+      $('#lockdown-customers-location-holder').show();
+    }
+
   } else {
-    if( !$('#lockdown-content-values > span[data-type=hide_price]').length ) {
+    $('#exceptions-section').show();
+    $('#how-to-lock-section').show();
+    $('#additional-settings-section').show();
+    $('#lockdown-hide-price-notice').hide();
+
+    var hideHowToLockSection = false;
+    var hideAdditionalSettingsSection = false;
+
+    var websiteContent = $contentValuesBlock.children('span[data-type=website]').length;
+    if( websiteContent ) {
+      $contentValuesBlock.children('span[data-type!=website]').remove();
+      $('#hide-links-by-filters-holder').hide();
+      $('#hide-links-by-js-holder').hide();
+
+    } else {
+      var $allContent = $contentValuesBlock.children('span');
+      var $filteredContent = $allContent.filter('[data-type=pages],[data-type=blogs],[data-type=all_collections],[data-type=collections],[data-type=collection_products],[data-type=products]');
+      var showHideLinksByFilter = !!$filteredContent.length;
+      var showHideLinksByJS = ((showHideLinksByFilter && $('#hide-links-by-filters').prop('checked')) || !showHideLinksByFilter);
+
+      $('#hide-links-by-filters-holder').toggle(showHideLinksByFilter);
+      $('#hide-links-by-js-holder').toggle(showHideLinksByJS);
+
+      var viewOnlyContent = $allContent.filter('[data-type=all_products_view_only],[data-type=product_view_onlys]').length;
+      if( viewOnlyContent == $allContent.length ) {
+        hideHowToLockSection = true;
+        hideAdditionalSettingsSection = true;
+      }
+    }
+
+    if( accessMode ) {
+      $('#lockdown-customers-type-authorized-selector').hide();
+      $('#lockdown-customers-password-holder').hide();
+
+      if( $('#lockdown-customers-type-authorized').prop('checked') ) {
+        $('#lockdown-customers-type-logged-in').prop("checked", true);
+      }
+
+    } else {
       $('#lockdown-customers-type-authorized-selector').show();
+
+      if( $('#lockdown-customers-type-authorized').prop('checked') ) {
+        $('#lockdown-customers-password-holder').show();
+      }
     }
-    if( $('#lockdown-customers-type-authorized').prop('checked') ) {
-      $('#lockdown-customers-password-holder').show();
+
+    if( permissionType == 'authorized' ) {
+      if( !accessMode ) $('#lockdown-customers-password-holder').show();
+      $('#locked-page-info').hide();
+      hideHowToLockSection = true;
+
+    } else {
+      $('#locked-page-info').show();
+
+      if( permissionType == 'selected' ) {
+        $('#lockdown-customers-filters-holder').show();
+
+      } else if( permissionType == 'location' ) {
+        $('#lockdown-customers-location-holder').show();
+      }
     }
+
+    if( !$('#additional-settings-section > .next-card > div:visible').length ) hideAdditionalSettingsSection = true;
+
+    if( hideHowToLockSection ) $('#how-to-lock-section').hide();
+    if( hideAdditionalSettingsSection ) $('#additional-settings-section').hide();
+    if( hideHowToLockSection && hideAdditionalSettingsSection ) $('#who-may-access-section > hr').hide();
+    else $('#who-may-access-section > hr').show();
   }
 }

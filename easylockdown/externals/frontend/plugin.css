@@ -34,3 +34,6 @@
   font-size: 0;
   line-height: 0;
 }
+.easylockdown-item-selector + * {
+  display: none;
+}

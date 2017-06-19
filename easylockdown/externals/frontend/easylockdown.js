@@ -10,8 +10,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     geosrc: 'https://apps.nexusmedia-ua.com/geoip/',
     currentISO: '',
     hideLinks: [],
-    hideLinksByLocationCan: {},
-    hideLinksByLocationCannot: {},
+    hideLinksListByLocation: {'canFilter': {}, 'cannotFilter': {}, 'canAll': {}, 'cannotAll': {}},
+    hideLinksListByAuth: {'filter': {}, 'all': {}},
     gotoUrl: '',
     activeId: '',
     showContent: false,
@@ -294,40 +294,70 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
     },
 
+    hideAllLinks: function()
+    {
+      if( easylockdown.hideLinks.length ) {
+        easylockdown.jq.each(easylockdown.hideLinks, function(i, v){ easylockdown.jq(v).not('a[href*="cdn.shopify.com"]').hide(); });
+      }
+      easylockdown.hideLinksByAuth();
+      easylockdown.hideLinksByLocation();
+    },
+
     hideLinksByLocation: function()
     {
       function _hideLinksByLocation()
       {
         easylockdown.jq(document).ready(function(){
-          easylockdown.jq.each(easylockdown.hideLinksByLocationCan, function(loc, sels){
+          if( Object.keys(easylockdown.hideLinksListByLocation.canFilter).length || Object.keys(easylockdown.hideLinksListByLocation.cannotFilter).length ) {
+            var $itemsList = easylockdown.jq('.easylockdown-item');
+            var $collectionsItemsList = easylockdown.jq('.easylockdown-collection-item');
+
+            if( $itemsList.length || $collectionsItemsList.length ) {
+              easylockdown.jq.each(easylockdown.hideLinksListByLocation.canFilter, function(loc, sels){
+                easylockdown.jq.each(sels, function(i, sel){
+                  if( easylockdown.currentISO != loc ) {
+                    $itemsList.each(function(){ if( easylockdown.jq(this).find(sel).length ) easylockdown.jq(this).hide(); });
+
+                    $collectionsItemsList.each(function(){
+                      var $col = easylockdown.jq(this);
+                      var $els = $col.find(sel);
+                      $els.each(function(){ if( !easylockdown.jq(this).closest('.easylockdown-item').length ) { $col.hide(); return; }});
+                    });
+                  }
+                });
+              });
+
+              easylockdown.jq.each(easylockdown.hideLinksListByLocation.cannotFilter, function(loc, sels){
+                easylockdown.jq.each(sels, function(i, sel){
+                  if( easylockdown.currentISO == loc ) {
+                    $itemsList.each(function(){ if( easylockdown.jq(this).find(sel).length ) easylockdown.jq(this).hide(); });
+
+                    $collectionsItemsList.each(function(){
+                      var $col = easylockdown.jq(this);
+                      var $els = $col.find(sel);
+                      $els.each(function(){ if( !easylockdown.jq(this).closest('.easylockdown-item').length ) { $col.hide(); return; }});
+                    });
+                  }
+                });
+              });
+            }
+          }
+
+          easylockdown.jq.each(easylockdown.hideLinksListByLocation.canAll, function(loc, sels){
             easylockdown.jq.each(sels, function(i, sel){
               if( easylockdown.currentISO != loc ) {
                 easylockdown.jq(sel).hide();
-                var $itemsList = easylockdown.jq('.easylockdown-item-selector').next(':visible');
-                if( $itemsList.length ) {
-                  $itemsList.each(function(){
-                    if( $(this).find(sel).length ) $(this).hide();
-                  })
-                }
               }
             });
           });
 
-          easylockdown.jq.each(easylockdown.hideLinksByLocationCannot, function(loc, sels){
+          easylockdown.jq.each(easylockdown.hideLinksListByLocation.cannotAll, function(loc, sels){
             easylockdown.jq.each(sels, function(i, sel){
               if( easylockdown.currentISO == loc ) {
                 easylockdown.jq(sel).hide();
-                var $itemsList = easylockdown.jq('.easylockdown-item-selector').next(':visible');
-                if( $itemsList.length ) {
-                  $itemsList.each(function(){
-                    if( $(this).find(sel).length ) $(this).hide();
-                  })
-                }
               }
             });
           });
-
-          easylockdown.jq('.easylockdown-item-selector').remove();
         });
       }
 
@@ -336,6 +366,36 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       } else {
         document.addEventListener('easylockdown_geoiso_allow', function(e){
           _hideLinksByLocation();
+        });
+      }
+    },
+
+    hideLinksByAuth: function()
+    {
+      if( Object.keys(easylockdown.hideLinksListByAuth.filter).length ) {
+        var $itemsList = easylockdown.jq('.easylockdown-item');
+        var $collectionsItemsList = easylockdown.jq('.easylockdown-collection-item');
+
+        if( $itemsList.length || $collectionsItemsList.length ) {
+          easylockdown.jq.each(easylockdown.hideLinksListByAuth.filter, function(cn, sel){
+            if( !easylockdown.getCookie(cn) ) {
+              $itemsList.each(function(){ if( easylockdown.jq(this).find(sel).length ) easylockdown.jq(this).hide(); });
+
+              $collectionsItemsList.each(function(){
+                var $col = easylockdown.jq(this);
+                var $els = $col.find(sel);
+                $els.each(function(){ if( !easylockdown.jq(this).closest('.easylockdown-item').length ) { $col.hide(); return; }});
+              });
+            }
+          });
+        }
+      }
+
+      if( Object.keys(easylockdown.hideLinksListByAuth.all).length ) {
+        easylockdown.jq.each(easylockdown.hideLinksListByAuth.all, function(cn, sel){
+          if( !easylockdown.getCookie(cn) ) {
+            easylockdown.jq(sel).hide();
+          }
         });
       }
     },
@@ -403,6 +463,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
   easylockdown.jq(document).ready(function(){
     if( typeof InstantClick == 'object' ) InstantClick.on('change', easylockdown.initPage);
+    easylockdown.jq('.easylockdown-item-selector').next(':not(".easylockdown-item-selector")').addClass('easylockdown-item');
+    easylockdown.jq('.easylockdown-collection-item-selector').next(':not(".easylockdown-collection-item-selector")').addClass('easylockdown-collection-item');
+    easylockdown.jq('.easylockdown-item-selector,.easylockdown-collection-item-selector').remove();
 
     easylockdown.initPage();
   });
