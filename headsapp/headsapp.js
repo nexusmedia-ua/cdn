@@ -1,18 +1,20 @@
 (function () {
 
-    const BASEURL = "https://dev.nexusmedia-ua.com/headsappapi/public";
+    const BASEURL = "https://apps.nexusmedia-ua.com/headsapp/api/public";
     const CONFIG_URL = BASEURL + "/config";
     const PING_URL = BASEURL + "/ping";
     const EMAIL_URL = BASEURL + "/mail";
     const STARS_URL = BASEURL + "/stars";
 
     const CLOSED_MESSAGES_COOKIE = "headsapp-closed-messages";
+    const OPENED_MESSAGES_COOKIE = "headsapp-opened-messages";
     const USERDATA_COOKIE = "headsapp-userdata";
 
-    let container = null;
+    var container = null;
+    var inProgress = false;
 
     const userdata = document.currentScript.dataset;
-    let cookieData = getUserData();
+    var cookieData = getUserData();
     userdata.user_id = cookieData.user_id;
     userdata.user_first_time = cookieData.user_first_time;
 
@@ -23,19 +25,19 @@
         request.send(JSON.stringify(data));
     }
 
-    function getTimestamp(){
+    function getTimestamp() {
         return Math.floor(Date.now() / 1000);
     }
 
     function setUserData() {
-        let user_id = Math.random().toString(36).substr(2, 9);
-        let user_first_time = getTimestamp();
+        var user_id = Math.random().toString(36).substr(2, 9);
+        var user_first_time = getTimestamp();
         setCookie(USERDATA_COOKIE, {"user_id": user_id, "user_first_time": user_first_time});
     }
 
     function getUserData() {
-        let userdata = getCookie(USERDATA_COOKIE);
-        if (userdata) {
+        var userdata = getCookie(USERDATA_COOKIE);
+        if (typeof userdata !== 'undefined' && userdata !== null && typeof userdata.user_id !== 'undefined' && typeof userdata.user_first_time !== 'undefined') {
             return userdata;
         } else {
             setUserData();
@@ -49,9 +51,9 @@
 
     function getCookie(cookieName) {
         var value = "; " + document.cookie;
-        var parts = value.split("; "+cookieName+"=");
-        if (parts.length == 2) {
-            let cookie = parts.pop().split(";").shift();
+        var parts = value.split("; " + cookieName + "=");
+        if (parts.length === 2) {
+            var cookie = parts.pop().split(";").shift();
             if (cookie) {
                 return JSON.parse(cookie);
             }
@@ -63,24 +65,35 @@
         const id = headsapp.getAttribute('data-server-message-id');
         if (headsapp.getAttribute('data-display-interval') !== null) {
             setCookie('headsapp-closed-time-' + id, getTimestamp());
-        } else if (headsapp.getAttribute('data-display') !== 'default') {
-            let closedIds = getCookie(CLOSED_MESSAGES_COOKIE);
+        } else if (!headsapp.getAttribute('data-display')) {
+            var closedIds = getCookie(CLOSED_MESSAGES_COOKIE);
             if (!closedIds) {
                 closedIds = [];
             }
             closedIds.push(id);
             setCookie(CLOSED_MESSAGES_COOKIE, closedIds);
 
+        } else if (headsapp.getAttribute('data-display') === 'opened') {
+            var openedIds = getCookie(OPENED_MESSAGES_COOKIE);
+            if (!openedIds) {
+                openedIds = [];
+            }
+            if (openedIds.indexOf(id) === -1) {
+                openedIds.push(id);
+            }
+            setCookie(OPENED_MESSAGES_COOKIE, openedIds);
         }
     }
 
     function setIdForMessage(id, headsapp) {
         headsapp.setAttribute('data-server-message-id', id);
     }
-    
+
     function setMessage(headsapp, message) {
-        let messageItem = headsapp.querySelector('.headsapp-message');
-        messageItem.innerText = message;
+        var messageItem = headsapp.querySelector('.headsapp-message');
+        if (messageItem) {
+            messageItem.innerText = message;
+        }
     }
 
     function setAvatar(headsapp, avatarUrl) {
@@ -101,23 +114,27 @@
             headsapp.parentNode.removeChild(headsapp);
             pingClose(headsapp);
         }
+        inProgress = false;
     }
 
     function setPopupHandler(headsapp) {
         headsapp.querySelector('.headsapp-close').addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (headsapp.getAttribute('data-display') != 'default') {
-                setFadeEffectToBlock(headsapp);
-                checkingIfAllMessagesClosed(headsapp);
-                closePopup(headsapp, true);
+            if (!inProgress) {
+                inProgress = true;
+                e.stopPropagation();
+                if (headsapp.getAttribute('data-display') !== 'default' && headsapp.getAttribute('data-display') !== 'opened') {
+                    setFadeEffectToBlock(headsapp);
+                    checkingIfAllMessagesClosed(headsapp);
+                    closePopup(headsapp, true);
+                }
+                else {
+                    hidePopupWhenDefault(headsapp);
+                }
+                if (isAllMessagesClosed(headsapp, true)) {
+                    hideIcon();
+                }
+                saveToCookieDeletedMessage(headsapp);
             }
-            else {
-                hidePopupWhenDefault(headsapp);
-            }
-            if(isAllMessagesClosed(container, headsapp, true)) {
-                hideIcon();
-            }
-            saveToCookieDeletedMessage(headsapp);
         });
         headsapp.addEventListener('click', choosePopup);
     }
@@ -125,19 +142,19 @@
     function checkingIfAllMessagesClosed(headsapp) {
         container = document.querySelector('.headsapp-wrapper');
         const headsapps = container.querySelectorAll('.headsapp');
-        for (let i = 0; i < headsapps.length; i++) {
+        for (var i = 0; i < headsapps.length; i++) {
             const headsapp = headsapps[i];
-            if(headsapp.getAttribute('data-is_open') === 'false') {
+            if (headsapp.getAttribute('data-is_open') === 'false') {
                 container.setAttribute('data-container-open', 'false');
             }
         }
     }
 
     function setFadeEffectToBlock(headsapp) {
-        if(headsapp.classList.contains('headsapp-blur')){
+        if (headsapp.classList.contains('headsapp-blur')) {
             headsapp.style.filter = 'blur(2px)';
         }
-        if(headsapp.classList.contains('headsapp-darken')){
+        if (headsapp.classList.contains('headsapp-darken')) {
             headsapp.style.filter = 'contrast(30%)';
         }
     }
@@ -146,11 +163,12 @@
         setFadeEffectToBlock(headsapp);
         setTimeout(function () {
             headsapp.style.opacity = 0;
-            setTimeout(function () {
-                headsapp.style.display = 'none';
-                headsapp.style.filter = '';
-            }, 500)
-        },1000);
+            headsapp.style.display = 'none';
+            headsapp.style.filter = '';
+            headsapp.setAttribute('data-maximized', false);
+            headsapp.querySelector('.headsapp-body').style.height = '';
+        }, 300);
+        inProgress = false;
     }
 
     function changeIconToMail() {
@@ -163,51 +181,69 @@
             setTimeout(function () {
                 document.querySelector('.headsapp-wrapper').style.display = 'none';
             }, 500)
-        },1000);
+        }, 1000);
     }
 
-    function isAllMessagesClosed(headsapp){
-        let lengthHeadsapps = document.querySelector('.headsapp-wrapper-main').children.length;
-        let lengthDefaultHeadsapps = document.querySelectorAll('.headsapp[data-display="default"]').length;
-        if (lengthHeadsapps <= 1 && lengthDefaultHeadsapps === 0){
+    function isAllMessagesClosed(headsapp) {
+        var openedHiddenBlocks = 0;
+        var lengthHeadsapps = document.querySelector('.headsapp-wrapper-main').children;
+        var lengthHiddenBlocks = document.querySelectorAll('.headsapp[data-display]');
+        if (lengthHeadsapps.length <= 1 && lengthHiddenBlocks.length === 0) {
             return true;
         }
-        else if ((lengthHeadsapps - 1) === lengthDefaultHeadsapps || (lengthHeadsapps <= 1 && lengthDefaultHeadsapps !== 0)) {
-            changeIconToMail();
+        else if ((lengthHeadsapps.length - lengthHiddenBlocks.length === 0 || lengthHeadsapps.length - lengthHiddenBlocks.length === lengthHiddenBlocks.length)) {
+            for (var i = 0; i < lengthHeadsapps.length; i++) {
+                if (getComputedStyle(lengthHeadsapps[i]).display !== "none") {
+                    openedHiddenBlocks++;
+                }
+            }
+            if (openedHiddenBlocks === 1) {
+                changeIconToMail();
+                inProgress = false;
+            }
         }
     }
+
 
     function setContainerHandler(container) {
         const toggler = container.querySelector('.headsapp-toggle');
         toggler.addEventListener('click', function () {
-            if (container.getAttribute('data-container-open') == 'true') {
+            if (!inProgress) {
+                inProgress = true;
+                if (container.getAttribute('data-container-open') === 'true') {
                     closeContainer(container);
                 } else {
                     openContainer(container);
                 }
             }
-        );
+        });
     }
 
     function closeContainer(container) {
         container.setAttribute('data-container-open', false);
         const headsapps = container.querySelectorAll('.headsapp');
-        for (let i = 0; i < headsapps.length; i++) {
+        for (var i = 0; i < headsapps.length; i++) {
             const headsapp = headsapps[i];
             closePopup(headsapp);
-            if(headsapp.getAttribute('data-maximized') === 'true'){
+            if (headsapp.getAttribute('data-maximized') === 'true') {
                 headsapp.querySelector('.headsapp-close').click();
             }
+            if (headsapp.getAttribute('data-maximized') === 'true' && headsapp.getAttribute('data-display') === 'opened') {
+                hidePopupWhenDefault(headsapp);
+                saveToCookieDeletedMessage(headsapp);
+            }
+
         }
     }
 
     function openContainer(container) {
+        inProgress = false;
         container.setAttribute('data-container-open', true);
         const headsapps = container.querySelectorAll('.headsapp');
-        for (let i = 0; i < headsapps.length; i++) {
+        for (var i = 0; i < headsapps.length; i++) {
             const headsapp = headsapps[i];
             openPopup(headsapp, true);
-            if (headsapp.style.display == 'none') {
+            if (headsapp.style.display === 'none') {
                 headsapp.style.display = 'block';
                 setTimeout(function () {
                     headsapp.style.opacity = '';
@@ -219,25 +255,31 @@
 
     function closePopup(headsapp, remove) {
         setTimeout(function () {
-            let openconatiner = remove && headsapp.getAttribute('data-maximized');
+            var openconatiner = remove && headsapp.getAttribute('data-maximized');
             document.querySelector('.headsapp-wrapper-main').style.height = '';
             headsapp.setAttribute('data-is_open', false);
-            setTimeout(setAttrAfterTimeout, 400, headsapp, remove, openconatiner);
-        },500);
+            setTimeout(setAttrAfterTimeout, 600, headsapp, remove, openconatiner);
+        }, 500);
     }
+
 
     function openPopup(headsapp) {
-        headsapp.setAttribute('data-is_open', true);
+        if (!inProgress)
+            headsapp.setAttribute('data-is_open', true);
         headsapp.setAttribute('data-show_content', true);
+
     }
 
-    function maximizePopup(headsapp) {
-        pingOpen(headsapp);
-        headsapp.setAttribute('data-maximized', true);
-        document.querySelector('.headsapp-wrapper-main').style.height = '';
+    function setHeightWhenSmall(headsapp) {
+        if (headsapp.querySelector('.headsapp-body-wrapper').offsetHeight + 200 > document.documentElement.clientHeight) {
+            document.querySelector('.headsapp-wrapper-main').style.height = document.documentElement.clientHeight - 40 + 'px';
+        }
+    }
+
+    function styleForMessage(headsapp) {
         const el = headsapp.querySelector('.headsapp-message');
-        if(el){
-            if (headsapp.querySelector('.headsapp-message').offsetHeight && headsapp.querySelector('.headsapp-message').offsetHeight > 100) {
+        if (el) {
+            if (headsapp.querySelector('.headsapp-message').offsetHeight > 100) {
                 headsapp.querySelector('.headsapp-body').style.height = document.documentElement.clientHeight - 300 + 'px';
                 headsapp.querySelector('.headsapp-body').style.overflowY = 'scroll';
                 headsapp.querySelector('.headsapp-body').style.marginRight = 15 + 'px';
@@ -247,69 +289,109 @@
                 headsapp.querySelector('.headsapp-body').style.height = getHeight(headsapp.querySelector('.headsapp-body-wrapper')) + 'px';
             }
         }
+    }
+
+    function styleForBodyWrapperSuccess(headsapp) {
         const en = headsapp.querySelector('.headsapp-body-wrapper-success');
-        if (en){
+        if (en) {
             headsapp.querySelector('.headsapp-message-sent-icon').style.display = 'block';
             setTimeout(function () {
                 headsapp.querySelector('.headsapp-message-sent-icon').style.opacity = 1;
                 headsapp.querySelector('.headsapp-message-sent-icon').style.transition = 'opacity 0.5s';
-            },100);
+            }, 100);
             headsapp.querySelector('.headsapp-body').style.height = headsapp.querySelector('.headsapp-body-wrapper-success').offsetHeight + 'px';
         }
+    }
+
+    function styleForBodyStarsBlock(headsapp) {
         const er = headsapp.querySelector('.headsapp-body-stars-block');
         if (er) {
             headsapp.querySelector('.headsapp-body-stars-block').style.overflowY = '';
             headsapp.querySelector('.headsapp-body-stars-block').style.marginRight = '';
             headsapp.querySelector('.headsapp-body-stars-block').style.paddingRight = '';
-            if(document.querySelector('.headsapp-form-contact').style.display == 'none'){
+            if (document.querySelector('.headsapp-form-contact').style.display === 'none') {
                 headsapp.querySelector('.headsapp-body-stars-block').style.height = headsapp.querySelector('.headsapp-body-wrapper').offsetHeight + 'px';
             }
             else {
+
                 const we = headsapp.querySelector('.headsapp-body-wrapper');
-                if(we) {
+                if (we) {
                     headsapp.querySelector('.headsapp-body-stars-block').style.height = headsapp.querySelector('.headsapp-body-wrapper').offsetHeight + 'px';
                 }
-                else{
+                else {
                     headsapp.querySelector('.headsapp-body-stars-block').style.height = headsapp.querySelector('.headsapp-body-wrapper-success').offsetHeight + 'px';
-                }
-            }
-        }
-        const eq = headsapp.querySelector('.headsapp-message-long');
-        if(eq){
-            if(getHeight(headsapp.querySelector('.headsapp-body-wrapper')) < document.documentElement.clientHeight) {
-                headsapp.querySelector('.headsapp-body').style.height = getHeight(headsapp.querySelector('.headsapp-body-wrapper')) + 'px';
-                headsapp.querySelector('.headsapp-body').style.overflowY = '';
-                headsapp.querySelector('.headsapp-body').style.marginRight = '';
-                headsapp.querySelector('.headsapp-body').style.paddingRight = '';
-            }
-        }
-        if (window.matchMedia('(max-device-width: 740px)').matches || window.matchMedia('(max-width: 740px)').matches) {
-            var mql = window.matchMedia("(orientation: portrait)");
-
-            if(mql.matches) {
-                console.log('Портретная ориентация');
-            } else {
-                const el = headsapp.querySelector('.headsapp-form-contact');
-                if(el){
-                    headsapp.querySelector('.headsapp-body').style.height = document.documentElement.clientHeight - 290 + 'px';
-                    headsapp.querySelector('.headsapp-body').style.overflowY = 'auto';
-
                 }
             }
         }
     }
 
-    function choosePopup(event) {
-        let headsapp = event.target.closest('.headsapp');
-        if (headsapp.getAttribute('data-maximized') == 'false') {
-            let id = headsapp.id;
-            const popups = container.querySelectorAll('.headsapp');
-            for (let i = 0; i < popups.length; i++) {
-                if (popups[i].id !== id) {
-                    closePopup(popups[i]);
+    function styleForMessageLong(headsapp) {
+        const eq = headsapp.querySelector('.headsapp-message-long');
+        const ef = headsapp.querySelector('.headsapp-form-contact');
+        if (eq && !ef) {
+            if (headsapp.querySelector('.headsapp-container').style.height < document.documentElement.clientHeight) {
+                headsapp.querySelector('.headsapp-body').style.height = getHeight(headsapp.querySelector('.headsapp-body-wrapper')) - 65 + 'px';
+                headsapp.querySelector('.headsapp-body').style.overflowY = '';
+                headsapp.querySelector('.headsapp-body').style.marginRight = '';
+                headsapp.querySelector('.headsapp-body').style.paddingRight = '';
+            }
+        }
+    }
+
+    function changeHeadsappBodyHeightOnMobile(headsapp) {
+        if (window.matchMedia('(max-device-width: 740px)').matches || window.matchMedia('(max-width: 740px)').matches) {
+            var mql = window.matchMedia("(orientation: portrait)");
+            if (mql.matches) {
+            } else {
+                const el = headsapp.querySelector('.headsapp-form-contact');
+                if (el) {
+                    headsapp.querySelector('.headsapp-body').style.height = document.documentElement.clientHeight - 290 + 'px';
+                    headsapp.querySelector('.headsapp-body').style.overflowY = 'auto';
                 }
             }
-            setTimeout(maximizePopup, 1200, headsapp);
+        }
+    }
+
+    function maximizePopup(headsapp) {
+        pingOpen(headsapp);
+        headsapp.setAttribute('data-maximized', true);
+        document.querySelector('.headsapp-wrapper-main').style.height = '';
+        setHeightWhenSmall(headsapp);
+        styleForMessage(headsapp);
+        styleForBodyWrapperSuccess(headsapp);
+        styleForBodyStarsBlock(headsapp);
+        styleForMessageLong(headsapp);
+        changeHeadsappBodyHeightOnMobile(headsapp);
+        inProgress = false;
+    }
+
+    function choosePopup(event) {
+        if (!inProgress) {
+            inProgress = true;
+            var hiddenBlocks = 0;
+            var headsapp = event.target.closest('.headsapp');
+            if (headsapp.getAttribute('data-maximized') === 'false') {
+                var id = headsapp.id;
+                const popups = container.querySelectorAll('.headsapp');
+                for (var i = 0; i < popups.length; i++) {
+                    if (popups[i].id !== id) {
+                        closePopup(popups[i]);
+                        if (popups[i].style.display === 'none') {
+                            hiddenBlocks++;
+                        }
+                    }
+                }
+                var main = document.querySelector('.headsapp-wrapper-main');
+                if (main.childNodes.length > 1 && hiddenBlocks === 0) {
+                    setTimeout(maximizePopup, 1200, headsapp);
+                }
+                else {
+                    maximizePopup(headsapp);
+                }
+            }
+            else {
+                inProgress = false;
+            }
         }
     }
 
@@ -321,30 +403,30 @@
     }
 
     function createMessagesWrapper() {
-        let newContainer = document.createElement('div');
+        var newContainer = document.createElement('div');
         newContainer.id = 'headsapp-wrapper';
         openContainer(newContainer);
         newContainer.className = 'headsapp-wrapper';
         document.querySelector('body').appendChild(newContainer);
         newContainer.innerHTML = wrapperHtml;
-        let newMainContainer = document.createElement('div');
+        var newMainContainer = document.createElement('div');
         newMainContainer.className = 'headsapp-wrapper-main';
         newContainer.insertBefore(newMainContainer, newContainer.firstChild);
         setTimeout(setScrollWhenScreenSmall, 600);
         return newContainer;
     }
 
-    function setScrollWhenScreenSmall () {
-        setTimeout(function () {
-            let newMainContainer = document.querySelector('.headsapp-wrapper-main');
-            if (newMainContainer.offsetHeight > document.documentElement.clientHeight){
-                newMainContainer.style.height = document.documentElement.clientHeight - 40 +'px';
-                newMainContainer.style.overflowY = 'auto';
-                newMainContainer.scrollTop = newMainContainer.scrollHeight - newMainContainer.clientHeight;
-            }
-        },500);
-
+    function setScrollWhenScreenSmall() {
+        var newMainContainer = document.querySelector('.headsapp-wrapper-main');
+        if (newMainContainer.scrollHeight > document.documentElement.clientHeight) {
+            newMainContainer.style.height = document.documentElement.clientHeight - 40 + 'px';
+            newMainContainer.style.overflowY = 'auto';
+            newMainContainer.scrollTop = newMainContainer.scrollHeight - newMainContainer.clientHeight;
+        } else {
+            newMainContainer.style.height = 'auto';
+        }
     }
+
     window.onresize = setScrollWhenScreenSmall;
 
     function run() {
@@ -352,56 +434,55 @@
         setContainerHandler(container);
         apiRequest(renderMessages, CONFIG_URL, userdata);
         document.addEventListener('click', function (event) {
-            if (event.target.closest('.headsapp-wrapper') == null) {
+            if (event.target.closest('.headsapp-wrapper') === null) {
                 minimizePopups();
             }
         })
     }
 
     function renderMessages() {
-        let config = JSON.parse(this.responseText);
-        let messages = config.messages;
-        // hideIconWhenNoMessage();
-        if (config.messages){
+        var config = JSON.parse(this.responseText);
+        var messages = config.messages;
+        if (config.messages) {
             document.querySelector('.headsapp-wrapper').style.display = 'block';
             setTimeout(function () {
                 document.querySelector('.headsapp-wrapper').style.opacity = 1;
-            },200);
+            }, 200);
             if (messages) {
-                for (let i = 0; i < messages.length; i++) {
+                for (var i = 0; i < messages.length; i++) {
                     renderMessage(messages[i]);
                 }
             }
         }
     }
 
-    function isMessageValid(item){
-      return typeof item !== 'undefined'
+    function isMessageValid(item) {
+        return typeof item !== 'undefined'
             && typeof item.text !== 'undefined'
             && typeof item.staff_icon !== 'undefined'
             && typeof item.staff_name !== 'undefined'
-        && typeof item.staff_title !== 'undefined';
+            && typeof item.staff_title !== 'undefined';
     }
 
-    function isMessageForShow(item){
+    function isMessageForShow(item) {
         return !isMessageWasClosedByUser(item) && isMessageForShowAfterDelay(item) && isMessageInDisplayInterval(item) && !isDisplayAttribute(item);
     }
 
     function isDisplayAttribute(item) {
         if (typeof item.display_attribute !== 'undefined' && typeof item.dispaly_attribute_value !== 'undefined') {
-            if(userdata[item.display_attribute] != item.dispaly_attribute_value) {
-                hideIconWhenDelay();
+            if (userdata[item.display_attribute] !== item.dispaly_attribute_value) {
+                hideIconWhenNoMessage();
                 return true;
             }
         }
         return false;
     }
 
-    function isMessageInDisplayInterval(item){
-        if (typeof item.display_interval != 'undefined') {
-            let lastClose = getCookie('headsapp-closed-time-' + item.id);
+    function isMessageInDisplayInterval(item) {
+        if (typeof item.display_interval !== 'undefined') {
+            var lastClose = getCookie('headsapp-closed-time-' + item.id);
             if (lastClose) {
-                if ( (lastClose + item.display_interval * 60) > getTimestamp()) {
+                if ((lastClose + item.display_interval * 60) > getTimestamp()) {
                     hideIconWhenNoMessage();
                     return false;
                 }
@@ -412,8 +493,8 @@
 
     function hideIconWhenNoMessage() {
         setTimeout(function () {
-            let lengthHeadsapps = document.querySelector('.headsapp-wrapper-main').children.length;
-            if(lengthHeadsapps === 0){
+            var lengthHeadsapps = document.querySelector('.headsapp-wrapper-main').children.length;
+            if (lengthHeadsapps === 0) {
                 hideIconWhenDelay();
             }
         }, 100);
@@ -421,10 +502,9 @@
 
     function isMessageForShowAfterDelay(item) {
         if (typeof item.delay !== 'undefined') {
-            let now = getTimestamp();
+            var now = getTimestamp();
             if (+(+userdata.user_first_time + +(item.delay * 60)) > now) {
                 hideIconWhenNoMessage();
-                console.log('no show');
                 return false;
             }
         }
@@ -436,9 +516,10 @@
     }
 
     function isMessageWasClosedByUser(item) {
-        let closedMessages = getCookie('headsapp-closed-messages');
-        if (closedMessages != null) {
-            if (closedMessages.indexOf('' + item.id) != -1) {
+        var closedMessages = getCookie('headsapp-closed-messages');
+        if (closedMessages !== null) {
+            if (closedMessages.indexOf('' + item.id) !== -1) {
+                hideIconWhenNoMessage();
                 return true;
             }
         }
@@ -448,27 +529,28 @@
     function renderMessage(item) {
         if (isMessageValid(item) && isMessageForShow(item)) {
 
-            let type = 'notification';
+            var type = 'notification';
             const headsapp = createPopup();//new popup for each message
-            if (typeof typeof item.type !== 'undefined' && item.type == "notification") {
+            if (typeof typeof item.type !== 'undefined' && item.type === "notification") {
                 if (typeof typeof item.action_type !== 'undefined') {
                     type = setActionTemplate(headsapp, item.action_type);
                 }
-            } else if (typeof typeof item.type !== 'undefined' && item.type == "stars") {
+            } else if (typeof typeof item.type !== 'undefined' && item.type === "stars") {
                 type = setActionTemplate(headsapp, item.type);
                 starsBlock(headsapp);
             }
-
             setMessage(headsapp, item.text);
             setAvatar(headsapp, item.staff_icon);
             setName(headsapp, item.staff_name);
             setTitle(headsapp, item.staff_title);
             openPopup(headsapp);
-            if (type == 'contact') {
+            if (type === 'contact') {
+                setDefaultEmailAndNameFromUserData(headsapp);
                 setContactHandler(headsapp);
             }
 
-            if (type == 'stars') {
+            if (type === 'stars') {
+                setDefaultEmailAndNameFromUserData(headsapp);
                 setRateHandler(headsapp);
                 setContactHandler(headsapp);
                 setFormText(headsapp, item.text);
@@ -477,8 +559,10 @@
                 setHeightStarsBlock();
             }
 
-            if (typeof item.button_background_color !== 'undefined'
-                ) {
+            if (typeof item.text !== 'undefined') {
+                getLength(item.text);
+            }
+            if (typeof item.button_background_color !== 'undefined') {
                 setButtonBackground(headsapp, item.button_background_color);
             }
             if (typeof item.button_text_color !== 'undefined') {
@@ -496,9 +580,6 @@
             if (typeof item.action_text !== 'undefined') {
                 setActionText(headsapp, item.action_text);
             }
-            if (typeof item.text !== 'undefined') {
-                getLength(item.text);
-            }
             if (typeof item.fade !== 'undefined') {
                 setFadeEffect(headsapp, item.fade);
             }
@@ -513,36 +594,55 @@
             }
             if (typeof item.display !== 'undefined') {
                 headsapp.setAttribute('data-display', item.display);
-                headsapp.style.display = 'none';
-                if(isAllMessagesClosed (container, headsapp, true)) {
-                    changeIconToMail();
+                if (item.display === "default") {
+                    headsapp.style.display = 'none';
+                } else {
+                    var openedIds = getCookie(OPENED_MESSAGES_COOKIE);
+                    if (openedIds !== null && openedIds.indexOf(item.id) === -1) {
+                        headsapp.setAttribute('data-is_open', false);
+                    }
                 }
+                if (!allBlocksInvisible() === true) {
+                    changeIconToMail()
+                }
+            }
+
+        }
+    }
+
+    function allBlocksInvisible() {
+        var blocks = document.querySelectorAll(".headsapp");
+        var visibleBlock = 0;
+        for (var i = 0; i < blocks.length; i++) {
+            if (blocks[i].getAttribute('data-is_open') === 'true') {
+                return true
             }
         }
     }
 
+
     function setFormTextStar(headsapp, form_text) {
-        const el = headsapp.querySelector('.headsapp-message');
-        if(el){
+        const el = headsapp.querySelector('.headsapp-message-text');
+        if (el) {
             el.innerHTML = form_text;
         }
     }
 
     function setStarsText(headsapp, stars_text) {
         const el = headsapp.querySelector('.headsapp-question');
-        if(el){
+        if (el) {
             el.innerHTML = stars_text;
         }
     }
 
     function setFormText(headsapp, text) {
-        let messageItem = headsapp.querySelector('.headsapp-message-gorgeous');
+        var messageItem = headsapp.querySelector('.headsapp-message-gorgeous');
         messageItem.innerText = text;
     }
 
 
     function setFadeEffect(headsapp, fade) {
-        headsapp.classList.add('headsapp-'+fade);
+        headsapp.classList.add('headsapp-' + fade);
     }
 
     function starsBlock(headsapp) {
@@ -562,7 +662,7 @@
     }
 
     function getLength(text) {
-        let sliced = text.slice(0, 100);
+        var sliced = text.slice(0, 100);
         if (sliced.length < text.length) {
             const words = sliced.split(' ');
             words.pop();
@@ -570,14 +670,13 @@
             sliced = sliced.replace(/[,\!\?\:\;\.]$/, '');
             sliced += '...';
             const el = document.querySelector('#headsapp-star-block');
-            if (el) {}
-            else {
-                let shortMessageBlock = document.createElement('div');
+            if (!el) {
+                var shortMessageBlock = document.createElement('div');
                 shortMessageBlock.className = "headsapp-message-short";
                 shortMessageBlock.innerHTML = sliced;
-                let headsappBodyWrapper = document.querySelector('.headsapp-body-wrapper');
-                headsappBodyWrapper.appendChild(shortMessageBlock);
-                let heightShortMessageBlock = shortMessageBlock.offsetHeight;
+                var headsappBodyWrapper = document.querySelector('.headsapp-body-wrapper');
+                headsappBodyWrapper.insertBefore(shortMessageBlock, headsappBodyWrapper.firstChild);
+                var heightShortMessageBlock = shortMessageBlock.offsetHeight;
                 document.querySelector('.headsapp-body').style.height = heightShortMessageBlock + "px";
                 document.querySelector('.headsapp-message').classList.add("headsapp-message-long");
             }
@@ -587,50 +686,64 @@
         }
     }
 
+    function deleteHeightFromPopupI(popups) {
+        const messageBlock = popups.querySelector('.headsapp-message');
+        if (messageBlock) {
+            popups.querySelector('.headsapp-body').style.height = '';
+        }
+    }
+
+    function styleForPopupIMessageShort(popups) {
+        const el = popups.querySelector('.headsapp-message-short');
+        if (el) {
+            popups.querySelector('.headsapp-body').style.height = popups.querySelector('.headsapp-message-short').offsetHeight + 'px';
+            popups.querySelector('.headsapp-body').style.overflowY = '';
+            popups.querySelector('.headsapp-body').style.marginRight = '';
+            popups.querySelector('.headsapp-body').style.paddingRight = '';
+        }
+    }
+
+    function styleForPopupIBodyWrapperSuccess(popups) {
+        const en = popups.querySelector('.headsapp-body-wrapper-success');
+        if (en) {
+            popups.querySelector('.headsapp-body').style.height = popups.querySelector('.headsapp-your-message-sent-text').offsetHeight + 'px';
+            popups.querySelector('.headsapp-message-sent-icon').style.opacity = 0;
+            popups.querySelector('.headsapp-message-sent-icon').style.transition = 'opacity 0.5s';
+            popups.querySelector('.headsapp-message-sent-icon').style.display = 'none';
+        }
+    }
+
     function minimizePopups() {
+        inProgress = false;
         container = document.querySelector('.headsapp-wrapper');
-        if (container.getAttribute('data-container-open') == 'true') {
+        if (container.getAttribute('data-container-open') === 'true') {
             const popups = container.querySelectorAll('.headsapp');
-            for (let i = 0; i < popups.length; i++) {
+            for (var i = 0; i < popups.length; i++) {
                 openPopup(popups[i]);
                 popups[i].setAttribute('data-maximized', false);
-                popups[i].querySelector('.headsapp-body').style.height = '';
-                setTimeout(setScrollWhenScreenSmall ,600);
+                deleteHeightFromPopupI(popups[i]);
+                setTimeout(setScrollWhenScreenSmall, 600);
                 document.querySelector('.headsapp-wrapper-main').scrollTop = document.querySelector('.headsapp-wrapper-main').scrollHeight;
+                styleForPopupIMessageShort(popups[i]);
+                styleForPopupIBodyWrapperSuccess(popups[i]);
 
-                const el = popups[i].querySelector('.headsapp-message-short');
-                if(el){
-                    setTimeout(function () {
-                        popups[i].querySelector('.headsapp-body').style.height = popups[i].querySelector('.headsapp-message-short').offsetHeight + 'px';
-                    }, 1);
-                    popups[i].querySelector('.headsapp-body').style.overflowY = '';
-                    popups[i].querySelector('.headsapp-body').style.marginRight = '';
-                    popups[i].querySelector('.headsapp-body').style.paddingRight = '';
-                }
-
-                const en = popups[i].querySelector('.headsapp-body-wrapper-success');
-                if (en){
-                    popups[i].querySelector('.headsapp-body').style.height = popups[i].querySelector('.headsapp-your-message-sent-text').offsetHeight+'px';
-                    popups[i].querySelector('.headsapp-message-sent-icon').style.opacity = 0;
-                    popups[i].querySelector('.headsapp-message-sent-icon').style.transition = 'opacity 0.5s';
-                    setTimeout(function () {
-                        popups[i].querySelector('.headsapp-message-sent-icon').style.display = 'none';
-                    },500);
-                }
                 const er = container.querySelector('.headsapp-body-stars-block');
                 if (er) {
-                    const qw = container.querySelector('.headsapp-body-wrapper');
-                    if(qw) {
-                        if(container.querySelector('.headsapp-form-contact').style.display === 'block') {
-                            container.querySelector('.headsapp-body-stars-block').style.height = container.querySelector('.headsapp-message-text').offsetHeight + 'px';
-                        }
-                        else {
-                            setHeightStarsBlock();
-                        }
-                        const gorgeous = container.querySelector('.headsapp-message-gorgeous');
-                        if(gorgeous){
-                            if(gorgeous.style.display === 'block') {
-                                container.querySelector('.headsapp-body-stars-block').style.height = gorgeous.offsetHeight + 'px';
+                    const containerBodyWrapper = container.querySelector('.headsapp-body-wrapper');
+                    if (containerBodyWrapper) {
+                        const starsFormBlock = container.querySelector('.headsapp-form-contact');
+                        if (starsFormBlock) {
+                            if (starsFormBlock.style.display === 'block') {
+                                container.querySelector('.headsapp-body-stars-block').style.height = container.querySelector('.headsapp-message-text').offsetHeight + 'px';
+                            }
+                            else {
+                                setHeightStarsBlock();
+                            }
+                            const gorgeous = container.querySelector('.headsapp-message-gorgeous');
+                            if (gorgeous) {
+                                if (gorgeous.style.display === 'block') {
+                                    container.querySelector('.headsapp-body-stars-block').style.height = gorgeous.offsetHeight + 'px';
+                                }
                             }
                         }
                     }
@@ -639,9 +752,14 @@
         }
     }
 
+    function setDefaultEmailAndNameFromUserData(headsapp) {
+        headsapp.querySelector('input[name="user_name"]').value = userdata.user_name;
+        headsapp.querySelector('input[name="user_email"]').value = userdata.user_email;
+    }
+
     function setHeightStarsBlock() {
-        const q = document.querySelector('.headsapp-body-wrapper-success');
-        if(!q) {
+        const el = document.querySelector('.headsapp-body-wrapper-success');
+        if (!el) {
             const el = document.querySelector('.headsapp-body-stars-block');
             if (el) {
                 el.style.height = document.querySelector('#headsapp-star-block').offsetHeight + 'px';
@@ -664,7 +782,7 @@
     }
 
     function getHeight(el) {
-        let elHeight = el.offsetHeight;
+        var elHeight = el.offsetHeight;
         elHeight += parseInt(window.getComputedStyle(el).getPropertyValue('margin-top'));
         elHeight += parseInt(window.getComputedStyle(el).getPropertyValue('margin-bottom'));
         return elHeight;
@@ -689,18 +807,19 @@
 
     function clickRate(event) {
         setTimeout(function () {
-            let headsapp = getPopupByinternalNode(event.target);
+            inProgress = false;
+            var headsapp = getPopupByinternalNode(event.target);
             headsapp.querySelector('.headsapp-question').style.display = 'none';
             headsapp.querySelector('.headsapp-review-stars').style.display = 'none';
-            headsapp.querySelector('.headsapp-message').style.display = 'inline';
+            headsapp.querySelector('.headsapp-message-text').style.display = 'inline';
             setTimeout(function () {
-                headsapp.querySelector('.headsapp-body').style.height = headsapp.querySelector('#headsapp-star-block').offsetHeight+'px';
-            },100);
+                headsapp.querySelector('.headsapp-body').style.height = headsapp.querySelector('#headsapp-star-block').offsetHeight + 'px';
+            }, 100);
 
-            if (event.target.title == 'gorgeous') {
+            if (event.target.title === 'gorgeous') {
                 headsapp.querySelector('.headsapp-btn-send').style.display = 'block';
                 headsapp.querySelector('.headsapp-message-gorgeous').style.display = 'block';
-                headsapp.querySelector('.headsapp-message').style.display = 'none';
+                headsapp.querySelector('.headsapp-message-text').style.display = 'none';
             } else {
                 headsapp.querySelector('.headsapp-form-contact').style.display = 'block';
             }
@@ -711,31 +830,26 @@
 
     function setRateHandler(headsapp) {
         const labels = headsapp.querySelectorAll('label');
-        for (let i = 0; i < labels.length; i++) {
+        for (var i = 0; i < labels.length; i++) {
             labels[i].addEventListener('click', clickRate);
         }
     }
 
     function sendContactForm(event) {
-
+        inProgress = false;
         event.preventDefault();
         const headsapp = getPopupByinternalNode(event.target);
         removeTooltips(headsapp);
-
-        const data = {};
-        data.type = 'contact';
-        data.id = headsapp.id;
-
         const inputs = headsapp.querySelectorAll('input, textarea');
-        for (let i = 0; i < inputs.length; i++) {
+        for (var i = 0; i < inputs.length; i++) {
             inputs[i].style.borderColor = '#eeeeee';
         }
 
-        let userNameField = headsapp.querySelector('input[name="user_name"]');
-        let userEmailField = headsapp.querySelector('input[name="user_email"]');
-        let userMessageField = headsapp.querySelector('textarea[name="message"]');
+        var userNameField = headsapp.querySelector('input[name="user_name"]');
+        var userEmailField = headsapp.querySelector('input[name="user_email"]');
+        var userMessageField = headsapp.querySelector('textarea[name="message"]');
 
-        let isFormValid = true;
+        var isFormValid = true;
 
         if (!checkName(userNameField)) {
             isFormValid = false
@@ -747,7 +861,8 @@
             isFormValid = false
         }
         if (isFormValid) {
-            let data = {};
+            var data = {};
+            data.type = 'contact';
             data.id = headsapp.id;
             data.user_name = userNameField.value;
             data.user_email = userEmailField.value;
@@ -760,21 +875,26 @@
     }
 
     function removeTooltips(headsapp) {
-        headsapp.querySelectorAll('.headsapp-tooltiptext').forEach(function (item) {
-            item.parentNode.removeChild(item)
-        });
+        var tips = headsapp.querySelectorAll('.headsapp-tooltiptext');
+        for (var i = 0; i < tips.length; i++) {
+            var tip = tips[i];
+            tip.parentNode.removeChild(tip);
+        }
+
         const inputs = headsapp.querySelectorAll('input, textarea');
-        for (let i = 0; i < inputs.length; i++) {
-            inputs[i].oninput = function () {
-                inputs[i].style.borderColor = '';
-                inputs[i].parentNode.querySelectorAll('.headsapp-tooltiptext').forEach(function (item) {
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].oninput = function (el) {
+                this.style.borderColor = '';
+                var items = this.parentNode.querySelectorAll('.headsapp-tooltiptext');
+                for (var k = 0; k < items.length; k++) {
+                    var item = items[k];
                     item.parentNode.removeChild(item)
-                });
+                }
             }
         }
     }
 
-        function checkName(field) {
+    function checkName(field) {
         if (!validateField(field.value)) {
             addTooltip(field, 'Name is required');
             return false;
@@ -784,7 +904,7 @@
 
     function checkEmail(field) {
         if (!validateField(field.value)) {
-            addTooltip(field,  'Email is require');
+            addTooltip(field, 'Email is require');
             return false;
         } else {
             if (!validateEmail(field)) {
@@ -821,16 +941,16 @@
     }
 
     function contactAfter() {
-        let resp = JSON.parse(this.responseText);
+        var resp = JSON.parse(this.responseText);
         if (resp.success) {
             getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body-wrapper').style.opacity = 0;
             getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body-wrapper').style.transition = 'opacity 0.5s';
             setTimeout(function () {
                 getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body').innerHTML = getTmpl('success');
-                getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body').style.height = 100 + 'px';
+                getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body').style.height = 125 + 'px';
                 getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body-wrapper-success').style.opacity = 1;
                 getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body-wrapper-success').style.transition = 'opacity 1s';
-            },200);
+            }, 200);
 
         }
     }
@@ -862,7 +982,7 @@
                     <div id="headsapp-star-block">
                         <div class="headsapp-question"></div>
                         <div class="headsapp-message-gorgeous" style="display: none;"></div>
-                        <div class="headsapp-message headsapp-message-text" style="display: none;"></div>
+                        <div class="headsapp-message-text" style="display: none;"></div>
                         <div class="headsapp-review-stars">
                             <input id="headsapp-star-4" type="radio" name="reviewStars">
                             <label title="gorgeous" for="headsapp-star-4"></label>
@@ -907,7 +1027,7 @@
                     <div class="headsapp-message"></div>
                     <form class="headsapp-form-contact" action="">
                         <div class="headsapp-name headsapp-input">
-                            <span class="headsapp-input-title">Name</span><input class="headsapp-input-field" maxlength="30" type="text" name="user_name" value="">
+                            <span class="headsapp-input-title">Name</span><input class="headsapp-input-field" maxlength="30" type="text" name="user_name" value = "">
                         </div>
                         <div class="headsapp-name-email headsapp-input">
                             <span class="headsapp-input-title">Email</span><input class="headsapp-input-field" type="text" name="user_email" type="email" value="">
@@ -926,7 +1046,7 @@
                 return `<span class="headsapp-message"></span>
                     <div class="headsapp-btn-send">
                         <form>
-                            <button class="headsapp-button-send type="submit">URL</button>
+                            <button class="headsapp-button-send" type="submit">URL</button>
                         </form>
                     </div>
                 `;
@@ -939,7 +1059,7 @@
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDoAABSCAABFVgAADqXAAAXb9daH5AAACRASURBVHgBADAkz9sBdvMiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWAAAAQQAAADgAAAAoAAAAIQAAABUAAAALAAAAAAAAAPUAAADrAAAA3wAAANcAAADJAAAAvwAAAOoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEwAAAF4AAABaAAAAMwAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHAAAAEgAAACcAAABIAAAAAAAAAP8AAADNAAAApgAAAKIAAADtAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF28yIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZAAAAdAAAAGcAAAALAAAAAAAAAPUAAADEAAAAwQAAANYAAADaAAAA6QAAAPQAAAAAAAAADAAAABcAAAAmAAAAKgAAAD4AAAA9AAAACwAAAAAAAAD2AAAAngAAAIYAAADnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABdvMiAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABxAAAAfgAAAAwAAAD/AAAAuQAAAJ8AAACzAAAA9wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACQAAAE0AAABhAAAARwAAAAEAAAD0AAAAggAAAI8AAAD8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXbzIgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACUAAACpAAAAMQAAAAAAAACuAAAAggAAANEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC8AAACAAAAAUAAAAAAAAADQAAAAWwAAANYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE8AAADMAAAAMQAAAN0AAABGAAAAUwAAANEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADRAAAAUQAAAEYAAADdAAAAMAAAAMkAAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGYAAACtAAAADgAAAKkAAAAyAAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC7AAAAMgAAAKgAAAAMAAAArAAAAGYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGkAAACZAAAAAgAAAHwAAABYAAAA8gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPIAAABZAAAAfAAAAAIAAACPAAAAHQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE4AAACTAAAA/wAAAG0AAACVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIUAAADqAAAA3wAAAOMAAAAAAAAAAAAAAAoAAAA1AAAAwQAAAAACAAAAAAAAAAAAAAAAAAAAAAAAACkAAAClAAAAAwAAAHoAAACVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAmwAAALwAAAAAAAAAAAAAAAoAAACxAAAAugAAAE4AAAAABAAAAAAAAAAAAAAAAAAAAAUAAACnAAAADAAAAKgAAACIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABkAAAC5AAAALQAAAOcAAADaAAAAAAIAAAAAAAAAAAAAAAAAAABwAAAALwAAAN0AAABnAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAC5AAAALQAAAOsAAABCAAAA2AAAAAACAAAAAAAAAAAAAAAaAAAAfgAAAAAAAABpAAAA8gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAALQAAAPYAAABaAAAA2AAAAAAAAAAAAgAAAAAAAAAAAAAAegAAAAwAAACuAAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABDAAAAvAAAAAAAAAAAAAAAAAQAAAAAAAAAFAAAAGIAAAD/AAAAggAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAFwAAAAJAAAAugAAANEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAGQAAAFIAAAAABAAAAAAAAABcAAAAAAAAAJ8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAEQAAAL4AAAD0AAAArgQAAAAWAAAAMgAAAPUAAACxAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAPcAAAAdAAAACgAAABoCAAAAQgAAAAEAAADEAAAA+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAXAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAD4AAAAxAAAAAEAAABBAgAAADcAAAAAAAAAwQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAzwAAAIcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMEAAAAAAAAANAIAAAAoAAAAAAAAANQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJwAAABMAAAB4AAAAhwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADUAAAAAAAAACcCAAAAJAAAAAAAAADbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALEAAABaAAAA+gAAAHgAAACHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA2wAAAAAAAAAlAgAAABcAAAAAAAAA6wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArQAAAFoAAAD6AAAAeAAAAIcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOsAAAAAAAAAFwIAAAANAAAAAAAAAPMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACtAAAAWgAAAPoAAAB4AAAAhwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADzAAAAAAAAAA0CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK0AAABaAAAA+gAAAHgAAACHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD6AgAAAPMAAAAAAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArQAAAFoAAAD6AAAAeAAAAIcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABCAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0AAAAAAAAA8wIAAADpAAAAAAAAABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACtAAAAWQAAAPoAAAB4AAAAhwAAAAAAAAAAAAAAAAAAAAoAAACxAAAARAAAAOcAAABBAAAA2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAVAAAAAAAAAO8CAAAA3AAAAAAAAAAlAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK4AAABZAAAA+gAAAHgAAACHAAAAAAAAAAoAAACxAAAARAAAAOcAAABBAAAA2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJQAAAAAAAADbAgAAANgAAAAAAAAALAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArgAAAFkAAAD6AAAAeAAAAIsAAACxAAAARAAAAOcAAABBAAAA2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACwAAAAAAAAA2QIAAADJAAAAAAAAAD4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACuAAAAWQAAAPoAAAB0AAAARAAAAOcAAABBAAAA2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+AAAAAAAAAM0CAAAAvwAAAP8AAAA9AAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK4AAABaAAAA+gAAAOcAAABBAAAA2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAPQAAAP8AAAC+AgAAAOkAAADOAAAACwAAAE8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAArQAAAFUAAABBAAAA2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAATgAAAAsAAADOAAAA5gIAAAAAAAAApAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACyAAAA2QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAAAAAAAApgAAAAACAAAAAAAAAKQAAAD3AAAARwAAAC4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC4AAABIAAAA9wAAAKIAAAAAAgAAAAAAAADsAAAAnwAAAAEAAAB/AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB+AAAAAQAAAJ8AAADsAAAAAAIAAAAAAAAAAAAAAIUAAAD0AAAAUgAAAEUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABEAAAAUwAAAPQAAACFAAAAAAAAAAACAAAAAAAAAAAAAADmAAAAggAAAAAAAACXAAAADQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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">
                 </div>
                 <div class="headsapp-your-message-sent-text">
-                        Your message has been sent!
+                        Thank you for contacting us, we'll get back to you within several hours!
                     </div>
                 </div>
                 `;
@@ -953,7 +1073,7 @@
 
     function createPopup() {
         const id = Math.random().toString(36).substr(2, 9);
-        let child = document.createElement('div');
+        var child = document.createElement('div');
         child.innerHTML = `<div id="` + id + `" class="headsapp" data-is_open="false" data-show_content="false" data-maximized="false">
             <div class="headsapp-container">
                 <div class="headsapp-header">
@@ -984,73 +1104,7 @@
     }
 
     const wrapperHtml = `<style>
-    @media screen and (max-width: 740px), (max-device-width: 740px) 
-    //  {
-    // .headsapp-wrapper-main {
-    // margin: 3rem;
-    // }
-    //
-    // body #headsapp-wrapper .headsapp-your-message-sent-text {
-    //     font-size: 3rem;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp-btn-send {
-    // margin-top: 40px;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp .headsapp-header:before {
-    // left: 14%;
-    // transform: scale(2.5);
-    // bottom: 24px;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp-name-message .headsapp-message-editor {
-    // font-size: 1rem;
-    // font-weight: 400;
-    // }
-    //
-    // body .headsapp-review-stars {
-    // transform: scale(3);
-    // margin-left: 14rem;
-    // margin-top: 4rem;
-    // margin-bottom: 4rem;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp-input {
-    // font-size: 2.5rem;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp-name-email input, body .headsapp-wrapper .headsapp-name input {
-    // font-size: 2.5rem;
-    // }
-    //
-    // .headsapp-wrapper .headsapp[data-is_open="true"] {
-    // max-height: 1700px;
-    // }
-    //
-    //  body .headsapp-wrapper .headsapp-name-email input, body .mobile .headsapp-name input {
-    //  font-size: 90%;
-    //  }
-    //
-    // .headsapp-wrapper .headsapp-btn-send button {
-    // font-size: 3rem;
-    // padding: 2% 5%;
-    // }
-    //
-    // .headsapp-wrapper #headsapp-star-block .headsapp-question {
-    // display: block;
-    // font-size: 3rem;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp .headsapp-body {
-    // margin: 7%;
-    // }
-    //
-    // body .headsapp-wrapper {
-    // width: 100%;
-    // right: 0;
-    // bottom: 0;
-    // }
+    @media screen and (max-width: 740px), (max-device-width: 740px) {
     
     #headsapp-wrapper {
     width: 85%;
@@ -1064,8 +1118,8 @@
     }
     
     body .headsapp .headsapp-name {
-    width: 125px;
-    white-space: nowrap;
+    /*width: 125px;
+    white-space: nowrap;*/
     overflow: hidden;
     text-overflow: ellipsis;
     }
@@ -1073,74 +1127,6 @@
     .headsapp-wrapper .headsapp {
     width: 100%;
     }
-    //
-    // body .headsapp-wrapper .headsapp .headsapp-header {
-    // border-top-left-radius: 0.8rem;
-    // border-top-right-radius: 0.8rem;
-    // }
-    //
-    // body .headsapp-wrapper[data-container-open="true"] .headsapp-toggle i.is-close-icon {
-    // right: 60px;
-    // bottom: 60px;
-    // transform: scale(3);
-    // }
-    //
-    // body .headsapp-wrapper[data-container-open="false"] .headsapp-toggle i.is-close-icon {
-    // right: 60px;
-    // bottom: 60px;
-    // transform: scale(3.1);
-    // }
-    //
-    // .headsapp-wrapper .headsapp .headsapp-close {
-    // font-size: 5rem;
-    // top: 2.5rem;
-    // right: 4rem;
-    // }
-    //
-    // body #headsapp-wrapper .headsapp .headsapp-avatar {
-    // max-height: 8rem;
-    // max-width: 8rem;
-    // margin: 25px;
-    // }
-    //
-    // .headsapp-wrapper .headsapp-name {
-    // font-size: 2.5rem;
-    // }
-    //
-    // body #headsapp-wrapper .headsapp .headsapp-userinfo {
-    // margin-top: 2.7rem;
-    // }
-    //
-    // .headsapp-wrapper .headsapp .headsapp-title {
-    // font-size: 2.1rem;
-    // line-height: 3rem;
-    // }
-    //
-    // .headsapp-wrapper .headsapp-message-short {
-    // font-size: 3rem;
-    // line-height: 4rem;
-    // }
-    //
-    // body .headsapp-container {
-    // margin-top: 3rem;
-    // }
-    //
-    // .headsapp-wrapper .headsapp[data-maximized="false"] .headsapp-message, .headsapp[data-maximized="true"] .headsapp-message  {
-    //     font-size: 3.5em;
-    // }
-    //
-    // body .headsapp-wrapper .headsapp-wrapper-main .headsapp .headsapp-message-long {
-    //     line-height: 3rem;
-    //         font-size: 2rem;
-    // }
-    //
-    // .headsapp-wrapper .headsapp[data-maximized="false"] .headsapp-body {
-    // height: 3rem;
-    // }
-    //
-    // body .headsapp-message-gorgeous {
-    // font-size: 3rem;
-    // }
 }
 
     .headsapp .headsapp-name {
@@ -1148,7 +1134,7 @@
      font-weight: 400;
     }
 
-    .headsapp .headsapp-message-gorgeous {
+    .headsapp .headsapp-message-gorgeous, .headsapp .headsapp-message-text {
     font-size: 19px;
     }
 
@@ -1190,6 +1176,7 @@
     border-radius: 6px;
     padding: 5px 10px;
     position: absolute;
+    font-weight: 900;
     left: 50%;
     top: 7px;
     transform: translate(-50%, -50%);
@@ -1568,7 +1555,7 @@ body .headsapp .headsapp-chat-main {
 .headsapp .headsapp-review-stars input {
     filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     opacity: 0;
-    width: 34px;
+    width: 31px;
     height: 35px;
     position: absolute;
     top: 0;
@@ -1578,13 +1565,13 @@ body .headsapp .headsapp-chat-main {
 .headsapp .headsapp-review-stars input:checked ~ label {
     background-position: 0 -33px;
     height: 34px;
-    width: 35px;
+    width: 32px;
 }
 
 .headsapp .headsapp-review-stars label {
     background-position: 0 0;
     height: 33px;
-    width: 35px;
+    width: 32px;
     float: right;
     cursor: pointer;
     padding-right: 10px;
@@ -1596,7 +1583,7 @@ body .headsapp .headsapp-chat-main {
 .headsapp .headsapp-review-stars label:hover, .headsapp .headsapp-review-stars label:hover ~ label {
     background-position: 0 -33px;
     height: 34px;
-    width: 35px;
+    width: 32px;
 }
 
 .headsapp .headsapp-review-stars #headsapp-star-0 {
@@ -1616,7 +1603,7 @@ body .headsapp .headsapp-chat-main {
 }
 
 .headsapp .headsapp-review-stars #headsapp-star-4 {
-    left: 212px;
+    left: 170px;
 }
 
 body .headsapp .headsapp-your-message-sent-text {
@@ -1631,7 +1618,7 @@ body .headsapp .headsapp-message-sent-icon {
     margin-bottom: 20px;
 }
 
-body .headsapp-wrapper div.headsapp-toggle i img {
+body .headsapp-wrapper div.headsapp-toggle i svg, body .headsapp-wrapper div.headsapp-toggle i img {
     height: 23px;
     position: absolute;
     top: 50%;
@@ -1646,7 +1633,7 @@ body .headsapp-wrapper[data-container-open="true"] .headsapp-toggle .is-close-ic
     height: 40px;
     font-size: 24px;
     font-weight: 100;
-    line-height: 40px;
+    line-height: 38px;
     right: -20px;
     bottom: -20px;
 }
@@ -1656,11 +1643,11 @@ body .headsapp-wrapper[data-container-open="true"] div.headsapp-toggle i .x-icon
     transition-delay: 0.3s;
 }
 
-body .headsapp-wrapper[data-container-open="true"] div.headsapp-toggle i img  {
+body .headsapp-wrapper[data-container-open="true"] div.headsapp-toggle i svg, body .headsapp-wrapper[data-container-open="true"] div.headsapp-toggle i img  {
     opacity: 0;
 }
 
-body .headsapp-wrapper[data-container-open="false"] div.headsapp-toggle i img  {
+body .headsapp-wrapper[data-container-open="false"] div.headsapp-toggle i svg, body .headsapp-wrapper[data-container-open="false"] div.headsapp-toggle i img  {
     transition: opacity 0.3s;
     transition-delay: 0.3s;
 }
@@ -1704,11 +1691,12 @@ body .headsapp .headsapp-name-email p {
 .headsapp[data-is_open="true"] {
     opacity: 1;
     transition: all 0.3s;
-    max-height: 1700px;
+    max-height: 10000px;
+    box-shadow: 0px 0px 10px #aaa;
 }
 
 .headsapp[data-maximized="false"] .headsapp-body {
-    height:23px;
+    height:22px;
 }
 
 .headsapp[data-maximized="true"] .headsapp-body {
@@ -1732,7 +1720,9 @@ body .headsapp .headsapp-name-email p {
 
             </style>
 <div class="headsapp-toggle">
-            <i class="is-close-icon" aria-hidden="true"><span class="x-icon">×</span><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgaGVpZ2h0PSIyNHB4IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6c2tldGNoPSJodHRwOi8vd3d3LmJvaGVtaWFuY29kaW5nLmNvbS9za2V0Y2gvbnMiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48dGl0bGUvPjxkZXNjLz48ZGVmcy8+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIiBpZD0ibWl1IiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSI+PGcgaWQ9IkFydGJvYXJkLTEiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yMTUuMDAwMDAwLCAtMzM1LjAwMDAwMCkiPjxnIGlkPSJzbGljZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjE1LjAwMDAwMCwgMTE5LjAwMDAwMCkiLz48cGF0aCBkPSJNMjM3LDM0MS4wMjA1NjggTDIzNywzNDAgTDIxNywzNDAgTDIxNywzNDEuMDIwNTY4IEwyMjcsMzQ4LjY4NzQxIEwyMzcsMzQxLjAyMDU2OCBaIE0yMzcsMzQyLjI3NzQyMSBMMjM3LDM1My4yOTI1OTIgTDIzMC43NjE2NTcsMzQ3LjA1MTExMiBMMjM3LDM0Mi4yNzc0MjEgWiBNMjM2LjI5MzE5NCwzNTQgTDIxNy43MTA0NDgsMzU0IEwyMjQuMDQxNTM1LDM0Ny42NjU3MjggTDIyNywzNDkuOTI5NTk4IEwyMjkuOTYwNTI4LDM0Ny42NjQxNDkgTDIzNi4yOTMxOTQsMzU0IFogTTIxNywzNTMuMjk2MjM2IEwyMTcsMzQyLjI3NzQyMSBMMjIzLjI0MDQwNywzNDcuMDUyNjkxIEwyMTcsMzUzLjI5NjIzNiBaIE0yMTYsMzM5IEwyMzgsMzM5IEwyMzgsMzU1IEwyMTYsMzU1IEwyMTYsMzM5IFoiIGZpbGw9IiNmZmZmZmYiIGlkPSJjb21tb24tZW1haWwtZW52ZWxvcGUtbWFpbC1vdXRsaW5lLXN0cm9rZSIvPjwvZz48L2c+PC9zdmc+" alt="New message"></i>
+            <i class="is-close-icon" aria-hidden="true"><span class="x-icon">×</span>
+            <img height="22" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEJmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNS40LjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6ZXhpZj0iaHR0cDovL25zLmFkb2JlLmNvbS9leGlmLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIKICAgICAgICAgICAgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MTwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPHRpZmY6Q29tcHJlc3Npb24+NTwvdGlmZjpDb21wcmVzc2lvbj4KICAgICAgICAgPHRpZmY6WFJlc29sdXRpb24+OTY8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgICAgIDx0aWZmOllSZXNvbHV0aW9uPjk2PC90aWZmOllSZXNvbHV0aW9uPgogICAgICAgICA8ZXhpZjpQaXhlbFhEaW1lbnNpb24+MTAwPC9leGlmOlBpeGVsWERpbWVuc2lvbj4KICAgICAgICAgPGV4aWY6Q29sb3JTcGFjZT4xPC9leGlmOkNvbG9yU3BhY2U+CiAgICAgICAgIDxleGlmOlBp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" />
+            </i>
             </div>`;
 
 
