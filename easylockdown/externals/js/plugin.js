@@ -272,12 +272,12 @@ function addContent()
 
     $content.attr('data-type', type + 's');
     if( handle ) $content.attr('data-handle', handle);
-    $content.append( '<b>' + typeTitle + ':</b> ' + title + '<span class="close" onclick="removeContent(this);">x</span>' );
+    $content.append( '<b>' + typeTitle + ':</b> ' + title + '<span class="close" onclick="removeContent(this);"></span>' );
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + 's][' + id + ']').val(title) );
 
   } else {
     $content.attr('data-type', type);
-    $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeContent(this);">x</span>' );
+    $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeContent(this);"></span>' );
     $content.append( $hidden.attr('name', 'lockdown_content[' + type + ']').val(1) );
   }
 
@@ -364,11 +364,11 @@ function addException()
       return;
     }
 
-    $content.append( '<b>' + typeTitle + ':</b> ' + title + '<span class="close" onclick="removeException(this);">x</span>' );
+    $content.append( '<b>' + typeTitle + ':</b> ' + title + '<span class="close" onclick="removeException(this);"></span>' );
     $content.append( $hidden.attr('name', 'lockdown_exceptions[' + type + 's][' + id + ']').val(title) );
 
   } else {
-    $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeException(this);">x</span>' );
+    $content.append( '<b>' + typeTitle + '</b><span class="close" onclick="removeException(this);"></span>' );
     $content.append( $hidden.attr('name', 'lockdown_exceptions[' + type + ']').val(1) );
   }
 
@@ -508,14 +508,14 @@ function addFilter()
     $content.append('<b>' + title1 + ':</b>');
     $content.append(' ' + title2);
     $content.append('<span class="add-or" onclick="showFilterForm(this);">+OR</span>');
-    $content.append('<span class="close" onclick="removeFilter(this);">x</span>');
+    $content.append('<span class="close" onclick="removeFilter(this);"></span>');
     $content.append( $hidden.attr('name', 'lockdown_customers[' + group + '][' + value1 + '][' + value2 + '][]').val(value3) );
 
   } else {
     $content.append('<b>' + title1 + ':</b>');
     $content.append(' ' + title2);
     $content.append('<span class="add-or" onclick="showFilterForm(this);">+OR</span>');
-    $content.append('<span class="close" onclick="removeFilter(this);">x</span>');
+    $content.append('<span class="close" onclick="removeFilter(this);"></span>');
     $content.append( $hidden.attr('name', 'lockdown_customers[' + group + '][' + value1 + '][]').val(value2) );
   }
 
