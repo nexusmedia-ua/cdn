@@ -116,6 +116,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         var ch = easylockdown.getCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activeId);
         if( ch && ch == h ) {
           easylockdown.jq("form[action='/cart/add'] input[type=submit], form[action='/cart/add'] button[type=submit]").show();
+          easylockdown.jq('.easylockdown-hidden-purchase').show();
           easylockdown.showContent = true;
           return;
         }
@@ -156,7 +157,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
       var $passField = easylockdown.jq(btn).parent().closest('#easylockdown-password-form').find('#easylockdown-password');
       if( $passField.length ) {
-
         easylockdown.jq.ajax({
           type: 'POST',
           url: easylockdown.checkPasswordUrl,
@@ -196,38 +196,41 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
     preparePurchaseForm: function( pwd )
     {
+      var $forms = easylockdown.jq("form[action='/cart/add']");
+      if( !$forms.length ) return;
+
       if( pwd ) {
-        var $forms = easylockdown.jq("form[action='/cart/add']");
-        if( $forms.length ) {
-          if( !easylockdown.showContent ) {
-            $forms.each(function(){
-              var $f = easylockdown.jq(this);
-              $f.attr('action', '').attr('onsubmit', 'return false;');
-              var $cf = $f.clone();
-              $f.before($cf);
-              $f.remove();
-              var $btn = $cf.find("input[type=submit], button[type=submit]");
-              $btn.before(easylockdown.jq('#easylockdown-password-form'));
-              $btn.remove();
-            });
-
-          } else {
-            $forms.find('input[type=submit], button[type=submit]').show();
-          }
-        }
-
-      } else {
-        var $forms = easylockdown.jq("form[action='/cart/add']");
-        if( $forms.length ) {
+        if( !easylockdown.showContent ) {
           $forms.each(function(){
             var $f = easylockdown.jq(this);
             $f.attr('action', '').attr('onsubmit', 'return false;');
-            $f.find("input[type=submit], button[type=submit]").remove();
             var $cf = $f.clone();
             $f.before($cf);
             $f.remove();
+
+            var $btn = $cf.find("input[type=submit], button[type=submit]");
+            $btn.before(easylockdown.jq('#easylockdown-password-form'));
+            $btn.remove();
+
+            easylockdown.jq(".easylockdown-hidden-purchase").remove();
           });
+
+        } else {
+          $forms.find('input[type=submit], button[type=submit]').show();
+          easylockdown.jq('.easylockdown-hidden-purchase').show();
         }
+
+      } else {
+        $forms.each(function(){
+          var $f = easylockdown.jq(this);
+          $f.attr('action', '').attr('onsubmit', 'return false;');
+          $f.find("input[type=submit], button[type=submit]").remove();
+          easylockdown.jq('.easylockdown-hidden-purchase').remove();
+
+          var $cf = $f.clone();
+          $f.before($cf);
+          $f.remove();
+        });
       }
     },
 
@@ -237,21 +240,24 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
       function _preparePurchaseFormByLocation()
       {
+        var $forms = easylockdown.jq("form[action='/cart/add']");
+        if( !$forms.length ) return;
+
         if( (easylockdown.currentISO == loc && !cannot) || (easylockdown.currentISO != loc && cannot) ) {
-          easylockdown.jq("form[action='/cart/add'] input[type=submit]").show();
-          easylockdown.jq("form[action='/cart/add'] button[type=submit]").show();
+          $forms.find("input[type=submit], button[type=submit]").show();
+          easylockdown.jq('.easylockdown-hidden-purchase').show();
+
         } else {
-          var $forms = easylockdown.jq("form[action='/cart/add']");
-          if( $forms.length ) {
-            $forms.each(function(){
-              var $f = easylockdown.jq(this);
-              $f.attr('action', '').attr('onsubmit', 'return false;');
-              $f.find("input[type=submit], button[type=submit]").remove();
-              var $cf = $f.clone();
-              $f.before($cf);
-              $f.remove();
-            });
-          }
+          $forms.each(function(){
+            var $f = easylockdown.jq(this);
+            $f.attr('action', '').attr('onsubmit', 'return false;');
+            $f.find("input[type=submit], button[type=submit]").remove();
+            easylockdown.jq('.easylockdown-hidden-purchase').remove();
+
+            var $cf = $f.clone();
+            $f.before($cf);
+            $f.remove();
+          });
         }
       }
 
