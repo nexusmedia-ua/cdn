@@ -228,7 +228,11 @@
             const headsapp = headsapps[i];
             closePopup(headsapp);
             if (headsapp.getAttribute('data-maximized') === 'true') {
-                headsapp.querySelector('.headsapp-close').click();
+                headsapp.setAttribute('data-is_open', false);
+                setTimeout(function () {
+                    setAttrAfterTimeout(headsapp);
+                    headsapp.querySelector('.headsapp-close').click();
+                }, 500);
             }
             if (headsapp.getAttribute('data-maximized') === 'true' && headsapp.getAttribute('data-display') === 'opened') {
                 hidePopupWhenDefault(headsapp);
@@ -385,7 +389,6 @@
                     setTimeout(maximizePopup, 1200, headsapp);
                 }
                 else {
-                    console.log(1);
                     maximizePopup(headsapp);
                 }
             }
@@ -650,9 +653,9 @@
     }
 
     function setActionUrl(headsapp, formUrl) {
-        const el = headsapp.querySelector('form.headsapp-url-action');
+        const el = headsapp.querySelector('.headsapp-url-action');
         if (el) {
-            el.setAttribute("action", formUrl);
+            el.setAttribute("href", formUrl);
             el.setAttribute("target", "_blank");
         }
     }
@@ -820,6 +823,9 @@
                 headsapp.querySelector('.headsapp-btn-send').style.display = 'block';
                 headsapp.querySelector('.headsapp-message-gorgeous').style.display = 'block';
                 headsapp.querySelector('.headsapp-message-text').style.display = 'none';
+                headsapp.querySelector('.headsapp-button-send').addEventListener('click', function () {
+                    headsapp.querySelector('.headsapp-close').click();
+                })
             } else {
                 headsapp.querySelector('.headsapp-form-contact').style.display = 'block';
             }
@@ -964,16 +970,16 @@
                 getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body-wrapper-success').style.opacity = 1;
                 getPopupByinternalNode(document.getElementById(resp.id)).querySelector('.headsapp-body-wrapper-success').style.transition = 'opacity 1s';
             }, 200);
-            setTimeout(function () {
-                document.querySelector('.headsapp-wrapper-main').innerHTML = '';
-                run();
-            }, 2000);
+            if (document.getElementById(resp.id).querySelector('.headsapp-body-stars-block') !== null) {
+                document.getElementById(resp.id).setAttribute('data-is_open', false);
+                document.getElementById(resp.id).querySelector('.headsapp-close').click();
+            } else {
+                setTimeout(function () {
+                    document.querySelector('.headsapp-wrapper-main').innerHTML = '';
+                    run();
+                }, 1000);
+            }
         }
-    }
-
-    function reRendering() {
-        document.querySelector('.headsapp-wrapper-main').innerHTML = '';
-        run();
     }
 
     function pingClose(headsapp) {
@@ -993,7 +999,7 @@
     function getTmpl(tmplName) {
         switch (tmplName) {
             case ("stars"): {
-                return '<div class="headsapp-loader-main"> <div class="headsapp-loader"> <div class="headsapp-next-spinner"> <svg class="headsapp-next-icon headsapp-next-icon--40" preserveAspectRatio="xMinYMin"><circle class="headsapp-next-spinner__ring" cx="50%" cy="50%" r="45%"></circle></svg> </div> </div> </div> <div id="headsapp-star-block"> <div class="headsapp-question"></div> <div class="headsapp-message-gorgeous" style="display: none;"></div> <div class="headsapp-message-text" style="display: none;"></div> <div class="headsapp-review-stars"> <input id="headsapp-star-4" type="radio" name="reviewStars"> <label title="gorgeous" value="5-stars" for="headsapp-star-4"></label> <input id="headsapp-star-3" type="radio" name="reviewStars"> <label title="good" value="4-stars" for="headsapp-star-3"></label> <input id="headsapp-star-2" type="radio" name="reviewStars"> <label title="regular" value="3-stars" for="headsapp-star-2"></label> <input id="headsapp-star-1" type="radio" name="reviewStars"> <label title="poor" value="2-stars" for="headsapp-star-1"></label> <input id="headsapp-star-0" type="radio" name="reviewStars"> <label title="bad" value="1-star" for="headsapp-star-0"></label> </div> <div class="headsapp-btn-send" style="display: none"> <form class="headsapp-url-action"> <button class="headsapp-button-send type="submit">URL</button> </form> </div> <form class="headsapp-form-contact" style="display: none;" action=""> <div class="headsapp-name headsapp-input">Name<input class="headsapp-input-field" maxlength="30" type="text" name="user_name" value=""> </div> <div class="headsapp-name-email headsapp-input">Email<input class="headsapp-input-field" type="text" name="user_email" value="" type="email"> </div> <div class="headsapp-name-message headsapp-input"> Message<textarea name="message" contenteditable="" class="headsapp-message-editor"></textarea> </div> <div class="headsapp-btn-send"> <button class="headsapp-button-send" type="submit">Send</button> </div> </form> <div style="clear:both;"></div> </div>';
+                return '<div class="headsapp-loader-main"> <div class="headsapp-loader"> <div class="headsapp-next-spinner"> <svg class="headsapp-next-icon headsapp-next-icon--40" preserveAspectRatio="xMinYMin"><circle class="headsapp-next-spinner__ring" cx="50%" cy="50%" r="45%"></circle></svg> </div> </div> </div> <div id="headsapp-star-block"> <div class="headsapp-question"></div> <div class="headsapp-message-gorgeous" style="display: none;"></div> <div class="headsapp-message-text" style="display: none;"></div> <div class="headsapp-review-stars"> <input id="headsapp-star-4" type="radio" name="reviewStars"> <label title="gorgeous" value="5-stars" for="headsapp-star-4"></label> <input id="headsapp-star-3" type="radio" name="reviewStars"> <label title="good" value="4-stars" for="headsapp-star-3"></label> <input id="headsapp-star-2" type="radio" name="reviewStars"> <label title="regular" value="3-stars" for="headsapp-star-2"></label> <input id="headsapp-star-1" type="radio" name="reviewStars"> <label title="poor" value="2-stars" for="headsapp-star-1"></label> <input id="headsapp-star-0" type="radio" name="reviewStars"> <label title="bad" value="1-star" for="headsapp-star-0"></label> </div> <div class="headsapp-btn-send" style="display: none"> <a class="headsapp-url-action"><button class="headsapp-button-send" type="submit">URL</button></a> </div> <form class="headsapp-form-contact" style="display: none;" action=""> <div class="headsapp-name headsapp-input">Name<input class="headsapp-input-field" maxlength="30" type="text" name="user_name" value=""> </div> <div class="headsapp-name-email headsapp-input">Email<input class="headsapp-input-field" type="text" name="user_email" value="" type="email"> </div> <div class="headsapp-name-message headsapp-input"> Message<textarea name="message" contenteditable="" class="headsapp-message-editor"></textarea> </div> <div class="headsapp-btn-send"> <button class="headsapp-button-send headsapp-send-mail" type="submit">Send</button> </div> </form> <div style="clear:both;"></div> </div>';
             }
 
             case ("contact"): {
