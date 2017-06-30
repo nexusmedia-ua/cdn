@@ -44,13 +44,16 @@ hr {
 #add-content-form,
 #add-exception-form,
 #add-filter-form,
+#add-location-form,
 #lockdown-customers-location-holder,
 #lockdown-customers-password-holder,
-#lock-page-holder {
+#lock-page-holder,
+#hide-price-page-holder {
   display: none;
   margin-top: 20px;
 }
-#lock-page-holder {
+#lock-page-holder,
+#hide-price-page-holder {
   margin-left: 0;
 }
 #lockdown-customers-filters-holder {
@@ -231,17 +234,6 @@ input.ui-autocomplete-input {
   background-color:#ff9797;
   border-color: coral;
   color: #4d4d4d;
-}
-.tag .close, .tag .back {
-  background: none;
-  text-align: center;
-  text-indent: 0;
-}
-.tag .close::before,
-.tag .back::before {
-  content: "\f00d";
-  margin-left: -1px;
-  font: normal normal normal 11px/25px FontAwesome;
 }
 
 #lockdown-customers-quicklinks > span {
