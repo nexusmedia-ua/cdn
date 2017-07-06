@@ -197,7 +197,7 @@ function initAutocomplete($holder)
   $comboboxHolder.combobox($holder);
 }
 
-function showFilterForm( btn )
+function showFilterForm(btn)
 {
   $('#add-filter-form').show();
   contentGroup = 0;
@@ -208,11 +208,6 @@ function showFilterForm( btn )
 
   $('#lockdown-customers-filters .tag > span').removeClass('active');
   $('#lockdown-customers-filters .tag > span[data-group=' + contentGroup + ']').addClass('active');
-}
-
-function showLocationForm( btn )
-{
-  $('#add-location-form').show();
 }
 
 function showContent(el)
@@ -545,6 +540,7 @@ function cancelFilter()
   $('#lockdown-customers-filter-secondary').find('.field-error').removeClass('field-error');
   $('#lockdown-customers-filters .tag > span').removeClass('active');
   $('#add-filter-form').hide();
+  $('#add-location-form').hide();
 }
 
 function removeFilter(el)
@@ -553,37 +549,6 @@ function removeFilter(el)
   $(el).parent().remove();
 
   $('span[data-group=' + group + ']').last().addClass('group-tag-last');
-}
-
-function addLocation()
-{
-  var $locationSel = $('#lockdown-customers-location');
-  var value = $locationSel.val();
-  if( !$locationSel.length || !value ) return;
-
-  if( !$('#lockdown-customers-locations-list span[data-item=' + value +']').length ) {
-    $('#lockdown-customers-locations-list > div').append([
-        '<span data-item="' + value +'">',
-        $locationSel.children('option:selected').text(),
-        '<span class="close" onclick="removeLocation(this);"></span>',
-        '<input type="hidden" name="lockdown_customers[location][]" value="' + value +'" />',
-        '</span>'
-      ].join('')
-    );
-  }
-
-  cancelLocation();
-}
-
-function cancelLocation()
-{
-  $('#lockdown-customers-location').val('');
-  $('#add-location-form').hide();
-}
-
-function removeLocation( el )
-{
-  $(el).parent().remove();
 }
 
 function initWYSIWYG()
@@ -675,14 +640,13 @@ function hideAndShow()
     $('#how-to-lock-section').hide();
     $('#additional-settings-section').hide();
 
+    $('#who-may-access-section > hr').hide();
     $('#lockdown-customers-type-authorized-selector').hide();
     $('#lockdown-customers-password-holder').hide();
 
     $('#hide-links-by-filters-holder').hide();
     $('#hide-links-by-js-holder').hide();
-    $('#who-may-access-section > hr').show();
     $('#lockdown-hide-price-notice').show();
-    $('#hide-price-custom-section').show();
 
     if( permissionType == 'selected' ) {
       $('#lockdown-customers-filters-holder').show();
@@ -696,7 +660,6 @@ function hideAndShow()
     $('#how-to-lock-section').show();
     $('#additional-settings-section').show();
     $('#lockdown-hide-price-notice').hide();
-    $('#hide-price-custom-section').hide();
 
     var hideHowToLockSection = false;
     var hideAdditionalSettingsSection = false;

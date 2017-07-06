@@ -116,12 +116,14 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           });
 
         } else {
-          easylockdown.jq('#easylockdown-content').remove();
           if( redirectTo ) {
             if( redirectTo == 'login' ) redirectTo = '/account/login?return_to=' + window.location.href;
             window.location.href = redirectTo;
           } else {
-            easylockdown.jq('#easylockdown404').removeAttr('style');
+            easylockdown.jq(document).ready(function(){
+              easylockdown.jq('#easylockdown-content').remove();
+              easylockdown.jq('#easylockdown404').removeAttr('style');
+            });
           }
         }
       }
@@ -422,6 +424,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
                 else toHideLinks.push(easylockdown.jq(sel));
               });
             });
+            easylockdown.jq.each( easylockdown.jq.unique(toHideLinks), function(i, $items){ $items.hide() });
+            easylockdown.jq.each( easylockdown.jq.unique(toShowLinks), function(i, $items){ $items.show() });
+
           } else {
             easylockdown.jq.each(easylockdown.hideLinksListByLocation.cannotAll, function(loc, sels){
               easylockdown.jq.each(sels, function(i, sel){
@@ -429,10 +434,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
                 else toHideLinks.push(easylockdown.jq(sel));
               });
             });
+            easylockdown.jq.each( easylockdown.jq.unique(toShowLinks), function(i, $items){ $items.show() });
+            easylockdown.jq.each( easylockdown.jq.unique(toHideLinks), function(i, $items){ $items.hide() });
           }
-
-          easylockdown.jq.each( easylockdown.jq.unique(toHideLinks), function(i, $items){ $items.hide() });
-          easylockdown.jq.each( easylockdown.jq.unique(toShowLinks), function(i, $items){ $items.show() });
         });
       }
 
