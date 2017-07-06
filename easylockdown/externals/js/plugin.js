@@ -210,6 +210,11 @@ function showFilterForm(btn)
   $('#lockdown-customers-filters .tag > span[data-group=' + contentGroup + ']').addClass('active');
 }
 
+function showLocationForm( btn )
+{
+  $('#add-location-form').show();
+}
+
 function showContent(el)
 {
   var type = $(el).val();
