@@ -458,12 +458,12 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         if( $itemsList.length || $collectionsItemsList.length ) {
           easylockdown.jq.each(easylockdown.hideLinksListByAuth.filter, function(cn, sel){
             if( !easylockdown.getCookie(cn) ) {
-              $itemsList.each(function(){ if( easylockdown.jq(this).find(sel).length ) easylockdown.jq(this).hide(); });
+              $itemsList.each(function(){ if( easylockdown.jq(this).find(sel).length ) easylockdown.jq(this).remove(); });
 
               $collectionsItemsList.each(function(){
                 var $col = easylockdown.jq(this);
                 var $els = $col.find(sel);
-                $els.each(function(){ if( !easylockdown.jq(this).closest('.easylockdown-item').length ) { $col.hide(); return; }});
+                $els.each(function(){ if( !easylockdown.jq(this).closest('.easylockdown-item').length ) { $col.remove(); return; }});
               });
             }
           });
