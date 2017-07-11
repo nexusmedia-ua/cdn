@@ -47,13 +47,11 @@ hr {
 #add-location-form,
 #lockdown-customers-location-holder,
 #lockdown-customers-password-holder,
-#lock-page-holder,
-#hide-price-page-holder {
+#lock-page-holder {
   display: none;
   margin-top: 20px;
 }
-#lock-page-holder,
-#hide-price-page-holder {
+#lock-page-holder {
   margin-left: 0;
 }
 #lockdown-customers-filters-holder {
@@ -63,7 +61,7 @@ hr {
 #lockdown-customers-password-holder input {
   margin: 0;
 }
-#form-lockdown .mce-ico {
+/*#form-lockdown .mce-ico {
   width: 13px;
   height: 13px;
   line-height: 18px;
@@ -73,6 +71,23 @@ hr {
   padding-right: 20px;
   line-height: 18px;
   font-size: 13px;
+}*/
+.mce-btn-group:not(:first-child) {
+  border: none !important;
+}
+.mce-btn-group:first-child + .mce-btn-group,
+.mce-btn-group:first-child + .mce-btn-group + .mce-btn-group,
+.mce-btn-group:first-child + .mce-btn-group + .mce-btn-group + .mce-btn-group,
+.mce-btn-group:first-child + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group,
+.mce-btn-group:first-child + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group,
+.mce-btn-group:first-child + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group,
+.mce-btn-group:first-child + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group + .mce-btn-group {
+   border-left: 1px solid #d9d9d9 !important;
+}
+.access-mode-select {
+  display: inline-block;
+  vertical-align: top;
+  width: 45%;
 }
 
 #add-content-form,
@@ -139,11 +154,22 @@ input.ui-autocomplete-input {
 }
 
 #form-lockdown section {
-  padding: 5px 0 0;
+  padding: 0;
 }
 #form-lockdown .section-summary {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 1.8rem;
+}
+#form-lockdown .section-summary h3 {
+  margin-top: 0;
+}
+#form-lockdown .section-helper {
+  overflow: hidden;
+  padding: 1px;
+}
+#form-lockdown section > hr {
+  margin: 1.8rem -20px 0;
 }
 
 #lockdown-content-holder ul.ui-autocomplete,
@@ -205,7 +231,7 @@ input.ui-autocomplete-input {
   font-size: 0;
 }
 .lockdown-actions {
-  width: 170px;
+  width: 194px;
 }
 .lockdown-actions .btn {
   padding: 7px 15px;
@@ -234,6 +260,17 @@ input.ui-autocomplete-input {
   background-color:#ff9797;
   border-color: coral;
   color: #4d4d4d;
+}
+.tag .close, .tag .back {
+  background: none;
+  text-align: center;
+  text-indent: 0;
+}
+.tag .close::before,
+.tag .back::before {
+  content: "\f00d";
+  margin-left: -1px;
+  font: normal normal normal 11px/25px FontAwesome;
 }
 
 #lockdown-customers-quicklinks > span {

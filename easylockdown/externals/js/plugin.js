@@ -597,14 +597,17 @@ function initWYSIWYG()
       if( $valueEl.length ) $wysiwygEl.val($valueEl.html());
 
       var editor = new tinymce.Editor($wysiwygEl.attr('id'), {
+        theme: "modern",
+        skin: 'light',
+        branding: false,
         menubar: false,
         statusbar: false,
-        height: 160,
+        height: 400,
         content_css : "externals/css/base.css,externals/libraries/tinymce/base.css",
         plugins: [
           "advlist link textcolor code hr directionality lineheight"
         ],
-        toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,|,ltr,rtl,|,link,unlink,code,|,hr,removeformat,",
+        toolbar: "bold,italic,underline,strikethrough,|,forecolor,backcolor,|,alignleft,aligncenter,alignright,alignjustify,|,ltr,rtl,|,link,unlink,|,code,|,hr,|,removeformat,|,bullist,numlist,|,fontselect,formatselect,|,fontsizeselect,lineheightselect,",
         fontsize_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
         lineheight_formats: '8px 10px 12px 14px 18px 24px 36px 48px 60px 72px 90px',
         font_formats: "Arial=arial,helvetica,sans-serif;Arial Black=arial black,gadget,sans-serif;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier, monospace;Georgia=georgia,serif;Impact=impact,charcoal,sans-serif;Lucida Console=lucida console,Monaco,monospace;Lucida Sans Unicode=lucida sans unicode,lucida grande, sans-serif;Tahoma=tahoma,arial,helvetica,sans-serif;Times New Roman=times new roman,times,serif;Trebuchet MS=trebuchet ms,helvetica,geneva;Verdana=verdana,geneva,sans-serif;Comfortaa=Comfortaa;Courgette=Courgette;Federo=Federo;Josefin Slab=Josefin Slab;Montserrat=Montserrat;Niconne=Niconne;Old Standard TT=Old Standard TT;Open Sans=Open Sans;Raleway=Raleway;Roboto Condensed=Roboto Condensed;Titillium Web=Titillium Web;"
@@ -728,6 +731,7 @@ function hideAndShow()
 
       if( $('#lockdown-customers-type-authorized').prop('checked') ) {
         $('#lockdown-customers-type-logged-in').prop("checked", true);
+        permissionType = 'logged_in';
       }
 
     } else {
@@ -754,7 +758,7 @@ function hideAndShow()
       }
     }
 
-    if( !$('#additional-settings-section > .next-card > div:visible').length ) hideAdditionalSettingsSection = true;
+    if( !$('#additional-settings-section .section-helper > .next-card > div:visible').length ) hideAdditionalSettingsSection = true;
 
     if( hideHowToLockSection ) $('#how-to-lock-section').hide();
     if( hideAdditionalSettingsSection ) $('#additional-settings-section').hide();
