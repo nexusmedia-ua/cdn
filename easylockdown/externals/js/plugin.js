@@ -556,6 +556,37 @@ function removeFilter(el)
   $('span[data-group=' + group + ']').last().addClass('group-tag-last');
 }
 
+function addLocation()
+{
+  var $locationSel = $('#lockdown-customers-location');
+  var value = $locationSel.val();
+  if( !$locationSel.length || !value ) return;
+
+  if( !$('#lockdown-customers-locations-list span[data-item=' + value +']').length ) {
+    $('#lockdown-customers-locations-list > div').append([
+        '<span data-item="' + value +'">',
+        $locationSel.children('option:selected').text(),
+        '<span class="close" onclick="removeLocation(this);"></span>',
+        '<input type="hidden" name="lockdown_customers[location][]" value="' + value +'" />',
+        '</span>'
+      ].join('')
+    );
+  }
+
+  cancelLocation();
+}
+
+function cancelLocation()
+{
+  $('#lockdown-customers-location').val('');
+  $('#add-location-form').hide();
+}
+
+function removeLocation( el )
+{
+  $(el).parent().remove();
+}
+
 function initWYSIWYG()
 {
   var $wysiwygEls = $('textarea[data-spec=wysiwyg]');
