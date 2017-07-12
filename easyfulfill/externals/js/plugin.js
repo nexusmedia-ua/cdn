@@ -196,3 +196,34 @@ function notifiesToggle( el )
 {
   $('.notify-order').prop('checked', el.checked);
 }
+
+function addCode( el, code )
+{
+  var $codesHolder  = $(el).parent();
+  var $codesHolders = $codesHolder.siblings('.codes-holder');
+
+  if( !$codesHolder.length || $codesHolders.length >= 40 ) return;
+
+  $codesHolder.after([
+      '<div class="codes-holder">',
+      '  <input type="text" name=orders[' + code + '][codes][] value="">',
+      '  <a href="javascript:void(0)" class="remove-code" onclick="removeCode(this)"><i class="fa fa-minus"></i></a>',
+      '</div>'
+    ].join('')
+  );
+
+
+  var $row = $codesHolder.closest('tr');
+  var $sel = $row.find('.order-item-carriers > select:first').clone();
+
+  $row.find('.order-item-carriers > select:first').after( $sel );
+}
+
+function removeCode( el )
+{
+  var $row = $(el).parent().closest('tr');
+  var index = $(el).parent().index();
+
+  $(el).parent().remove();
+  $row.find('.order-item-carriers > select:eq(' + index + ')').remove();
+}

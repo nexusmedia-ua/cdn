@@ -352,4 +352,6 @@ a:not([data-polaris-unstyled]):active {
 
 .Polaris-ButtonGroup .Polaris-ButtonGroup__Item {
   display: inline-block;
+  margin-left: 6px;
+  margin-top:  3px;
 }

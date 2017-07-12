@@ -42,13 +42,13 @@ input[type=radio] {
   border: none;
 }
 .main-header-paid-filter {
-  width: 160px;
+  width: 180px;
 }
 .main-header-paid-filter label {
   margin-bottom: 0;
 }
 .main-header-imported-filter {
-  width: 180px;
+  width: 200px;
 }
 .main-header-imported-filter label {
   margin-bottom: 0;
@@ -58,17 +58,35 @@ input[type=radio] {
 }
 
 .main-header-import {
-  width: 198px;
+  width: 218px;
 }
 
-.order-item-actions select {
+.order-item-carriers select {
+  display: block;
+  clear: both;
   width: auto;
   margin: 0;
 }
-.order-item-actions input {
+.order-item-carriers select + select {
+  margin-top: 6px;
+}
+.order-item-codes input {
   width: 100%;
   margin: 0;
 }
+.order-item-codes .codes-holder {
+  position: relative;
+  padding-right: 20px;
+}
+.order-item-codes .codes-holder + .codes-holder {
+  margin-top: 6px;
+}
+.add-code, .remove-code {
+  position: absolute;
+  top: 0.5em;
+  right: 0;
+}
+
 #no-orders {
   display: none;
   padding: 10px;
@@ -156,11 +174,16 @@ td.carrier-item-actions a.btn {
 }
 .carriers-header-cell-actions,
 .carrier-item-cell-actions {
-  width: 104px;
+  width: 128px;
 }
 
 .no-carrier-notice {
   text-align: center;
+}
+#no-carriers .btn-large {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0;
 }
 
 .pagination-links-holder {
