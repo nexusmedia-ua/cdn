@@ -6,8 +6,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
   var easylockdown = {
     jq: jQuery.noConflict(true),
-    checkPasswordUrl: '//dev.nexusmedia-ua.com/easylockdowndev/check_password.php',
-    geosrc: 'http://dev.nexusmedia-ua.com/geoip/',
+    checkPasswordUrl: '//shopifier.net/app/easylockdown/check_password.php',
+    geosrc: 'https://apps.nexusmedia-ua.com/geoip/',
     currentISO: '',
     hideLinks: [],
     hideLinksListByLocation: {'canAll': {}, 'cannotAll': {}},
