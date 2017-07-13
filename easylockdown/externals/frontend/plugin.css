@@ -34,6 +34,8 @@
   font-size: 0;
   line-height: 0;
 }
-.easylockdown-item-selector + * {
+.easylockdown-item-selector + *,
+.easylockdown-item[data-eld-loc-can],
+.easylockdown-collection-item[data-eld-loc-can] {
   display: none;
 }

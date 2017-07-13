@@ -51,6 +51,10 @@ hr {
   display: none;
   margin-top: 20px;
 }
+#hide-price-page-holder {
+  display: none;
+  margin: 0 0 15px;
+}
 #lock-page-holder {
   margin-left: 0;
 }

@@ -157,14 +157,16 @@ a:not([data-polaris-unstyled]):active {
   color: #637381;
 }
 .nav-tabs > li > a {
-  border-width: 0 !important;
-  padding: 18px 0 16px 0;
-  color: #637381;
-  line-height: 14px;
-  font-size: 1.5rem;
+  padding: 1.6rem 0;
+  margin: 0 0 0 1.6rem;
+  border: none;
+  border-bottom: 3px solid transparent;
   background: transparent !important;
-  border: none !important;
-  margin: 0 0 0 20px;
+  color: #637381;
+}
+.nav-tabs > li:first-child > a.next-tab {
+  border-top-left-radius: 0;
+  margin-left: 1.6rem;
 }
 .nav-tabs > li > a:hover{
   background: transparent !important;
@@ -172,14 +174,14 @@ a:not([data-polaris-unstyled]):active {
   border: none !important;
   border-bottom: 3px #c4cdd5 solid !important;
 }
-.nav-tabs > li.active > a {
+.nav-tabs > li > a.active {
   background-color: transparent !important;
   border: none !important;
   border-bottom: 3px #5c6ac4 solid !important;
   color: #212b35 !important;
 }
 .nav-tabs > li.right {
-    border-left: none !important;
+  border-left: none !important;
 }
 
 .layout-selector { max-width: 29.9%; }

@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 // ------------------------------------------ Content  ------------------------------------------
 
-function removeLockdown(id)
+function removeLockdown( id )
 {
   if( ajaxIsActive || !id ) return;
 
@@ -191,13 +191,13 @@ function lockdownStatusToggle( id )
   });
 })( jQuery );
 
-function initAutocomplete($holder)
+function initAutocomplete( $holder )
 {
   var $comboboxHolder = $holder.find('.autocomplete-combobox');
   $comboboxHolder.combobox($holder);
 }
 
-function showFilterForm(btn)
+function showFilterForm( btn )
 {
   $('#add-filter-form').show();
   contentGroup = 0;
@@ -215,7 +215,7 @@ function showLocationForm( btn )
   $('#add-location-form').show();
 }
 
-function showContent(el)
+function showContent( el )
 {
   var type = $(el).val();
   var $container = $('#lockdown-content-container').hide();
@@ -303,14 +303,14 @@ function cancelContent()
   $('#add-content-form').hide();
 }
 
-function removeContent(el)
+function removeContent( el )
 {
   $(el).parent().remove();
   hideAndShow();
   createQuickLinks();
 }
 
-function showException(el)
+function showException( el )
 {
   var type = $(el).val();
   var $container = $('#lockdown-exception-container').hide();
@@ -390,7 +390,7 @@ function cancelException()
   $('#add-exception-form').hide();
 }
 
-function removeException(el)
+function removeException( el )
 {
   $(el).parent().remove();
 }
@@ -418,20 +418,20 @@ function getContentTitleByType( type )
 
 // ------------------------------------------ Customers  ------------------------------------------
 
-function selectCustomersType(el)
+function selectCustomersType( el )
 {
   cancelFilter();
   hideAndShow();
 }
 
-function showFilterContent(el)
+function showFilterContent( el )
 {
   var val = $(el).val();
   $('#lockdown-customers-filter-secondary > div').hide();
   $('div[data-rel=' + val + ']').show();
 }
 
-function showFilterDate(el)
+function showFilterDate( el )
 {
   var $el = $(el);
   var value = $el.val();
@@ -548,7 +548,7 @@ function cancelFilter()
   $('#add-location-form').hide();
 }
 
-function removeFilter(el)
+function removeFilter( el )
 {
   var group = parseInt($(el).parent().attr('data-group'));
   $(el).parent().remove();
@@ -685,7 +685,9 @@ function hideAndShow()
 
     $('#hide-links-by-filters-holder').hide();
     $('#hide-links-by-js-holder').hide();
+    $('#who-may-access-section > hr').show();
     $('#lockdown-hide-price-notice').show();
+    $('#hide-price-custom-section').show();
 
     if( permissionType == 'selected' ) {
       $('#lockdown-customers-filters-holder').show();
@@ -694,11 +696,36 @@ function hideAndShow()
       $('#lockdown-customers-location-holder').show();
     }
 
+    var mode = $("input:radio[name='lockdown_redirect[hide_price_link_mode]']:checked").val();
+    if( accessMode && permissionType == 'logged_in' ) {
+      $('#lockdown-hide-price-login-holder').hide();
+      if( mode == 'login' ) {
+        $('#lockdown-hide-price-no-link').prop("checked", true);
+        mode = '';
+      }
+    } else {
+      $('#lockdown-hide-price-login-holder').show();
+    }
+
+    if( mode == 'page' ) {
+      $('#hide-price-page-holder').show();
+      $('#hide-price-text-holder').show();
+
+    } else if( mode == 'login' ) {
+      $('#hide-price-page-holder').hide();
+      $('#hide-price-text-holder').show();
+
+    } else {
+      $('#hide-price-page-holder').hide();
+      $('#hide-price-text-holder').hide();
+    }
+
   } else {
     $('#exceptions-section').show();
     $('#how-to-lock-section').show();
     $('#additional-settings-section').show();
     $('#lockdown-hide-price-notice').hide();
+    $('#hide-price-custom-section').hide();
 
     var hideHowToLockSection = false;
     var hideAdditionalSettingsSection = false;
