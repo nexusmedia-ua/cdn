@@ -21,6 +21,23 @@ input[type=radio] {
   display: none;
 }
 
+.easymobile-disabled {
+  position: relative;
+}
+.easymobile-disabled:after {
+  content: '';
+  position: absolute;
+  z-index: 99999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255,255,255,0.5);
+  cursor: wait !important;
+}
+.section-table {
+  padding-bottom: 70px;
+}
 #catalog-holder .grid-stack > .grid-stack-item {
   /*position: relative;*/
 }
@@ -72,6 +89,7 @@ input[type=radio] {
 }
 
 .image-preview {
+  display: block;
   max-width: 100px;
 }
 
@@ -275,11 +293,13 @@ input[type=radio] {
   top: 0;
   left: 0;
   right: 0;
-  height: 10%;
+  height: 16%;
   background-position: center center;
   background-repeat: no-repeat;
   background-size: contain;
   text-align: left;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px
 }
 .device-header-collections-view {
   font-size: 0;
@@ -288,23 +308,24 @@ input[type=radio] {
 }
 .device-header-products-view {
   display: none;
+  height: 10%;
 }
 .device-header-info {
   vertical-align: top;
 }
 .device-header-logo {
-  height: 70%;
+  height: 43%;
   margin: 0 auto;
 }
 .device-header-content {
   position: absolute;
-  top: 45%;
+  top: 48%;
   table-layout: fixed;
   width: 100%;
   padding: 0;
-  font-size: 1.4vw;
+  font-size: 1.3vw;
   font-weight: bold;
-  line-height: 1.4em;
+  line-height: 1.2em;
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -315,16 +336,104 @@ input[type=radio] {
   border: none;
   text-overflow: ellipsis;
 }
+.device-header-content-back {
+  width: 25%;
+  text-align: left;
+}
+.device-header-content-title {
+  text-align: center;
+}
+.device-header-content-back > i.fa {
+  vertical-align: top;
+  font-size: 2.1vw;
+  font-weight: 300;
+  line-height: 0.6em;
+}
+.device-header-content-back > span {
+  vertical-align: top;
+  font-size: 1.3vw;
+  font-weight: 300;
+  line-height: 1.2em;
+}
+.device-header-content-title span {
+  vertical-align: top;
+  font-size: 1.3vw;
+  font-weight: 400;
+  line-height: 1.2em;
+}
+
+.device-status-holder {
+  padding: 0 2%;
+  color: black;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.device-status-holder.device-status-dark {
+  color: white;
+}
+.device-status-bar td.device-status-time {
+  font-size: .9vw;
+  font-weight: 500;
+  letter-spacing: .05vw;
+  text-align: center;
+}
+.device-status-bar {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 1vw;
+  line-height: 1.4em;
+}
+.device-status-bar td {
+  padding: 0;
+  border: none;
+}
+.device-status-bar td.device-status-wifi {
+  width: 33%;
+  text-align: left;
+  font-size: .85vw;
+  letter-spacing: .03vw;
+}
+.device-status-bar td.device-status-battery {
+  text-align: right;
+  width: 33%;
+}
+.device-status-battery > div {
+  height: 0.8vw;
+  background: url('../images/icon_status_battery_light.png') no-repeat right top;
+  background-size: contain;
+}
+.device-status-holder.device-status-dark .device-status-battery > div {
+  background-image: url('../images/icon_status_battery_dark.png');
+}
+
+.device-search-holder {
+  height: 40%;
+  padding: 2%;
+  border-bottom: 1px solid #6c6c6c;
+  text-align: center;
+}
+.device-search-bar {
+  height: 100%;
+  margin: 0;
+  background: white;
+  color: #8e8e93;
+  border-radius: 4px;
+  font-size: 1.00vw;
+  line-height: 1.6em;
+}
 
 .device-body {
   position: absolute;
-  top: 9.9%;
+  top: 15.9%;
   bottom: 10%;
   left: 0;
   right: 0;
   font-size: 1.00vw;
   line-height: 1.4em;
   text-align: left;
+}
+.device-body-products {
+  top: 9.9%;
 }
 .device-body-content {
   overflow: auto;
@@ -514,8 +623,9 @@ input[type=radio] {
   padding-top: 10%;
 }
 .device-footer-title {
-  font-size: 1vw;
+  font-size: .8vw;
   line-height: 1vw;
+  letter-spacing: .03vw;
 }
 
 
@@ -567,6 +677,7 @@ body.dragging, body.dragging * {
 
 .link-holder ul.ui-autocomplete {
   position: absolute !important;
+  z-index: 10;
   overflow: auto;
   width: 300px !important;
   max-height: 130px;
@@ -606,12 +717,12 @@ body.dragging, body.dragging * {
 }
 
 #navigations-holder .sortable-list-row:last-child .link-holder ul.ui-autocomplete {
-  height: 96px;
+  max-height: 96px;
 }
 #navigations-container > section {
   padding-bottom: 80px;
 }
-#navigations-container > .next-pane__footer {
+#navigations-container > .next-pane--form {
   margin-top: -60px;
 }
 
@@ -661,4 +772,187 @@ input.ui-autocomplete-input {
   top: 4px;
   right: 8px;
   margin: 0;
+}
+
+
+.submission-page {
+  /*background: url('https://trello-attachments.s3.amazonaws.com/57b1e0e93a3540e19c54026d/2000x2000/52f9a2af0fcc2b59d4ed764f03822b86/submission_screen.png');
+  background-size: 100%;*/
+  padding: 8px 40px;
+  text-align: center;
+}
+.submission-logo img {
+  width: 170px;
+}
+.submission-title {
+  padding: 3px 3px 30px;
+}
+.submission-title h1 {
+  color: #c2ced7;
+  font-size: 35px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.submission-content form {
+  display: inline-block;
+}
+.submission-content .next-card {
+  text-align: left;
+}
+.submission-content h1 {
+  color: #a5b1ba;
+  font-size: 35px;
+  margin: 0;
+}
+.submission-content-note {
+  margin: 1px 0 6px;
+  padding: 0;
+  color: #555555;
+  font-size: 13px;
+}
+.submission-content h3 {
+  margin-top: 0;
+}
+.submission-content label {
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #30363c;
+}
+.submission-content .grid__item p {
+  font-size: 14px;
+  line-height: 19px;
+}
+
+.image-preview-holder {
+  text-align: center;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+#help-content p.illustration {
+  text-align: center;
+}
+#help-content p.illustration img {
+  max-width: 100%;
+}
+
+#help-progress-holder {
+  margin-bottom: 20px;
+}
+#help-progress-holder table
+#install-progress-holder table {
+  table-layout: fixed;
+}
+#help-progress-holder td,
+#install-progress-holder td {
+  border: none;
+}
+td.progress-point {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: #dddddd;
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 40px;
+  text-align: center;
+}
+td.progress-point > a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: inherit;
+}
+td.progress-point.completed {
+  background: #0078bd;
+}
+
+td.progress-steps-container {
+  position: relative;
+  padding: 4px;
+}
+td.progress-steps-container.current {
+  width: 30%;
+}
+.progress-steps-holder {
+  width: 100%;
+  height: 6px;
+  background: #dddddd;
+}
+.progress-steps {
+  width: 0;
+  height: 6px;
+  background: #0078bd;
+}
+td.completed .progress-steps {
+  width: 100%;
+  background: #0078bd;
+}
+
+.progress-title,
+.progress-count {
+  display: none;
+  overflow: hidden;
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.progress-title {
+  top: -2px;
+}
+.progress-count {
+  font-weight: bold;
+}
+
+td.progress-steps-container.current .progress-title,
+td.progress-steps-container.current .progress-count {
+  display: block;
+}
+
+.help-steps-navigation {
+  float: right;
+  margin: 0 0 10px 10px;
+}
+.help-steps-navigation + p {
+  min-height: 24px;
+  margin-top: 0.5em;
+}
+.help-steps-navigation a:first-child {
+  margin-right: 5px;
+}
+
+#help-sidebar-menu a.current {
+  background: #eff9fd;
+  text-decoration: none;
+}
+
+#install-header {
+  padding: 40px 40px 80px;
+  margin: -20px -20px -40px;
+  background: #dfe6ef url(https://nexusmedia-ua.github.io/cdn/easymobile/images/pattern.png);
+  background-size: 200px;
+  border-bottom: 4px solid #c2cbd4;
+  text-align: center;
+}
+#install-header h1 {
+  font-size: 34px;
+}
+#install-header h3 {
+  margin-top: 20px;
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+
+#channels-parser-holder {
+  display: none;
+}
+#channels-parser-holder textarea {
+  margin: 8px 0;
 }

@@ -121,16 +121,17 @@ function resizeMainMenu()
     var $activeA     = $allA.filter('.active');
     var finalList    = [];
     var finalSubList = [];
-    var totalWidth   = $tablist.width();
-    var moreWidth    = 54;
+    var moreWidth    = 80;
     var width        = 0;
+    var rightMargin  = 16;
+    var totalWidth   = $tablist.width() - rightMargin;
 
-    $allA.each(function(i, el){ width += $(el).outerWidth(); });
+    $allA.each(function(i, el){ width += $(el).parent('li').outerWidth(); });
 
     if( width > totalWidth ) {
       //has droplist
       var actualWidth = totalWidth - moreWidth;
-      var inactiveWidth = actualWidth - ( $activeA.length ? $activeA.outerWidth() : 0 );
+      var inactiveWidth = actualWidth - ( $activeA.length ? $activeA.parent('li').outerWidth() : 0 );
 
       width = 0;
       var activeAdded = false;
@@ -143,7 +144,7 @@ function resizeMainMenu()
             inactiveWidth = actualWidth;
           }
 
-          width += $(el).outerWidth();
+          width += $(el).parent('li').outerWidth();
           if( width < inactiveWidth ) {
             finalList.push(el);
           } else {

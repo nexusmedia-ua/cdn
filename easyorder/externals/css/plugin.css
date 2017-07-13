@@ -30,6 +30,10 @@ select[multiple] {
   overflow: hidden;
 }
 
+.next-card {
+  margin-top: 0 !important;
+}
+
 .easy-disabled {
   position: relative;
 }
@@ -435,6 +439,6 @@ select[multiple] {
   width: 45px;
 }
 
-#installation-holder > hr {
+#instructions-container > hr {
   margin: 20px -20px;
 }

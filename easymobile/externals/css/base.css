@@ -273,7 +273,9 @@ p.note { margin-top: 0; }
   -webkit-align-items: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.tab_list_dropdown {
+  padding: 0 !important;
 }
 
 .tab_list > li {
@@ -309,8 +311,6 @@ p.note { margin-top: 0; }
   padding: 15px 20px;
   text-decoration: none;
   color: #798c9c;
-  border-right: 1px solid #ebeef0;
-  border-bottom: 1px solid #ebeef0;
   text-align: center;
   line-height: 1;
   cursor: pointer;
@@ -338,7 +338,6 @@ p.note { margin-top: 0; }
 .tab_list .next-tab.active {
   background-color: white;
   color: #31373d;
-  border-bottom-color: white;
   cursor: default;
   text-decoration: none;
 }
@@ -398,7 +397,7 @@ p.note { margin-top: 0; }
   content: "";
   position: absolute;
   top: -7px;
-  right: 10px;
+  right: 17px;
   width: 0;
   height: 0;
 
@@ -686,6 +685,9 @@ p.note { margin-top: 0; }
 }
 .no-padding-top {
   padding-top:0 !important;
+}
+.padding-top {
+  padding-top: 20px;
 }
 
 .ui-banner {

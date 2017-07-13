@@ -24,13 +24,19 @@ $(document).ready(function(){
     $(window).on('scroll', function() {
       var scrolltop = $(this).scrollTop();
       var $deviceContainer = $('.device-container');
+      var $formContainer = $('.config-form-holder');
 
-      if( scrolltop > $('.device-tab-list').offset().top + $('.device-tab-list').height() ) {
-        $deviceContainer.addClass('fixed-device-container');
-        resizeDevicePreview();
+      if( $formContainer.length && $formContainer.height() > $deviceContainer.height() + $('.device-tab-list').height() ) {
+        if( scrolltop > $('.device-tab-list').offset().top + $('.device-tab-list').height() ) {
+          $deviceContainer.addClass('fixed-device-container');
+          resizeDevicePreview();
+        } else {
+          $deviceContainer.removeClass('fixed-device-container');
+        }
       } else {
         $deviceContainer.removeClass('fixed-device-container');
       }
+
     });
   }
 
@@ -63,6 +69,32 @@ function showPushDetils(el, pos)
     $conversionBlock.append(conversionGraph.generateLegend());
 
     delete doughnutData[pos];
+  }
+}
+
+// ------------------------------------- SDK Settings ---------------------------------------------
+function checkChannel(el)
+{
+  if( el.value == '8' ) {
+    $('#channels-parser-holder').show();
+  }
+}
+
+function parseChannelId()
+{
+  var channelJSON = $('#channels-parser').val();
+  var channelObj  = $.parseJSON( channelJSON );
+
+  if( channelObj && channelObj['channels'] ) {
+    $('#channel_id').val('');
+    $.each(channelObj['channels'], function(i, channel) {
+      if( channel.provider_id && parseInt(channel.provider_id) == 8 ) {
+        if( channel.id ) {
+          $('#channel_id').val(channel.id);
+          $('#channels-parser-holder').hide();
+        }
+      }
+    });
   }
 }
 
@@ -123,6 +155,8 @@ function saveCatalog()
   });
 
   $('#catalog-data').val(JSON.stringify(data));
+
+  if( isset(ShopifyApp) ) ShopifyApp.Bar.loadingOn();
   $('#save-catalog-form').submit();
 }
 
@@ -236,6 +270,8 @@ function saveNavigation()
   });
 
   $('#navigation-data').val(JSON.stringify(data));
+
+  if( isset(ShopifyApp) ) ShopifyApp.Bar.loadingOn();
   $('#save-navigation-form').submit();
 }
 
@@ -272,22 +308,43 @@ function setBannerLinkField(pageSel, i)
   }
 }
 
+// ------------------------------------- Submission ---------------------------------------------
+function downloadZip(btn, showConfirm)
+{
+  if( showConfirm ) {
+    ShopifyApp.Modal.confirm({
+        message: "For you as one of our first customers we provide FREE submission service - just click Submission service button in right box on this page. Are you sure you'd like to proceed with manual submission yourself?",
+        okButton: "Yes",
+        cancelButton: "No"
+      },
+      function(result){
+        if( result ) {
+          $(btn).closest('form').submit();
+        } else {
+          return false;
+        }
+      }
+    );
+  }
+}
+
 // ------------------------------------- Common ---------------------------------------------
 function devicePreviewToggle(tab, mode)
 {
   $(tab).addClass('active').parent().siblings('li').children('a').removeClass('active');
   $('.device-header-' + mode + '-view').show().siblings('div.device-header').hide();
   $('.device-body-content-' + mode + '-view').show().siblings('div').hide();
+  $('.device-body').removeClass('device-body-collections').removeClass('device-body-products').addClass('device-body-' + mode);
 }
 
 function resizeDevicePreview()
 {
   var $device = $('.device-container');
   if( $device.length ) {
-    var w = parseInt($device.parent().width()) - 40;
+    var w = parseInt($device.parent().width());// - 40;
     $device.css('width', w);
     $device.css('height', w * 2);
-    $('body').css('min-height', w * 2 + 50);
+    $('html, body').css('min-height', w * 2 + 50);
   }
 }
 
@@ -317,6 +374,26 @@ $.fn.extend({previewImplementation : function() {
                 $previewEl.css(style, '#' + value);
                 break;
 
+        case 'status-background-color-home':
+        case 'status-background-color-collection':
+                $previewEl.css('background-color', '#' + value);
+
+                var rgb = parseInt(value, 16); // convert rrggbb to decimal
+                var r = (rgb >> 16) & 0xff;    // extract red
+                var g = (rgb >>  8) & 0xff;    // extract green
+                var b = rgb & 0xff;            // extract blue
+                var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
+                console.log('r: ' + r + '; g: ' + g + '; b: ' + b + '; luma = ' + luma);
+
+                if( luma < 120 ) {
+                  if( style == 'status-background-color-home' ) $('.device-header-collections-view .device-status-holder').addClass('device-status-dark');
+                  else $('.device-header-products-view .device-status-holder').addClass('device-status-dark');
+                } else {
+                  if( style == 'status-background-color-home' ) $('.device-header-collections-view .device-status-holder').removeClass('device-status-dark');
+                  else $('.device-header-products-view .device-status-holder').removeClass('device-status-dark');
+                }
+                break;
+
         case 'footer-fill':
                 $previewEl.children().css('color', '#' + value);
                 $previewEl.find('rect').css('fill', '#' + value);
@@ -342,61 +419,6 @@ $.fn.extend({previewImplementation : function() {
   }
 }});
 
-/*
-function initAutocomplete($holder, listHolderSelector)
-{
-  var $labelHolder = $holder.find('.autocomplete-label');
-  var $valueHolder = $holder.find('.autocomplete-value');
-
-  $labelHolder.autocomplete({
-    minLength: 2,
-    source: function(text, callback){
-      var request = ajaxCall(
-        globalBaseUrl,
-        { 'task': 'ajax_controller', 'action': 'get_products', 'text': text.term }
-      );
-
-      if( request ) {
-        request.done(function(response) {
-          if( response && response.data ) {
-            callback( response.data );
-          } else {
-            callback([]);
-          }
-        });
-      }
-    },
-    //source: autocompleteData,
-    deferRequestBy: 300,
-    appendTo: '#' + listHolderSelector,
-
-    select: function( event, ui ) {
-      $labelHolder.val( ui.item.label );
-      $valueHolder.val( ui.item.value );
-      event.preventDefault();
-    },
-
-    focus: function (event, ui) {
-      $labelHolder.val( ui.item.label );
-      $valueHolder.val( ui.item.value );
-      event.preventDefault();
-    },
-
-    search: function(event, ui) {
-      $holder.find('.autocomplete-loader').show();
-    },
-
-    response: function(event, ui) {
-      $holder.find('.autocomplete-loader').hide();
-    }
-  }).autocomplete( "instance" )._renderItem = function( ul, item ) {
-    return $( "<li>" )
-      .append( item.label )
-      .appendTo( ul );
-  };
-}
-*/
-
 
 (function( $ ) {
   $.widget( "custom.combobox", {
@@ -417,7 +439,7 @@ function initAutocomplete($holder, listHolderSelector)
         .attr("title", "")
         .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
         .autocomplete({
-          delay: 0,
+          delay: 400,
           minLength: 1,
           source: $.proxy( this, "_source" ),
           appendTo: '#' + $holder.attr('id'),
@@ -520,4 +542,81 @@ function initAutocomplete($holder)
 {
   var $comboboxHolder = $holder.find('.autocomplete-combobox');
   $comboboxHolder.combobox($holder);
+}
+
+
+function getHelpPage(theme, step)
+{
+  var theme = parseInt(theme) || 1;
+  var step  = parseInt(step)  || 1;
+  var totalSteps = 1;
+
+  var request = ajaxCall(
+    globalBaseUrl,
+    { 'task': 'ajax_controller', 'action': 'get_help', 'theme': theme, 'step': step },
+    { 'response_type': 'HTML', 'disabled_block': '#help-content-holder > .grid__item > div' }
+  );
+
+  var $progressBar = $('#help-progress-holder');
+  var $currentPoint = $progressBar.find('td[data-theme=' + theme + ']');
+
+  $('#help-progress-holder td').removeClass('completed').removeClass('current');
+  $('#help-sidebar-menu a').removeClass('current');
+  $('#help-sidebar-menu a[data-theme=' + theme + ']').addClass('current');
+
+  if( $currentPoint.length ) {
+    $currentPoint.addClass('completed');
+    $currentPoint.prevAll('td').addClass('completed');
+    $('.progress-steps').removeAttr('style');
+
+    var $nextSteps = $currentPoint.next('.progress-steps-container');
+    if( $nextSteps.length ) {
+      totalSteps = parseInt($nextSteps.attr('data-steps'));
+      var w = parseInt(100 * step / totalSteps);
+      if( w > 98 ) w = 100;
+      if( totalSteps ) $nextSteps.children().children().css('width', w + "%");
+
+      $nextSteps.children('.progress-count').text('Step ' + step + " of " + totalSteps);
+      $nextSteps.addClass('current');
+    }
+  }
+
+  if( request ) {
+    request.done(function(response) {
+      var $nav = $('<div class="help-steps-navigation"></div>');
+      var $prev = $('<a class="btn">Prev</a>');
+      var $next = $('<a class="btn">Next</a>');
+
+      var prevTheme = theme;
+      var nextTheme = theme;
+      var prevStep = step - 1;
+      var nextStep = step + 1;
+
+      if( theme <= 1 && step <= 1 ) {
+        $prev.addClass('btn-disabled');
+      } else {
+        if( step <= 1 ) {
+          prevTheme = theme - 1;
+          var $prevPoint = $progressBar.find('td[data-theme=' + prevTheme + ']');
+          var $prevSteps = $prevPoint.next('.progress-steps-container');
+          prevStep = $prevSteps.length ? parseInt($prevSteps.attr('data-steps')) : 1;
+        }
+        $prev.addClass('btn-primary').attr('onclick', 'getHelpPage("' + prevTheme + '", "' + prevStep + '")');
+      }
+
+      if( theme >= 8 && step >= totalSteps ) {
+        $next.addClass('btn-disabled');
+      } else {
+        if( step >= totalSteps ) {
+          nextTheme = theme + 1;
+          nextStep = 1;
+        }
+        $next.addClass('btn-primary').attr('onclick', 'getHelpPage("' + nextTheme + '", "' + nextStep + '")');
+      }
+
+      $nav.append($prev).append($next);
+
+      $('#help-content').html($nav).append(response);
+    });
+  }
 }

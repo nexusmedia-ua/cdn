@@ -6,6 +6,8 @@ var $ajaxDisabledBlock = null;
 
 window.onbeforeunload = function()
 {
+  if( isset(ShopifyApp) ) ShopifyApp.Bar.loadingOn();
+
   if( ajaxRequest !== null ) {
     ajaxRequest.abort();
   }
@@ -68,30 +70,14 @@ function ajaxBefore(params)
   var params = params || {};
   ajaxIsActive = true;
 
-  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.addClass('easypopup-disabled');
+  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.addClass('easymobile-disabled');
 }
 
 function ajaxAfter(response)
 {
-  //if( !ajaxCheckResponse(response) ) return;
-
-  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.removeClass('easypopup-disabled');
+  if( $ajaxDisabledBlock && $ajaxDisabledBlock.length ) $ajaxDisabledBlock.removeClass('easymobile-disabled');
 
   ajaxIsActive = false;
   ajaxRequest = null;
   $ajaxDisabledBlock = null;
-}
-
-function ajaxCheckResponse(response)
-{
-  if( globalAppCurrentUrl ) {
-    if( typeof(response) == 'string' && response == 'invalid shop' ) {
-      window.top.location.href = globalAppCurrentUrl;
-      return false;
-    } else if( typeof(response) == 'object' && isset(response.responseText) && response.responseText == 'invalid shop' ) {
-      window.top.location.href = globalAppCurrentUrl;
-      return false;
-    }
-  }
-  return true;
 }
