@@ -679,7 +679,6 @@ function hideAndShow()
     $('#how-to-lock-section').hide();
     $('#additional-settings-section').hide();
 
-    $('#who-may-access-section > hr').hide();
     $('#lockdown-customers-type-authorized-selector').hide();
     $('#lockdown-customers-password-holder').hide();
 
