@@ -416,7 +416,7 @@ ev$(function(){
               .css("opacity", "0")
               .css("transition", "visibility 0s, opacity 0.2s linear")
               .appendTo('body')
-              .html('<iframe width="100%" id="easyvideo_popup_video" style="max-width: 800px; margin: auto" src="' + src + youtubelink + params + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe><a id="easyvideo_popup_close" href="#"><img width="50" height="50" src="https://nexusmedia-ua.github.io/cdn/easyvideo/cross.svg" /></a>');
+              .html('<iframe width="100%" id="easyvideo_popup_video" style="max-width: ' + (500/ev_dimensions) + 'px; margin: auto" src="' + src + youtubelink + params + '" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe><a id="easyvideo_popup_close" href="#"><img width="50" height="50" src="https://nexusmedia-ua.github.io/cdn/easyvideo/cross.svg" /></a>');
 
             var video_width = ev$('#easyvideo_popup_video').width();
             wrapper.css( "opacity", 1 );
