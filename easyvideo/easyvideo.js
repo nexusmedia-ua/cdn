@@ -64,6 +64,7 @@ ev$(function(){
       ev$("img[alt*='youtu.be/']").show().css("opacity", 1);
 
       easyVideoSetup();
+      ev$(window).trigger('resize');
 
       if (ev_show_icon && (ie_version == -1 || ie_version > 10)) {
         ev$("img[alt*='//vimeo.com/']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
