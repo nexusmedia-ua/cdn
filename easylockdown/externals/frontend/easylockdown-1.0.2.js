@@ -74,7 +74,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
       } else {
         easylockdown.jq('#easylockdown404').removeAttr('style');
-        easylockdown.jq('#easylockdown-content').remove();
+        easylockdown.jq('div[id=easylockdown-content]').remove();
       }
     },
 
@@ -83,7 +83,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( !easylockdown.routeListByLocation.can.length && !easylockdown.routeListByLocation.cannot.length ) {
         easylockdown.jq(document).ready(function(){
           easylockdown.jq('#easylockdown404').remove();
-          easylockdown.jq('#easylockdown-content').removeAttr('style');
+          easylockdown.jq('div[id=easylockdown-content]').removeAttr('style');
         });
         return;
       }
@@ -115,7 +115,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         if( show ) {
           easylockdown.jq(document).ready(function(){
             easylockdown.jq('#easylockdown404').remove();
-            easylockdown.jq('#easylockdown-content').removeAttr('style');
+            easylockdown.jq('div[id=easylockdown-content]').removeAttr('style');
           });
 
         } else {
@@ -124,7 +124,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
             window.location.href = redirectTo;
           } else {
             easylockdown.jq(document).ready(function(){
-              easylockdown.jq('#easylockdown-content').remove();
+              easylockdown.jq('div[id=easylockdown-content]').remove();
               easylockdown.jq('#easylockdown404').removeAttr('style');
             });
           }
@@ -206,11 +206,11 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
         easylockdown.jq(document).ready(function(){
           if( ch && ch == h ) {
-            easylockdown.jq('#easylockdown-content').removeAttr('style');
+            easylockdown.jq('div[id=easylockdown-content]').removeAttr('style');
             easylockdown.jq('#easylockdown-password-form').remove();
           } else {
             easylockdown.jq('#easylockdown-password-form').removeAttr('style');
-            easylockdown.jq('#easylockdown-content').remove();
+            easylockdown.jq('div[id=easylockdown-content]').remove();
           }
           easylockdown.jq('#easylockdown-helper').remove();
         });
