@@ -1444,6 +1444,10 @@
   .eorder_featherlight .radio-row-holder label {
     margin-bottom: 0 !important;
   }
+  .eorder_featherlight .checkbox-row-holder label a,
+  .eorder_featherlight .radio-row-holder label a {
+    text-decoration: underline !important;
+  }
   .eorder_featherlight .checkbox-row-holder + .checkbox-row-holder,
   .eorder_featherlight .radio-row-holder + .radio-row-holder {
     margin-top: 4px !important;

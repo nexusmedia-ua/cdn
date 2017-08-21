@@ -111,3 +111,31 @@ function escapeHtml(text) {
 
   return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
+
+function escapeHtmlExceptAnchor( text )
+{
+  var allLinks = text.match(/<a href=.+?<\/a>/ig);
+  if( !empty(allLinks) ) {
+    text = escapeHtml( text.replace(/<a href=.+?<\/a>/ig, 'easyorder_link_tmp_replacement'));
+    $.each(allLinks, function(i, l){
+      text = text.replace('easyorder_link_tmp_replacement', l);
+    });
+  } else {
+    text = escapeHtml( text );
+  }
+
+  return text;
+}
+
+function escapeHtmlOnlyAnchor( text )
+{
+  var allLinks = text.match(/<a href=.+?<\/a>/ig);
+  if( !empty(allLinks) ) {
+    text = text.replace(/<a href=.+?<\/a>/ig, 'easyorder_link_tmp_replacement');
+    $.each(allLinks, function(i, l){
+      text = text.replace('easyorder_link_tmp_replacement', escapeHtml(l));
+    });
+  }
+
+  return text;
+}

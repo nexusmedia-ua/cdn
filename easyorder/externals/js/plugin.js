@@ -395,13 +395,14 @@ function initOptionsGrid()
 }
 
 // +
-function addOption(type)
+function addOption()
 {
+  var type = $('#options-container').attr('data-type');
   var $labelEl = $('#new-option-label');
-  var labelText = escapeHtml( $labelEl.val() );
+  var labelText = (type == 'checkbox' || type == 'radio') ? escapeHtmlExceptAnchor( $labelEl.val() ) : escapeHtml( $labelEl.val() );
   if( labelText == '' ) return;
-
   var id = getTimedId('new_');
+
   $labelEl.val('');
 
   $('#options-holder').append([
@@ -428,7 +429,8 @@ function editOption(el)
 
   $editingOption.append($form.show());
 
-  $('#edit-option-label').val( $editingOption.find('.option-title').text() );
+  var $tmp = $('<div>').html( escapeHtmlOnlyAnchor($editingOption.find('.option-title').html()) );
+  $('#edit-option-label').val( $tmp.text() );
 }
 
 // +
@@ -441,8 +443,9 @@ function deleteOption(el)
 // +
 function updateOption(el)
 {
+  var type = $('#options-container').attr('data-type');
   var $labelEl = $('#edit-option-label');
-  var labelText = escapeHtml( $labelEl.val() );
+  var labelText = (type == 'checkbox' || type == 'radio') ? escapeHtmlExceptAnchor( $labelEl.val() ) : escapeHtml( $labelEl.val() );
   if( labelText == '' ) return;
 
   var $row = $(el).parent().closest('.option-row');
