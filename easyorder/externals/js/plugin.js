@@ -138,7 +138,7 @@ function saveFieldSettings()
     $options.each(function(index, item) {
       if( item.getAttribute('data-option-id') ) {
         var name = "field_setting_options[" + item.getAttribute('data-option-id') + "]";
-        data.append(name + "[label]", $(item).find('.option-title').text());
+        data.append(name + "[label]", $(item).find('.option-title').html());
         data.append(name + "[checked]", ($(item).hasClass('row-checked') ? 1 : 0));
       }
     });
