@@ -108,7 +108,6 @@ input[type=radio] {
   color: #fff;
 }
 .nowrap { white-space: nowrap; }
-.o-scroll { overflow: scroll  }
 .next-card tr:last-child td { border-bottom: none;  }
 
 .layout-selector {

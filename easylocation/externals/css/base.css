@@ -137,7 +137,7 @@ td {
 
 section {
     min-width: 872px;
-    overflow: hidden;
+    overflow: initial;
     clear: both;
     padding: 15px 0;
 }
@@ -813,6 +813,7 @@ html .loader .next-spinner {
 
 .no-padding-bottom {
     padding-bottom: 0 !important;
+    overflow: initial;
 }
 
 .no-padding-top {
@@ -991,7 +992,7 @@ td.input-countries{
     width: 25%
 }
 
-@media (max-width:1360px) {
+@media (max-width:1110px) {
     .input-countries button.add-country-btn{
         top: inherit;
         left: 0;
@@ -1051,7 +1052,7 @@ td.input-countries{
 }
 
 .redirect-to-block {
-    width: 25%;
+    width: 40%;
 }
 
 .or {

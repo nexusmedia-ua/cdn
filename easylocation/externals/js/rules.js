@@ -1,4 +1,5 @@
-var firstBlock = document.querySelector('html');
+var firstBlock = document.querySelector('html'),
+    valueEditableBlock;
 showLoaderWhenPageLoad(firstBlock);
 document.addEventListener('DOMContentLoaded', getRules);
 window.rulesJSON = null;
@@ -67,7 +68,7 @@ function createRule(item) {
     } else {
         var linkValue = '<a target="_blank" href="' + item.link + '" class="redirect-value">' + item.link + '</a>';
     }
-    child.innerHTML = '<td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><span class="layout-item-status tooltip-holder layout-disabled" data-status="' + item.enabled + '" onclick="layoutStatusToggle(this);"><i class="fa fa-toggle-' + switchClass + '"></i></span></td><td class="input-countries"><div class="tag green-tag">' + values + '</div></td><td class="input-store-name"><span>' + item.store_name + '</span></td><td class="redirect-to-block">'+ linkValue +'</td><td class="text-right nowrap button-save-and-delete"><button class="btn btn-edit">Edit</button><button class="btn delete-btn" onclick="deleteNode(this);">&times;</button></td>';
+    child.innerHTML = '<td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><span class="layout-item-status tooltip-holder layout-disabled" data-status="' + item.enabled + '" onclick="layoutStatusToggle(this);"><i class="fa fa-toggle-' + switchClass + '"></i></span></td><td class="input-countries"><div class="tag green-tag">' + values + '</div></td><td class="input-store-name"><span>' + item.store_name + '</span></td><td class="redirect-to-block">' + linkValue + '</td><td class="text-right nowrap button-save-and-delete"><button class="btn btn-edit">Edit</button><button class="btn delete-btn" onclick="deleteNode(this);">&times;</button></td>';
     if (item.link === 'about:blank') {
         child.setAttribute('data-is_blocked', true);
     }
@@ -83,10 +84,10 @@ function createRule(item) {
 var availableTags = ['All countries', 'Africa', 'Asia', 'Australia', 'Europe', 'South America', 'North America', 'Afghanistan', 'Åland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla', 'Antarctica', 'Antigua & Barbuda', 'Argentina', 'Armenia', 'Aruba', 'Ascension Island', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize', 'Benin', 'Bermuda', 'Bhutan', 'Bolivia', 'Bosnia & Herzegovina', 'Botswana', 'Brazil', 'British Indian Ocean Territory', 'British Virgin Islands', 'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon', 'Canada', 'Canary Islands', 'Cape Verde', 'Caribbean Netherlands', 'Cayman Islands', 'Central African Republic', 'Ceuta & Melilla', 'Chad', 'Chile', 'China', 'Christmas Island', 'Cocos (Keeling) Islands', 'Colombia', 'Comoros', 'Congo - Brazzaville', 'Congo - Kinshasa', 'Cook Islands', 'Costa Rica', 'Côte d’Ivoire', 'Croatia', 'Cuba', 'Curaçao', 'Cyprus', 'Czech Republic', 'Denmark', 'Diego Garcia', 'Djibouti', 'Dominica', 'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Ethiopia', 'Falkland Islands', 'Faroe Islands', 'Fiji', 'Finland', 'France', 'French Guiana', 'French Polynesia', 'French Southern Territories', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Gibraltar', 'Greece', 'Greenland', 'Grenada', 'Guadeloupe', 'Guam', 'Guatemala', 'Guernsey', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hong Kong SAR China', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran', 'Iraq', 'Ireland', 'Isle of Man', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jersey', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati', 'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau SAR China', 'Macedonia', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Martinique', 'Mauritania', 'Mauritius', 'Mayotte', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Montserrat', 'Morocco', 'Mozambique', 'Myanmar (Burma)', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Caledonia', 'New Zealand', 'Nicaragua', 'Niger', 'Nigeria', 'Niue', 'Norfolk Island', 'North Korea', 'Northern Mariana Islands', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestinian Territories', 'Panama', 'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Pitcairn Islands', 'Poland', 'Portugal', 'Puerto Rico', 'Qatar', 'Réunion', 'Romania', 'Russia', 'Rwanda', 'Samoa', 'San Marino', 'São Tomé & Príncipe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Sint Maarten', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Georgia & South Sandwich Islands', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'St. Barthélemy', 'St. Helena', 'St. Kitts & Nevis', 'St. Lucia', 'St. Martin', 'St. Pierre & Miquelon', 'St. Vincent & Grenadines', 'Sudan', 'Suriname', 'Svalbard & Jan Mayen', 'Swaziland', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tokelau', 'Tonga', 'Trinidad & Tobago', 'Tristan da Cunha', 'Tunisia', 'Turkey', 'Turkmenistan', 'Turks & Caicos Islands', 'Tuvalu', 'U.S. Outlying Islands', 'U.S. Virgin Islands', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Wallis & Futuna', 'Western Sahara', 'Yemen', 'Zambia', 'Zimbabwe'];
 
 function addCountryBlock() {
-    var tr = this.closest('tr');
+    var tr = closest(this,'tr');
     var singleValues = tr.querySelector('.inputAutocomplete').value;
     var tagEditBlock = tr.querySelector('.tag-edit');
-    var countryExist = checkIfCountryAlredyExist(tagEditBlock, singleValues);
+    var countryExist = checkIfCountryAlreadyExist(tagEditBlock, singleValues);
     if (singleValues !== '' && availableTags.indexOf(singleValues) !== -1 && countryExist === false) {
         var newSpan = document.createElement('span');
         newSpan.innerHTML = '<span class="title country-title">' + singleValues + '</span><span class="close">&times;</span>';
@@ -100,7 +101,7 @@ function addCountryBlock() {
 }
 
 function addIpBlock() {
-    var tr = this.closest('tr');
+    var tr = closest(this,'tr');
     var singleValues = tr.querySelector('.inputAutocomplete').value;
     var tagEditBlock = tr.querySelector('.tag-edit');
     var errorString = verifyIP(singleValues);
@@ -146,7 +147,7 @@ function verifyIP(IpValue) {
     return errorString;
 }
 
-function checkIfCountryAlredyExist(tagEditBlock, country, ip) {
+function checkIfCountryAlreadyExist(tagEditBlock, country, ip) {
     var countryTitles = tagEditBlock.querySelectorAll('.title');
     for (var i = 0; i < countryTitles.length; i++) {
         if (countryTitles[i].innerText === country || countryTitles[i].innerText === ip) {
@@ -156,31 +157,111 @@ function checkIfCountryAlredyExist(tagEditBlock, country, ip) {
     return false;
 }
 
-function changeToEditUI() {
+function changeToEditUI(e) {
+    var openRuleId = closest(e.currentTarget, 'tr').id;
     var tbody = document.querySelector('#rules tbody');
     var tr = searchesTheInput(tbody);
     if (tr) {
-        flashTrWhenError(tr);
-    }
-    else {
-        var rule = this.closest('tr');
-        rule.setAttribute('data-is_edit_mode', true);
-        changeBtnBlockStyle(this);
-        setStoreNameToInput(rule);
-        setRedirectValue(rule);
-        addCountrySearchInput(rule);
-        rule.querySelector('button.add-country-btn').addEventListener('click', addCountryBlock);
-        rule.querySelector('button.add-ip-btn').addEventListener('click', addIpBlock);
-        rule.querySelector('.inputAutocomplete').addEventListener('keypress', addCountryBlock);
-        rule.querySelector('input.inputAutocomplete').addEventListener('keydown', runAutocomplete);
-
-        var prevState = rule.getAttribute('data-is_blocked') === 'true';
-        rule.querySelector('.btn-blocker').innerText = (prevState) ? 'Unblock' : 'Block';
+        if (checkChangesInEditableRule(tr, valueEditableBlock)) {
+            flashTrWhenError(tr);
+        } else {
+            cancelEdit();
+            var itemRule = document.getElementById(openRuleId);
+            showRuleInEditMode(itemRule);
+        }
+    } else {
+        var rule = this.parentNode.parentNode;
+        showRuleInEditMode(rule);
     }
 }
 
+function showRuleInEditMode(rule) {
+   var button = rule.querySelector('.btn-edit');
+    valueEditableBlock = saveValueEditebleRule(rule);
+    rule.setAttribute('data-is_edit_mode', true);
+    changeBtnBlockStyle(button);
+    setStoreNameToInput(rule);
+    setRedirectValue(rule);
+    addCountrySearchInput(rule);
+    rule.querySelector('button.add-country-btn').addEventListener('click', addCountryBlock);
+    rule.querySelector('button.add-ip-btn').addEventListener('click', addIpBlock);
+    rule.querySelector('.inputAutocomplete').addEventListener('keypress', addCountryBlock);
+    rule.querySelector('input.inputAutocomplete').addEventListener('keydown', runAutocomplete);
+
+    var prevState = rule.getAttribute('data-is_blocked') === 'true';
+    rule.querySelector('.btn-blocker').innerText = (prevState) ? 'Unblock' : 'Block';
+}
+
+function checkChangesInEditableRule(rule, data) {
+    if (rule.querySelector('.layout-item-status').getAttribute('data-status') !== data['enabled']) {
+        return true;
+    } else if (rule.querySelector('.store-name').value !== data['store_name']) {
+        return true;
+    } else if (rule.querySelector('.redirect-link').value !== data['link']) {
+        return true;
+    } else if (checkCountry(rule, data)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkCountry(rule, data) {
+    var countries = rule.querySelectorAll('.country-title');
+    if (countries.length !== data['countries'].length) {
+        return true;
+    } else {
+        for (var i = 0; countries.length < i; i++) {
+            if (countries[i].innerText !== data['countries'][i]) {
+                return true;
+            }
+        }
+        return false
+    }
+}
+
+function saveValueEditebleRule(tr) {
+    var data = new Object();
+    if (tr.getAttribute('data-rule-id') !== null) {
+        data.id = tr.getAttribute('data-rule-id');
+    }
+    data.enabled = tr.querySelector('.layout-item-status').getAttribute('data-status');
+    data.domain_redirect = (tr.getAttribute('data-is_domain_redirect') === 'true');
+    data.countries = [];
+    data.ip = [];
+    var countryTitles = tr.querySelectorAll('.title');
+    var k = 0,
+        n = 0;
+    for (var i = 0; i < countryTitles.length; i++) {
+        if (countryTitles[i].classList.contains("country-title")) {
+            data.countries[k] = countryTitles[i].innerHTML;
+            k++;
+        } else if (countryTitles[i].classList.contains("ip-title")) {
+            data.ip[n] = countryTitles[i].innerHTML;
+            n++;
+        }
+    }
+    if (tr.querySelector('input.store-name') !== null) {
+        data.store_name = tr.querySelector('input.store-name').value;
+    } else {
+        data.store_name = tr.querySelector('.input-store-name span').innerText;
+    }
+    if (tr.querySelector('.redirect-link') !== null) {
+        data.link = tr.querySelector('.redirect-link').value;
+        if (data.link === 'Blocked') {
+            data.link = 'about:blank';
+        }
+    } else if (tr.querySelector('.redirect-to-block a') !== null) {
+        data.link = tr.querySelector('.redirect-to-block a').innerText;
+    } else {
+        data.link = data.link = 'Blocked';
+    }
+
+    return data;
+}
+
 function changeBtnBlockStyle(item) {
-    var btnParentBlock = item.closest('td');
+    var btnParentBlock = closest(item,'td');
     btnParentBlock.innerHTML = '<td class="text-right nowrap btn-block button-save-and-delete"><button class="btn delete-btn" onclick="cancelEdit();">Cancel</button>&nbsp;<button class="btn btn-primary save-btn">Save</button></td>';
     btnParentBlock.querySelector('button.save-btn').addEventListener('click', saveChangesToBase);
 }
@@ -194,7 +275,7 @@ function setStoreNameToInput(rule) {
 function setRedirectValue(rule) {
     var redirect = rule.querySelector('.redirect-value');
     var redirectValue = redirect.innerText;
-    var redirectRule = redirect.closest('td');
+    var redirectRule = closest(redirect,'td');
     var blockButtonText = (redirectValue === 'about:blank') ? 'Unblock' : 'Block';
     redirectRule.innerHTML = '<div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">' + blockButtonText + '</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" type="text" value="' + redirectValue + '"/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span>Domain Redirect</button><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div>';
     redirectRule.setAttribute('valign', 'top');
@@ -207,10 +288,10 @@ function setRedirectValue(rule) {
 function addCountrySearchInput(rule) {
     var tagEditBlock = rule.querySelector('div.tag');
     tagEditBlock.classList.add("tag-edit");
-    var tagEditBlockTD = tagEditBlock.closest('td');
+    var tagEditBlockTD = closest(tagEditBlock,'td');
     var addCountryInput = document.createElement("div");
     addCountryInput.className = 'quick-response-form';
-    addCountryInput.innerHTML = '<div class="ui-widget"><input placeholder="Region, country or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button> <button class="btn btn-primary add-ip-btn">Add IP</button>';
+    addCountryInput.innerHTML = '<div class="ui-widget"><input placeholder="Start typing country or region name" class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button> <button class="btn btn-primary add-ip-btn">Add IP</button>';
     tagEditBlockTD.insertBefore(addCountryInput, tagEditBlock);
     setCountryTitleFromList(tagEditBlockTD);
 }
@@ -230,33 +311,8 @@ function setCountryTitleFromList(tagEditBlockTD) {
 }
 
 function saveChangesToBase() {
-    var tr = this.closest('tr');
-    var data = new Object();
-    if (tr.getAttribute('data-rule-id') !== null) {
-        data.id = tr.getAttribute('data-rule-id');
-    }
-    data.enabled = tr.querySelector('.layout-item-status').getAttribute('data-status');
-    data.domain_redirect = (tr.getAttribute('data-is_domain_redirect') === 'true');
-    data.countries = [];
-    data.ip = [];
-    const countryTitles = tr.querySelectorAll('.title');
-    var k = 0,
-        n = 0;
-    for (var i = 0; i < countryTitles.length; i++) {
-        if (countryTitles[i].classList.contains("country-title")) {
-            data.countries[k] = countryTitles[i].innerHTML;
-            k++;
-        } else if (countryTitles[i].classList.contains("ip-title")) {
-            data.ip[n] = countryTitles[i].innerHTML;
-            n++;
-        }
-
-    }
-    data.store_name = tr.querySelector('input.store-name').value;
-    data.link = tr.querySelector('.redirect-link').value;
-    if (data.link === 'Blocked') {
-        data.link = 'about:blank';
-    }
+    var tr = closest(this,'tr');
+    var data = saveValueEditebleRule(tr);
     if (data.store_name.length !== 0 && data.link.length !== 0 && (data.countries.length !== 0 || data.ip.length !== 0)) {
         showLoaderWhenPageLoad(firstBlock);
         apiRequest('POST', '&task=postrule', renderSaved, data, failSaved);
@@ -299,7 +355,7 @@ jQuery(function ($) {
         items: "> tr.dragable",
         opacity: 0.5,
         stop: function (event) {
-            const listId = event.target.querySelectorAll('tr.dragable');
+            var listId = event.target.querySelectorAll('tr.dragable');
             var ids = [];
             for (var i = 0; i < listId.length; i++) {
                 ids[i] = listId[i].getAttribute('data-rule-id');
@@ -346,22 +402,21 @@ function sentRequestDataStatus(newStatus, spanParentNodeID) {
 }
 
 function cancelEdit() {
-    renderRules(window.rulesJSON);
+    showLoaderWhenPageLoad(firstBlock);
+    getRules();
 }
 
 function deleteNode(node) {
-    if (node.getAttribute('data-confirm') === 'true') {
-        node.innerText = 'Deleting...';
-        node.style.color = 'orange';
-        var nodeParentNode = node.parentNode.parentNode;
-        var nodeParentNodeID = nodeParentNode.getAttribute('id');
-        sendDeleteRequest(node, nodeParentNodeID);
-        setStartPageAfterClosetAllRules();
-    } else {
-        node.setAttribute('data-confirm', 'true');
-        node.innerText = 'Delete?';
-        node.style.color = 'red';
-    }
+    ShopifyApp.Modal.confirm("Delete redirect?", function (result) {
+        if (result) {
+            showLoaderWhenPageLoad(firstBlock);
+            var nodeParentNode = node.parentNode.parentNode;
+            var nodeParentNodeID = nodeParentNode.getAttribute('id');
+            sendDeleteRequest(node, nodeParentNodeID);
+            setStartPageAfterClosetAllRules();
+        }
+    });
+
 }
 
 function blockRule(button) {
@@ -375,8 +430,8 @@ function blockRule(button) {
     if (input) input.value = (prevState) ? '' : 'about:blank';
 }
 
-function domainRedirect(button){
-    var tr = button.closest('tr');
+function domainRedirect(button) {
+    var tr = closest(button,'tr');
     var prevState = tr.getAttribute('data-is_domain_redirect') === 'true';
     tr.setAttribute('data-is_domain_redirect', !prevState);
 }
@@ -403,7 +458,7 @@ function sendDeleteRequest(node, ruleID) {
 }
 
 function deleteRule(node) {
-    var ruleTr = node.closest('tr');
+    var ruleTr = closest(node,'tr');
     ruleTr.parentNode.removeChild(ruleTr);
 }
 
@@ -411,7 +466,12 @@ function newRow() {
     var tbody = document.querySelector('#rules tbody');
     var tr = searchesTheInput(tbody);
     if (tr) {
-        flashTrWhenError(tr);
+        if (checkChangesInEditableRule(tr, valueEditableBlock)) {
+            flashTrWhenError(tr);
+        } else {
+            tr.querySelector('.delete-btn').click();
+            newRow();
+        }
     }
     else {
         addNewRuleBlock(tbody);
@@ -422,7 +482,7 @@ function addNewRuleBlock(tbody) {
     var newtr = document.createElement("tr");
     newtr.setAttribute('data-is_edit_mode', 'true');
     newtr.innerHTML = '<tr class="dragable"><td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><div class="layout-item-status tooltip-holder layout-enabled" data-status="1" onclick="layoutStatusToggle(this)"><i class="fa fa-toggle-on" onclick=""></i></div></td><td class="input-countries"><div class="quick-response-form"><div class="ui-widget"><input placeholder="Start typing country or region name" class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button><button class="btn btn-primary add-ip-btn">Add IP</button></div><div class="tag green-tag tag-edit"></div></td><td valign="top" class="input-store-name"><div class="quick-response-form"><input class="store-name" type="text" placeholder="Enter your Store Name..."/></div></td><td valign="top" class="redirect-to-block"><div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">Block</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" type="text" value=""/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span>Domain Redirect</button><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div></td><td class="text-right nowrap btn-block button-save-and-delete"><button class="btn delete-btn" onclick="cancelEdit();">Cancel</button>&nbsp;<button class="btn btn-primary save-btn">Save</button></td></tr>';
-    visibilityofblock(tbody);
+    visibilityOfBlock(tbody);
     tbody.appendChild(newtr);
     addTooltip(newtr);
     newtr.querySelector('.redirect-link').addEventListener('keyup', function (e) {
@@ -445,11 +505,12 @@ function addTooltip(newtr) {
 
 function flashTrWhenError(tr) {
     tr.style.backgroundColor = '#fff0f0';
-    ShopifyApp.flashError("All fields must be filled and saved!");
+    ShopifyApp.flashError("You have unsaved changes in the redirect. Please Save or Cancel.");
     setTimeout(function () {
         tr.style.backgroundColor = '';
     }, 1000);
 }
+
 function flashTrWhenIpNotCorrect(tr, errorString) {
     tr.style.backgroundColor = '#fff0f0';
     ShopifyApp.flashError(errorString);
@@ -458,15 +519,35 @@ function flashTrWhenIpNotCorrect(tr, errorString) {
     }, 1000);
 }
 
-function visibilityofblock(tbody) {
-    tbody.closest('div').style.display = 'block';
-    tbody.closest('section').querySelector('.start-section').style.display = 'none';
+function visibilityOfBlock(tbody) {
+    closest(tbody,'div').style.display = 'block';
+    closest(tbody,'section').querySelector('.start-section').style.display = 'none';
 }
 
 function searchesTheInput(block) {
     var inputAutocomplete = block.querySelector('.inputAutocomplete');
     if (inputAutocomplete) {
-        return inputAutocomplete.closest('tr')
+        return closest(inputAutocomplete,'tr');
     }
     return false;
+}
+
+function closest(el, selector) {
+    var matchesFn;
+    ['matches','webkitMatchesSelector','mozMatchesSelector','msMatchesSelector','oMatchesSelector'].some(function(fn) {
+        if (typeof document.body[fn] === 'function') {
+            matchesFn = fn;
+            return true;
+        }
+        return false;
+    });
+    var parent;
+    while (el) {
+        parent = el.parentElement;
+        if (parent && parent[matchesFn](selector)) {
+            return parent;
+        }
+        el = parent;
+    }
+    return null;
 }

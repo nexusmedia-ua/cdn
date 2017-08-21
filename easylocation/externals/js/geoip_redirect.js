@@ -85,6 +85,9 @@
             if (verificationOfCookie === null) {
                 getJSON(urlLocation,
                     function (err, data) {
+                        if (typeof data !== 'object') {
+                            data = JSON.parse(data);
+                        }
                         if (err === null) {
                             getJSON(urlIp, function (status, ip) {
                                 data.ip = ip;
@@ -212,7 +215,7 @@
     }
 
     function hideBanner(e) {
-        var topDiv = e.target.closest('div#geoip-banner');
+        var topDiv = document.querySelector('div#geoip-banner');
         topDiv.style.opacity = 0;
         topDiv.style.transition = 'opacity 0.3s';
         setTimeout(function () {

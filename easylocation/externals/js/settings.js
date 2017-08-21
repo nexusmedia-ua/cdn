@@ -22,7 +22,7 @@ function pickAColor() {
 function setDefaultColors() {
     var squareColorPreview = document.querySelectorAll('span.color-preview.current-color');
     for (var i = 0; i<squareColorPreview.length; i++){
-        var valueColor = squareColorPreview[i].closest('.input-group').querySelector('input').value;
+        var valueColor = closest(squareColorPreview[i],'.input-group').querySelector('input').value;
         squareColorPreview[i].style.backgroundColor = '#'+valueColor;
 
     }
@@ -47,7 +47,7 @@ function addSpinnerWhenSaving() {
     var loaderBlock = document.createElement('div');
     loaderBlock.className = 'loader-main';
     loaderBlock.innerHTML = '<div class="loader"><div class="next-spinner"><svg class="next-icon next-icon--40" preserveAspectRatio="xMinYMin"><circle class="next-spinner__ring" cx="50%" cy="50%" r="45%"></circle></svg></div></div>';
-    var loader = document.querySelector('#setting-form .geoip-loader-block');
+    var loader = document.querySelector('.geoip-loader-block');
     loader.innerHTML = '';
     loader.appendChild(loaderBlock);
 }
@@ -119,6 +119,7 @@ function setActiveLayout() {
         layouts[i].className = 'layout-selector';
     }
     this.className = "layout-selector layout-selector-selected";
+    switchSettings(this.getAttribute('data-value') === 'redirect');
     renderPreview();
 }
 
@@ -136,6 +137,7 @@ function renderSettings(data) {
                 input.value = data.content[keys[i]];
             } else if (keys[i]['layout-selector'] !== '') {
                 document.querySelector('.layout-selector[data-value="' + data.content[keys[i]] + '"]').className = "layout-selector layout-selector-selected";
+                switchSettings(data.content[keys[i]] === 'redirect');
             }
 
         }
@@ -249,4 +251,34 @@ function addStylesBlock(mainTplBlock) {
     var newStyleTag = document.createElement('style');
     newStyleTag.innerHTML = '.geoip-popup-banner .geoip-main-block button:first-child{ margin-left: 0;} .geoip-top-banner{ text-align:center; background-color: rgb(0, 150, 255);} .geoip-top-banner .geoip-button-block{ display:inline-block; margin: 5px;} .geoip-top-banner .geoip-text-block{ margin-right:20px; color: #ffffff;} .geoip-store-name{ font-weight:bolder; text-decoration: underline;} .geoip-store-name a{ color:inherit} .geoip-country-name{ font-weight:bolder} .geoip-text-block{ line-height:28px; font-size:15px; font-family:sans-serif; margin-right:10px; font-weight:lighter} .geoip-main-block button{ background:none; border:0; font-size:14px; margin-left:10px; cursor:pointer; padding:3px 11px 3px} .geoip-main-block button:hover{ opacity:0.8} .geoip-popup-banner{ margin:auto; width:450px; height:200px; position: relative; box-shadow: 0 2px 4px rgba(0,0,0,0.1);    background-color: rgb(0, 150, 255);} .geoip-popup-banner .geoip-main-block{ position:relative; top:50%; transform:translateY(-50%)} .geoip-close-icon{ position:absolute; right:10px; top:5px; cursor:pointer;color: white;} .geoip-popup-banner .geoip-text-block{ text-align:center; width:60%; margin:0 auto; line-height:16px; padding-bottom:20px; color: #ffffff;} .geoip-popup-banner .geoip-button-block{ margin:0 auto; text-align:center} .geoip-button-block:first-child{ margin-left:0} .geoip-button-block button{ margin-left:20px; color: #ffffff;background-color: #005493;} @media screen and (max-width:480px){ .geoip-text-block{ width:100%; float:left} .geoip-main-block button{ margin-bottom:10px} .geoip-popup-banner{ width:100%} .geoip-popup-banner .geoip-text-block{ width:100%} }';
     mainTplBlock.appendChild(newStyleTag);
+}
+
+function closest(el, selector) {
+    var matchesFn;
+    ['matches','webkitMatchesSelector','mozMatchesSelector','msMatchesSelector','oMatchesSelector'].some(function(fn) {
+        if (typeof document.body[fn] === 'function') {
+            matchesFn = fn;
+            return true;
+        }
+        return false;
+    });
+    var parent;
+    while (el) {
+        parent = el.parentElement;
+        if (parent && parent[matchesFn](selector)) {
+            return parent;
+        }
+        el = parent;
+    }
+    return null;
+}
+
+function switchSettings(isInstant) {
+    if (isInstant) {
+        document.getElementById('redirect-text').style.display = 'none';
+        document.getElementById('redirect-color').style.display = 'none';
+    } else {
+        document.getElementById('redirect-text').style.display = 'block';
+        document.getElementById('redirect-color').style.display = 'block';
+    }
 }
