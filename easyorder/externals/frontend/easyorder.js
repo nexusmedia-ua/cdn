@@ -215,7 +215,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       event.initEvent('easyorder_init', true, true);
       document.dispatchEvent(event);
 
-      easyorder.jq('#easyorder-hpbtn-style');
+      easyorder.jq('#easyorder-hpbtn-style').remove();
     },
 
     validateForm: function(visibleFields, requiredFields)
