@@ -136,7 +136,6 @@ td {
 }
 
 section {
-    min-width: 872px;
     overflow: initial;
     clear: both;
     padding: 15px 0;
@@ -217,15 +216,16 @@ button {
 }
 
 .btn-default, .btn {
-    background-color: white;
-    color: #479ccf;
-    border: 1px solid #d3dbe2;
+    background: linear-gradient(to bottom, #fff, #f9fafb);
+    border: 1px solid #c4cdd5;
+    border-radius: 3px;
+    color: #212b35;
 }
 
 .btn-primary {
-    background-color: #479ccf;
-    color: white;
-    border: 1px solid #479ccf;
+    background: linear-gradient(to bottom, #6371c7, #5563c1);
+    border-color: #3f4eae;
+    color: #ffffff;
 }
 
 .btn-disabled {
@@ -437,6 +437,8 @@ p.note {
 .tab_list .next-tab-disclosure {
     padding: 0 20px;
 }
+
+.Polaris-Page { display:none;  }
 
 .tab_list .dropdown {
     display: none;
@@ -935,16 +937,16 @@ html .loader .next-spinner {
 .btn-blocker {
     top: 0;
     background: #fff;
-    border: 2px #479ccf solid;
-    color: #479ccf;
+    border: 2px #3f4eae solid;
+    color: #3f4eae;
     font-weight: bold;
     outline: none;
     width: 100%;
 }
 
 tr[data-is_blocked="true"] .btn-blocker {
-    background: #479ccf;
-    border: 2px #479ccf solid;
+    background: #3f4eae;
+    border: 2px #3f4eae solid;
     color: #fff;
     font-weight: bold;
     outline: none;
@@ -989,7 +991,7 @@ tr[data-is_blocked="true"] .redirect-link-div, tr[data-is_blocked="true"] .or{
 }
 
 td.input-countries{
-    width: 25%
+    width: 40%
 }
 
 @media (max-width:1110px) {
@@ -1031,7 +1033,16 @@ td.input-countries{
 
 }
 
-@media (max-width:785px) {
+@media (max-width:872px) {
+
+    #thead { display: none; }
+    .next-card tr td { display: block; width: 100% !important; } 
+    .next-card tr td.draggable {
+        width: 40px !important;
+        float: left;
+        padding-top: 4px;        
+    }
+
     .redirect-to-block .redirect-link-div {
         width: 50%
     }
@@ -1108,7 +1119,7 @@ td.button-save-and-delete {
 }
 
 tr[data-is_domain_redirect="true"]  .domain-redirect-btn {
-    background: #479ccf;
+    background: #3f4eae;
     color: #fff;
 }
 

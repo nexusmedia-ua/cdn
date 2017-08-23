@@ -98,13 +98,13 @@ input[type=radio] {
   top:3px;
   right:3px;
   background: #fff;
-  border: 2px #479ccf solid;
-  color: #479ccf;
+  border: 2px #3f4eae solid;
+  color: #3f4eae;
   font-weight: bold;
   outline: none;
 }
 .quick-response-form .btn:hover {
-  background: #479ccf;
+  background: #3f4eae;
   color: #fff;
 }
 .nowrap { white-space: nowrap; }

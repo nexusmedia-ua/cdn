@@ -26,7 +26,7 @@ function renderRules(rulesJSON) {
 function setStartPage() {
     var mainBlock = document.querySelector('.section-table');
     if (mainBlock.querySelector('#tbody').rows.length - 1 === 0 || mainBlock.querySelector('#tbody').rows.length - 1 === -1) {
-        mainBlock.querySelector('.start-section').style.display = 'block';
+        document.querySelector('.Polaris-Page').style.display = 'block';
         mainBlock.querySelector('.next-card').style.display = 'none';
     }
 }
@@ -481,7 +481,7 @@ function newRow() {
 function addNewRuleBlock(tbody) {
     var newtr = document.createElement("tr");
     newtr.setAttribute('data-is_edit_mode', 'true');
-    newtr.innerHTML = '<tr class="dragable"><td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><div class="layout-item-status tooltip-holder layout-enabled" data-status="1" onclick="layoutStatusToggle(this)"><i class="fa fa-toggle-on" onclick=""></i></div></td><td class="input-countries"><div class="quick-response-form"><div class="ui-widget"><input placeholder="Start typing country or region name" class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button><button class="btn btn-primary add-ip-btn">Add IP</button></div><div class="tag green-tag tag-edit"></div></td><td valign="top" class="input-store-name"><div class="quick-response-form"><input class="store-name" type="text" placeholder="Enter your Store Name..."/></div></td><td valign="top" class="redirect-to-block"><div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">Block</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" type="text" value=""/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span>Domain Redirect</button><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div></td><td class="text-right nowrap btn-block button-save-and-delete"><button class="btn delete-btn" onclick="cancelEdit();">Cancel</button>&nbsp;<button class="btn btn-primary save-btn">Save</button></td></tr>';
+    newtr.innerHTML = '<tr class="dragable"><td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><div class="layout-item-status tooltip-holder layout-enabled" data-status="1" onclick="layoutStatusToggle(this)"><i class="fa fa-toggle-on" onclick=""></i></div></td><td class="input-countries"><div class="quick-response-form"><div class="ui-widget"><input placeholder="Country, region or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button><button class="btn btn-primary add-ip-btn">Add IP</button></div><div class="tag green-tag tag-edit"></div></td><td valign="top" class="input-store-name"><div class="quick-response-form"><input class="store-name" type="text" placeholder="For ex. US Store"/></div></td><td valign="top" class="redirect-to-block"><div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">Block</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" type="text" value=""/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span>Domain Redirect</button><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div></td><td class="text-right nowrap btn-block button-save-and-delete"><button class="btn delete-btn" onclick="cancelEdit();">Cancel</button>&nbsp;<button class="btn btn-primary save-btn">Save</button></td></tr>';
     visibilityOfBlock(tbody);
     tbody.appendChild(newtr);
     addTooltip(newtr);
@@ -521,7 +521,7 @@ function flashTrWhenIpNotCorrect(tr, errorString) {
 
 function visibilityOfBlock(tbody) {
     closest(tbody,'div').style.display = 'block';
-    closest(tbody,'section').querySelector('.start-section').style.display = 'none';
+    closest(tbody,'body').querySelector('.Polaris-Page').style.display = 'none';
 }
 
 function searchesTheInput(block) {
