@@ -177,6 +177,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     {
       var currentHandleExists = window.location.pathname.toLowerCase().match(/\/collections\/(.+?)(?=[\/]|$)/i);
 
+      gotoUrl = gotoUrl.toLowerCase();
       if( !currentHandleExists || !currentHandleExists[0] || !currentHandleExists[1] ) return gotoUrl;
       if( currentHandleExists[1] == 'all' || currentHandleExists[1] == 'vendors' || currentHandleExists[1] == 'types' ) return gotoUrl;
 
@@ -194,6 +195,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     {
       if( !newTags && !easysearch.currentTag ) return false;
 
+      gotoUrl = gotoUrl.toLowerCase();
       var GETParams = '', hashParam = '';
       var gotoUrlArr = gotoUrl.split('?', 2);
       if( gotoUrlArr[1] ) GETParams = gotoUrlArr[1];
