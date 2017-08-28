@@ -145,8 +145,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       easysearch.setCookie('easysearch-preselect', '');
       easysearch.currentTag = '';
 
-      var gotoUrl = window.location.href;
-      var tagExists = window.location.pathname.match(/\/collections\/(.+?)\/(.+?)(?=[\/]|$)/i);
+      var gotoUrl = window.location.href.toLowerCase();
+      var tagExists = window.location.pathname.toLowerCase().match(/\/collections\/(.+?)\/(.+?)(?=[\/]|$)/i);
 
       if( tagExists && tagExists[0] && tagExists[1] && tagExists[2] ) {
         if( tagExists[1] != 'vendors' && tagExists[1] != 'types' && tagExists[2] != 'products' ) {
@@ -175,7 +175,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
     collectionUrlHandleChecker: function( gotoUrl )
     {
-      var currentHandleExists = window.location.pathname.match(/\/collections\/(.+?)(?=[\/]|$)/i);
+      var currentHandleExists = window.location.pathname.toLowerCase().match(/\/collections\/(.+?)(?=[\/]|$)/i);
 
       if( !currentHandleExists || !currentHandleExists[0] || !currentHandleExists[1] ) return gotoUrl;
       if( currentHandleExists[1] == 'all' || currentHandleExists[1] == 'vendors' || currentHandleExists[1] == 'types' ) return gotoUrl;
@@ -1780,9 +1780,10 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
   }
 
   easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
-  easysearch.jq(document).ready(function() {
-    if( typeof InstantClick == 'object' ) InstantClick.on('change', easysearch.initPage);
+  easysearch.jq(document).ready(function() { easysearch.initPage(); easysearch.DOMReady = true; });
 
+} else {
+  if( easysearch.DOMReady && easysearch.jq('div[id=easysearch-holder].easysearch-loading').length ) {
     easysearch.initPage();
-  });
+  }
 }
