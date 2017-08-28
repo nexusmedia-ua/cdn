@@ -11,6 +11,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     curIndex: '',
     DOMReady: false,
     currentTag: '',
+    tempTag: '',
 
     dbSRC: '',
     tree: {'':[]},
@@ -134,26 +135,42 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         data = easysearch.curIndex;
       }
       easysearch.setCookie('easysearch-preselect', data.replace(/,/g, 'easysearch-preselect-delimiter'));
+      easysearch.setCookie('easysearch-tag-filter', easysearch.tempTag);
     },
 
     clearTagFilter: function()
     {
+      var curTag = easysearch.currentTag;
       easysearch.setCookie('easysearch-tag-filter', '');
       easysearch.setCookie('easysearch-preselect', '');
       easysearch.currentTag = '';
 
-      var newUrl = window.location.href;
+      var gotoUrl = window.location.href;
       var tagExists = window.location.pathname.match(/\/collections\/(.+?)\/(.+?)(?=[\/]|$)/i);
 
       if( tagExists && tagExists[0] && tagExists[1] && tagExists[2] ) {
         if( tagExists[1] != 'vendors' && tagExists[1] != 'types' && tagExists[2] != 'products' ) {
-          var t = '/' + tagExists[2];
-          var reg = new RegExp(t.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ), 'i');
-          newUrl = newUrl.replace(reg, '');
+          var ct = curTag.split('+');
+          var nt = tagExists[2].split('+');
+          var tags = [];
+
+          easysearch.jq( nt ).each(function(i, t){
+            if( easysearch.jq.inArray(t, ct) < 0 ) {
+              tags.push(t);
+            }
+          });
+
+          if( tags.length ) {
+            gotoUrl = gotoUrl.replace(tagExists[0], '/collections/' + tagExists[1] + '/' + tags.join('+'));
+          } else {
+            var t = '/' + tagExists[2];
+            var reg = new RegExp(t.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ), 'i');
+            gotoUrl = gotoUrl.replace(reg, '');
+          }
         }
       }
 
-      window.location.href = newUrl;
+      window.location.href = gotoUrl;
     },
 
     collectionUrlHandleChecker: function( gotoUrl )
@@ -173,9 +190,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       return gotoUrl;
     },
 
-    collectionUrlTagChecker: function( gotoUrl )
+    collectionUrlTagChecker: function( gotoUrl, newTags )
     {
-      if( !easysearch.currentTag ) return false;
+      if( !newTags && !easysearch.currentTag ) return false;
 
       var GETParams = '', hashParam = '';
       var gotoUrlArr = gotoUrl.split('?', 2);
@@ -185,24 +202,60 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( gotoUrlArr[1] ) hashParam = gotoUrlArr[1];
 
       gotoUrl = gotoUrlArr[0];
-      var tagExists = gotoUrl.match(/\/collections\/.+?\/(.+?)(?=[\/]|$)/i);
+      var tagExists = gotoUrl.match(/\/collections\/(.+?)\/(.*?)(?=[\/]|$)/i);
 
-      if( !tagExists || !tagExists[0] || !tagExists[1] ) {
-        var nextCollectionUrl = gotoUrl.match(/\/collections\/(.+?)(?=[\/]|$)/i);
+      if( !tagExists ) {
+        var shortUrl  = gotoUrl.match(/\/collections\/(.+?)$/i);
+        if( shortUrl && shortUrl[0] && shortUrl[1] ) {
+          tagExists = shortUrl;
+        }
+      }
 
-        if( nextCollectionUrl && nextCollectionUrl[0] && nextCollectionUrl[1] ) {
-          if( nextCollectionUrl[1] == 'vendors' || nextCollectionUrl[1] == 'types' ) return false;
+      if( tagExists && tagExists[0] && tagExists[1] ) {
+        if( tagExists[1] == 'vendors' || tagExists[1] == 'types' ) return false;
 
-          var toReplace = gotoUrl.match(/\/collections\/.+?$/i);
-          var newUrl = nextCollectionUrl[0] + '/' + easysearch.currentTag;
-          gotoUrl = gotoUrl.replace(toReplace[0], newUrl);
+        if( !tagExists[2] ) {
+          var newUrl = '/collections/' + tagExists[1] + '/' + easysearch.currentTag;
+          gotoUrl = gotoUrl.replace(tagExists[0], newUrl);
 
           if( GETParams ) gotoUrl += '?' + GETParams;
           else if( hashParam ) gotoUrl += '#' + hashParam;
 
           return gotoUrl;
+
+        } else {
+          if( tagExists[2] == 'products' ) return false;
+
+          if( newTags ) {
+            easysearch.tempTag = tagExists[2].toLowerCase();
+
+          } else {
+            if( easysearch.currentTag == tagExists[2] ) return false;
+
+            var ct = easysearch.currentTag.split('+');
+            var nt = tagExists[2].split('+');
+            var r  = false;
+
+            easysearch.jq( ct ).each(function(i, t){
+              if( easysearch.jq.inArray(t, nt) < 0 ) {
+                r = true;
+                nt.push(t);
+              }
+            });
+
+            if( !r ) return false;
+
+            var newUrl = '/collections/' + tagExists[1] + '/' + nt.join('+');
+            gotoUrl = gotoUrl.replace(tagExists[0], newUrl);
+
+            if( GETParams ) gotoUrl += '?' + GETParams;
+            else if( hashParam ) gotoUrl += '#' + hashParam;
+
+            return gotoUrl;
+          }
         }
       }
+
       return false;
     },
 
@@ -1727,10 +1780,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
   }
 
   easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
-  easysearch.jq(document).ready(function() { easysearch.initPage(); easysearch.DOMReady = true; });
+  easysearch.jq(document).ready(function() {
+    if( typeof InstantClick == 'object' ) InstantClick.on('change', easysearch.initPage);
 
-} else {
-  if( easysearch.DOMReady && easysearch.jq('div[id=easysearch-holder].easysearch-loading').length ) {
     easysearch.initPage();
-  }
+  });
 }
