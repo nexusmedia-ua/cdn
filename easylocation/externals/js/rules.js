@@ -291,7 +291,7 @@ function addCountrySearchInput(rule) {
     var tagEditBlockTD = closest(tagEditBlock,'td');
     var addCountryInput = document.createElement("div");
     addCountryInput.className = 'quick-response-form';
-    addCountryInput.innerHTML = '<div class="ui-widget"><input placeholder="Start typing country or region name" class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button> <button class="btn btn-primary add-ip-btn">Add IP</button>';
+    addCountryInput.innerHTML = '<div class="ui-widget"><input placeholder="Region, country or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button> <button class="btn btn-primary add-ip-btn">Add IP</button>';
     tagEditBlockTD.insertBefore(addCountryInput, tagEditBlock);
     setCountryTitleFromList(tagEditBlockTD);
 }
@@ -345,7 +345,11 @@ function renderSaved(data) {
 
 function runAutocomplete() {
     jQuery(this).autocomplete({
-        source: availableTags
+        source: availableTags,
+        select: function (event, ui) {
+            var addCountryBtn = $(this).parent().parent().find(".add-country-btn");
+            setTimeout(function() { addCountryBtn.trigger('click'); }, 10);
+        }
     });
 }
 
@@ -364,7 +368,7 @@ jQuery(function ($) {
             data.ids = ids;
             showLoaderWhenPageLoad(firstBlock);
             apiRequest('POST', '&task=updateorder', function () {
-                console.log('send');
+               // console.log('send');
             }, data);
         }
     });
@@ -396,7 +400,7 @@ function sentRequestDataStatus(newStatus, spanParentNodeID) {
     data.id = spanParentNodeID;
     if (spanParentNodeID !== null && newStatus !== null) {
         apiRequest('POST', '&task=postrule', function () {
-            console.log('done');
+           // console.log('done');
         }, data);
     }
 }
