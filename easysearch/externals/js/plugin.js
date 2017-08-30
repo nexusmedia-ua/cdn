@@ -762,6 +762,7 @@ function ruleStatusToggle( id )
             $.each(response.data, function(i, value){
               var $opt = $('<option>').text(value.title).attr('value', value.value);
               if( value.image && typeof value.image !== 'undefined' && typeof value.image.src !== 'undefined' ) $opt.attr('data-img', value.image.src);
+              else $opt.attr('data-img', '');
               $opt.appendTo($select);
             });
 
@@ -836,7 +837,7 @@ function addRouteProduct(item)
       '<tr>',
         '<td style="width: 40px">',
           '<div class="image-holder">',
-            '<img src="' + item.image + '" title="' + item.label + '">',
+            item.image ? '<img src="' + item.image + '" title="' + item.label + '">' : '',
           '</div>',
         '</td>',
         '<td>',
