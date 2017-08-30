@@ -761,7 +761,7 @@ function ruleStatusToggle( id )
           if( response && response.data ) {
             $.each(response.data, function(i, value){
               var $opt = $('<option>').text(value.title).attr('value', value.value);
-              if( typeof value.image !== 'undefined' && typeof value.image.src !== 'undefined' ) $opt.attr('data-img', value.image.src);
+              if( value.image && typeof value.image !== 'undefined' && typeof value.image.src !== 'undefined' ) $opt.attr('data-img', value.image.src);
               $opt.appendTo($select);
             });
 
