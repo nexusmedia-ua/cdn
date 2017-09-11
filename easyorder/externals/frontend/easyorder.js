@@ -139,7 +139,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
                           '<span class="easyorder-item-price-separator">, </span>',
                           '<small><span class="easyorder-item-price-quantity">' + this.quantity + '</span> x ' + currency + parseFloat(this.price / 100).toFixed(2) + '</small>',
                         '</p>',
-                        '<p><a href="#" onclick="easyorder.popupRemove(' + this.variant_id + ');return false;">Remove</a></p>',
+                        '<p class="easyorder-item-remove-holder"><a href="#" onclick="easyorder.popupRemove(' + this.variant_id + ');return false;">Remove</a></p>',
                       '</div>',
                     '</div>'
                   ].join('')
