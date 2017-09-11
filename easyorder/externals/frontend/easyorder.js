@@ -146,7 +146,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
                 );
               });
 
-              $productsList.append('<h4 class="easyorder-text-left">Total: ' + currency + '<span>' + totalPrice + '</span></h4>');
+              $productsList.append('<h4 class="easyorder-text-left easyorder-total-price-holder"><span class="easyorder-total-label">Total: </span><span class="easyorder-total-currency">' + currency + '</span><span class="easyorder-total-price">' totalPrice + '</span></h4>');
             } else {
               easyorder.jq.each(data.items, function(){
                 $easyorderPopup.find('.easyorder-popup-form-fields:first').append(
