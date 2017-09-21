@@ -124,6 +124,18 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
     },
 
+    onAfterOpen: function(event)
+    {
+      var $videos = easypopup.jq('.ep_featherlight .easypopup-simple-video');
+      if( $videos.length ) {
+        $videos.each(function(i, el){
+          if( $(el).attr('data-video-url') ) {
+            $(el).replaceWith('<iframe src="' + $(el).attr('data-video-url') + '" frameborder="0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe>');
+          }
+        });
+      }
+    },
+
     initFeatherlight: function()
     {
       /**
@@ -243,7 +255,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         beforeOpen:   easypopup.jq.noop,                 /* Called before open. can return false to prevent opening of lightbox. Gets event as parameter, this contains all data */
         beforeContent: easypopup.jq.noop,                /* Called when content is loaded. Gets event as parameter, this contains all data */
         beforeClose:  easypopup.jq.noop,                 /* Called before close. can return false to prevent opening of lightbox. Gets event as parameter, this contains all data */
-        afterOpen:    easypopup.jq.noop,                 /* Called after open. Gets event as parameter, this contains all data */
+        afterOpen:    easypopup.onAfterOpen,                 /* Called after open. Gets event as parameter, this contains all data */
         afterContent: easypopup.jq.noop,                 /* Called after content is ready and has been set. Gets event as parameter, this contains all data */
         afterClose:   easypopup.jq.noop,                 /* Called after close. Gets event as parameter, this contains all data */
         onKeyUp:      easypopup.jq.noop,                 /* Called on key down for the frontmost featherlight */
