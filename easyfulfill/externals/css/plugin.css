@@ -33,6 +33,10 @@ input[type=radio] {
   cursor: wait !important;
 }
 
+body > .wrapper {
+  margin-bottom: 50px;
+}
+
 #main-header {
   table-layout: fixed;
   margin-bottom: 10px;
@@ -42,13 +46,13 @@ input[type=radio] {
   border: none;
 }
 .main-header-paid-filter {
-  width: 180px;
+  width: 190px;
 }
 .main-header-paid-filter label {
   margin-bottom: 0;
 }
 .main-header-imported-filter {
-  width: 200px;
+  width: 210px;
 }
 .main-header-imported-filter label {
   margin-bottom: 0;
@@ -87,6 +91,10 @@ input[type=radio] {
   right: 0;
 }
 
+#orders-errors-holder,
+#orders-main-holder {
+  padding: 1px;
+}
 #no-orders {
   display: none;
   padding: 10px;
@@ -134,9 +142,6 @@ td.carrier-item-actions a.btn {
   margin: 20px auto;
 }
 
-#carriers-container {
-  padding: 20px 20px 20px 40px;
-}
 #carriers-holder {
   margin: 0;
   padding: 0;
@@ -233,4 +238,21 @@ table.csv-example {
 }
 table.csv-example td {
   border: 1px solid #ccc;
+}
+
+.order-date-col {
+  cursor: pointer;
+}
+.order-date-col:hover .order-date-text {
+  color: #5c6ac4;
+}
+.order-date-arrow {
+  font: normal normal normal 14px/1 FontAwesome;
+}
+.order-date-arrow:before {
+  content: "\f0d7";
+  margin-left: 2px;
+}
+input#orders-sort:checked + .order-date-arrow:before {
+  content: "\f0d8";
 }

@@ -14,6 +14,7 @@ function applyOrdersFilters( el )
 
   if( $('#paid-only').prop('checked') )     params += "&paid_only=1";
   if( $('#imported-only').prop('checked') ) params += "&imported_only=1";
+  if( $('#orders-sort').prop('checked') )   params += "&sort=1";
 
   window.location.href = globalBaseUrl + params;
 }
@@ -184,7 +185,7 @@ function uploadCSV( el )
 
 function closeErrors()
 {
-  $('#orders-main-holder').remove();
+  $('#orders-errors-holder').remove();
 }
 
 function showUploadPopup()
@@ -226,4 +227,11 @@ function removeCode( el )
 
   $(el).parent().remove();
   $row.find('.order-item-carriers > select:eq(' + index + ')').remove();
+}
+
+function setDefaultCarrier( el )
+{
+  $('#template-main > .wrapper').addClass('easy-disabled');
+  $('#default-carrier-value').val( el.value );
+  $('#default-carrier-form').submit();
 }
