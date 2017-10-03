@@ -50,13 +50,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         expires = options.expires = d;
       }
 
-      if( expires && expires.toUTCString ) {
-        options.expires = expires.toUTCString();
-      }
-
-      value = encodeURIComponent(value);
-
-      var updatedCookie = name + "=" + value;
+      var updatedCookie = name + "=" + encodeURIComponent(value);
 
       for (var propName in options) {
         updatedCookie += "; " + propName;
@@ -65,7 +59,11 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           updatedCookie += "=" + propValue;
         }
       }
+
       updatedCookie += ";path=/";
+      if( expires && expires.toUTCString ) {
+        updatedCookie += ";expires=" + expires.toUTCString();
+      }
 
       document.cookie = updatedCookie;
     },
@@ -188,7 +186,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
               var h = response.h;
               easylockdown.jq('#easylockdown-password-error').hide();
               easylockdown.jq('#easylockdown-password').removeClass('easylockdown-error');
-              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activePasswordId, h);
+              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activePasswordId, h, {expires: 315360000});
               window.location.href = window.location.href.split('#')[0];
             } else {
               easylockdown.jq('#easylockdown-password-error').show();
