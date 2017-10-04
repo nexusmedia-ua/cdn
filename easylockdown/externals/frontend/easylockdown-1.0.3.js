@@ -21,7 +21,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     hidePurchaseListByLocation: {'can': [], 'cannot': []},
     activePasswordId: null,
 
-    loadLink: function(url)
+    loadLink: function( url )
     {
       var link = document.createElement("link");
       link.type = "text/css"
@@ -30,42 +30,69 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       document.getElementsByTagName("head")[0].appendChild(link);
     },
 
-    getCookie: function(name)
+    getCookie: function( name )
     {
+      if( easylockdown.supportsLocalStorage() && localStorage[name] != undefined ) {
+        var lsObj = JSON.parse(localStorage[name]);
+        var dateString = lsObj.expires;
+        if( !dateString ) return lsObj.value;
+
+        var now = new Date().getTime().toString();
+        if( now - lsObj.expires  > 0 ) {
+          localStorage.removeItem(name);
+          return undefined;
+        }
+        return lsObj.value;
+      }
+
       var matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
       ));
       return matches ? decodeURIComponent(matches[1]) : undefined;
     },
 
-    setCookie: function(name, value, options)
+    setCookie: function( name, value, options )
     {
       options = options || {};
 
+      var lsObj = {value: value, expires: null};
       var expires = options.expires;
+
       if( expires ) {
         expires = parseInt(expires);
         var d = new Date();
         d.setTime(d.getTime() + (expires * 1000));
         expires = options.expires = d;
+        if( expires.toUTCString ) options.expires = expires.toUTCString();
+        lsObj.expires = expires.getTime().toString();
+      }
+
+      if( easylockdown.supportsLocalStorage() ) {
+        localStorage[name] = JSON.stringify(lsObj);
+        return;
       }
 
       var updatedCookie = name + "=" + encodeURIComponent(value);
 
-      for (var propName in options) {
-        updatedCookie += "; " + propName;
+      for( var propName in options ) {
+        updatedCookie += ";" + propName;
         var propValue = options[propName];
-        if (propValue !== true) {
+        if( propValue !== true ) {
           updatedCookie += "=" + propValue;
         }
       }
-
       updatedCookie += ";path=/";
-      if( expires && expires.toUTCString ) {
-        updatedCookie += ";expires=" + expires.toUTCString();
-      }
 
       document.cookie = updatedCookie;
+    },
+
+    supportsLocalStorage: function()
+    {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch (e) {
+        return false;
+      }
     },
 
     router: function( redirectTo )
@@ -186,7 +213,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
               var h = response.h;
               easylockdown.jq('#easylockdown-password-error').hide();
               easylockdown.jq('#easylockdown-password').removeClass('easylockdown-error');
-              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activePasswordId, h, {expires: 31536000});
+              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activePasswordId, h, {expires: 315360000});
               window.location.href = window.location.href.split('#')[0];
             } else {
               easylockdown.jq('#easylockdown-password-error').show();
@@ -624,8 +651,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
   document.addEventListener = document.addEventListener || function(e, f){ document.attachEvent('on' + e, f); };
 
-  if( easylockdown.getCookie('easylockdownISO') ) {
-    easylockdown.currentISO = easylockdown.getCookie('easylockdownISO');
+  var iso = easylockdown.getCookie('easylockdownISO');
+  if( iso ) {
+    easylockdown.currentISO = iso;
 
   } else {
     easylockdown.jq.ajax({
@@ -634,7 +662,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       dataType: 'json',
       success: function(response) {
         easylockdown.currentISO = response.country.iso_code;
-        easylockdown.setCookie('easylockdownISO', easylockdown.currentISO);
+        easylockdown.setCookie('easylockdownISO', easylockdown.currentISO, {expires: 86400});
 
         var event = document.createEvent('Event');
         event.initEvent('easylockdown_geoiso_allow', true, true);
