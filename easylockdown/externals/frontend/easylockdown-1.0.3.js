@@ -186,7 +186,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
               var h = response.h;
               easylockdown.jq('#easylockdown-password-error').hide();
               easylockdown.jq('#easylockdown-password').removeClass('easylockdown-error');
-              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activePasswordId, h, {expires: 315360000});
+              easylockdown.setCookie(h[1] + h[5] + h[8] + h[11] + h[13] + easylockdown.activePasswordId, h, {expires: 31536000});
               window.location.href = window.location.href.split('#')[0];
             } else {
               easylockdown.jq('#easylockdown-password-error').show();
@@ -203,6 +203,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     clientContentToggle: function( mode )
     {
       var ch, show = true, passNote = '', passPlaceholder = '';
+
       easylockdown.jq('#easylockdown-helper').remove();
 
       if( easylockdown.routeListByAuth.can.length ) {
@@ -222,6 +223,12 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         easylockdown.jq(document).ready(function(){
           easylockdown.jq('.easylockdown-content').removeAttr('style');
           easylockdown.jq('.easylockdown404').remove();
+
+          if( !mode ) {
+            easylockdown.preparePurchaseForm(); // by server
+          } else {
+            easylockdown.preparePurchaseFormByLocation(); // by client
+          }
         });
 
       } else {
@@ -231,12 +238,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         easylockdown.jq('#easylockdown-wrapper').prepend('<div id="easylockdown-password-note">' + passNote + '</div>');
         easylockdown.jq('#easylockdown-password').attr('placeholder', passPlaceholder);
         easylockdown.jq('.easylockdown-content').remove();
-      }
-
-      if( !mode ) {
-        easylockdown.preparePurchaseForm()
-      } else {
-        easylockdown.preparePurchaseFormByLocation();
       }
     },
 
@@ -346,6 +347,12 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
             easylockdown.jq('#easylockdown-password').attr('placeholder', passPlaceholder);
           });
         }
+
+      } else {
+        easylockdown.jq(document).ready(function(){
+          easylockdown.jq('#easylockdown-hpbtn-style').remove()
+          easylockdown.jq('#easylockdown-password-form').remove();
+        });
       }
     },
 
