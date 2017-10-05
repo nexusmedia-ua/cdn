@@ -54,7 +54,7 @@ jQuery191a(function() {
     jQuery191a(".product-description-slider > div").unbind('keydown');
     jQuery191a(".product-description-slider > h3").unbind('keydown');
 
-    if (jQuery191a("#scroll_to_accordion").val() == "1") jQuery191a(".product-description-slider .ui-accordion-header").bind("click",function(){ var el=jQuery191a(this); setTimeout(function(){ theOffset = el.offset().top; jQuery191a("html, body").animate({scrollTop: (theOffset-50)}, 500).finish(500); }, 105);  });
+    if (jQuery191a("#scroll_to_accordion").val() == "1") jQuery191a(".product-description-slider .ui-accordion-header").bind("click",function(){ var el=jQuery191a(this); setTimeout(function(){ theOffset = el.offset().top; jQuery191a("html, body").animate({scrollTop: (theOffset-50)}, 500).finish(500); }, 0);  });
     if (navigator.userAgent.indexOf("Opera") != -1 || navigator.userAgent.indexOf("Trident") != -1) { 
       setTimeout(function(){
 
@@ -101,7 +101,7 @@ jQuery191a(function() {
         jQuery191a(".product-description-slider").unbind('keydown');
         jQuery191a(".product-description-slider > div").unbind('keydown');
         jQuery191a(".product-description-slider > h3").unbind('keydown');
-        if (jQuery191a("#scroll_to_accordion").val() == "1") jQuery191a(".product-description-slider .ui-accordion-header").bind("click",function(){ var el=jQuery191a(this); setTimeout(function(){ theOffset = el.offset().top; jQuery191a("html, body").animate({scrollTop: (theOffset-50)}, 500).finish(500); }, 105);   });
+        if (jQuery191a("#scroll_to_accordion").val() == "1") jQuery191a(".product-description-slider .ui-accordion-header").bind("click",function(){ var el=jQuery191a(this); setTimeout(function(){ theOffset = el.offset().top; jQuery191a("html, body").animate({scrollTop: (theOffset-50)}, 500).finish(500); }, 0);   });
       }, 100);
     }
 });
