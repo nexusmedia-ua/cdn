@@ -20,6 +20,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     hidePurchaseListByAuth: {'can': []},
     hidePurchaseListByLocation: {'can': [], 'cannot': []},
     activePasswordId: null,
+    jslocked: false,
 
     loadLink: function( url )
     {
@@ -102,7 +103,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         window.location.href = redirectTo;
 
       } else {
-        easylockdown.jq('.easylockdown404').removeAttr('style');
+        easylockdown.jq('#easylockdown404').removeAttr('style');
         easylockdown.jq('.easylockdown-content').remove();
       }
     },
@@ -122,6 +123,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           easylockdown.jq.each(easylockdown.routeListByLocation.can, function(i, item){
             if( easylockdown.currentISO == item.loc ) {
               show = true;
+              return false; // break;
+
             } else {
               if( !redirectTo ) redirectTo = item.url;
               title404   = item.title404;
@@ -138,22 +141,25 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
               redirectTo = item.url;
               title404   = item.title404;
               message404 = item.message404;
-              return;
+              return false; // break;
             }
           });
         }
 
         if( !show ) {
+          easylockdown.jslocked = true;
           if( redirectTo ) {
             if( redirectTo == 'login' ) redirectTo = '/account/login?return_to=' + window.location.href;
             window.location.href = redirectTo;
           } else {
             easylockdown.jq(document).ready(function(){
               easylockdown.jq('.easylockdown-content').remove();
-              var $p404 = easylockdown.jq('.easylockdown404');
+              var $p404 = easylockdown.jq('#easylockdown404');
               $p404.find('.easylockdown-title-404').html(title404);
               $p404.find('.easylockdown-message-404').html(message404);
               $p404.removeAttr('style');
+              easylockdown.jq('#easylockdown-hpbtn-style').remove()
+              easylockdown.jq('#easylockdown-password-form').remove();
             });
           }
         }
@@ -232,6 +238,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       var ch, show = true, passNote = '', passPlaceholder = '';
 
       easylockdown.jq('#easylockdown-helper').remove();
+      if( easylockdown.jslocked ) return;
 
       if( easylockdown.routeListByAuth.can.length ) {
         easylockdown.jq.each(easylockdown.routeListByAuth.can, function(i, item){
@@ -249,7 +256,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( show ) {
         easylockdown.jq(document).ready(function(){
           easylockdown.jq('.easylockdown-content').removeAttr('style');
-          easylockdown.jq('.easylockdown404').remove();
+          easylockdown.jq('#easylockdown404').remove();
 
           if( !mode ) {
             easylockdown.preparePurchaseForm(); // by server
