@@ -73,7 +73,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
     },
 
-        initNativeSearchBar()
+    initNativeSearchBar()
     {
       if( easysearch.nativeSearchBarInited ) return;
 
@@ -168,44 +168,69 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
     },
 
-    getCookie: function(name)
+    getCookie: function( name )
     {
+      if( easysearch.supportsLocalStorage() && localStorage[name] != undefined ) {
+        var lsObj = JSON.parse(localStorage[name]);
+        var dateString = lsObj.expires;
+        if( !dateString ) return lsObj.value;
+
+        var now = new Date().getTime().toString();
+        if( now - lsObj.expires  > 0 ) {
+          localStorage.removeItem(name);
+          return undefined;
+        }
+        return lsObj.value;
+      }
+
       var matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
       ));
       return matches ? decodeURIComponent(matches[1]) : undefined;
     },
 
-    setCookie: function(name, value, options)
+    setCookie: function( name, value, options )
     {
       options = options || {};
 
+      var lsObj = {value: value, expires: null};
       var expires = options.expires;
+
       if( expires ) {
         expires = parseInt(expires);
         var d = new Date();
         d.setTime(d.getTime() + (expires * 1000));
         expires = options.expires = d;
+        if( expires.toUTCString ) options.expires = expires.toUTCString();
+        lsObj.expires = expires.getTime().toString();
       }
 
-      if( expires && expires.toUTCString ) {
-        options.expires = expires.toUTCString();
+      if( easysearch.supportsLocalStorage() ) {
+        localStorage[name] = JSON.stringify(lsObj);
+        return;
       }
 
-      value = encodeURIComponent(value);
-
-      var updatedCookie = name + "=" + value;
+      var updatedCookie = name + "=" + encodeURIComponent(value);
 
       for( var propName in options ) {
-        updatedCookie += "; " + propName;
+        updatedCookie += ";" + propName;
         var propValue = options[propName];
-        if (propValue !== true) {
+        if( propValue !== true ) {
           updatedCookie += "=" + propValue;
         }
       }
       updatedCookie += ";path=/";
 
       document.cookie = updatedCookie;
+    },
+
+    supportsLocalStorage: function()
+    {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch (e) {
+        return false;
+      }
     },
 
     saveSearchParams: function(el)
