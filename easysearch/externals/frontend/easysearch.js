@@ -376,7 +376,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       return false;
     },
 
-    searchPagePaginator( btn, initSQ )
+    searchPagePaginator: function( btn, initSQ )
     {
       if( !easysearch.$searchPrimaryContainer || !easysearch.$searchPrimaryContainer.length ) return;
 
