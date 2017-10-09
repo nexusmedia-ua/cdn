@@ -194,7 +194,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       options = options || {};
 
       var lsObj = {value: value, expires: null};
-      var expires = options.expires;
+      var expires = options.expires ? options.expires : 3600;
 
       if( expires ) {
         expires = parseInt(expires);
