@@ -126,3 +126,7 @@
     text-align: center !important;
   }
 }
+
+.easysearch-hidden-item {
+  display: none !important;
+}

@@ -340,7 +340,6 @@ function addField()
 
 
 // Database Editor
-
 function loadCSV( noAlert, url )
 {
   var noAlert = noAlert || false;
@@ -537,7 +536,6 @@ function fillSelects()
 
 
 // Rules
-
 function rangeToggle(checkbox)
 {
   var $block  = $(checkbox).parent().closest('.grid');
@@ -557,31 +555,6 @@ function rangeToggle(checkbox)
     $elFrom.children('input').attr('placeholder', gFieldPlaceholder);
   }
 }
-
-
-// Instalation Settings
-function saveInstallationSettings()
-{
-  if( ajaxIsActive ) return;
-
-  var form = $('#form-installation');
-  if( form.length ) {
-    var data = new FormData( form[0] );
-    data.append('task', 'ajax_controller');
-    data.append('action', 'save_installation_settings');
-
-    $('#easysearch-tabs-loader').show();
-
-    var request = ajaxCallForm(globalBaseUrl, data, { 'disabled_block': '#installation-container' });
-    if( request ) {
-      request.done(function(response) {
-        $('#easysearch-tabs-loader').hide();
-        if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Your changes have been saved");
-      });
-    }
-  }
-}
-
 
 function removeRule(id)
 {
@@ -647,6 +620,29 @@ function ruleStatusToggle( id )
   }
 }
 
+
+// Instalation Settings
+function saveInstallationSettings()
+{
+  if( ajaxIsActive ) return;
+
+  var form = $('#form-installation');
+  if( form.length ) {
+    var data = new FormData( form[0] );
+    data.append('task', 'ajax_controller');
+    data.append('action', 'save_installation_settings');
+
+    $('#easysearch-tabs-loader').show();
+
+    var request = ajaxCallForm(globalBaseUrl, data, { 'disabled_block': '#installation-container' });
+    if( request ) {
+      request.done(function(response) {
+        $('#easysearch-tabs-loader').hide();
+        if( isset(ShopifyApp) ) ShopifyApp.flashNotice("Your changes have been saved");
+      });
+    }
+  }
+}
 
 (function( $ ) {
   var selected = false;
@@ -872,6 +868,37 @@ function removeRouteProduct(el)
   gSortedProductList.sort();
 }
 
+function addRouteTag()
+{
+  var value = $('#route-value-tag').val();
+  if( !value || $('#route-value-tags-list > span').length >= 3 ) return;
+
+  $('#route-value-tag').val('');
+
+  $('#route-value-tags-list').append([
+      '<span>',
+        '<b>' + value + '</b><span class="close" onclick="removeRouteTag(this);"></span>',
+        '<input type="hidden" name="route[data][tag][]" value="' + value + '" />',
+      '</span>',
+    ].join('')
+  );
+
+  if( $('#route-value-tags-list > span').length >= 3 ) {
+    $('#add-route-tag-holder').hide();
+    $('#add-route-tag').prop('disabled', true);
+  }
+}
+
+function removeRouteTag( el )
+{
+  $(el).parent().remove();
+
+  if( $('#route-value-tags-list > span').length < 3 ) {
+    $('#add-route-tag-holder').show();
+    $('#add-route-tag').prop('disabled', false);
+  }
+}
+
 function checkImportQueueStatus()
 {
   var request = simpleAjaxCall(
@@ -907,5 +934,15 @@ function checkRulesQueueStatus()
         }
       }
     });
+  }
+}
+
+function keepFilterToggle()
+{
+  if( $('#form_setting_tag_filter').prop('checked') ) {
+    $('#search-tag-filter-holder').show();
+  } else {
+    $('#search-tag-filter-holder').hide();
+    $('#form_setting_search_tag_filter').prop('checked', false);
   }
 }

@@ -305,7 +305,7 @@ p.note { margin-top: 0; }
 }
 
 .tab_list .next-tab {
-  padding: 15px 20px;
+  /*padding: 15px 20px;*/
   text-decoration: none;
   color: #798c9c;
   text-align: center;
@@ -395,7 +395,7 @@ p.note { margin-top: 0; }
   content: "";
   position: absolute;
   top: -7px;
-  right: 10px;
+  right: 17px;
   width: 0;
   height: 0;
 
