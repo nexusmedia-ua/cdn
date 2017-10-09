@@ -35,6 +35,13 @@
   margin: 0 !important;
   width: 100% !important;
 }
+.easysearch-select-holder select {
+  outline: 0      !important;
+  cursor: pointer !important;
+}
+.easysearch-select-holder select option {
+  cursor: pointer !important;
+}
 .easysearch-loading .easysearch-select-holder,
 .easysearch-loading .easysearch-btn-holder {
   opacity: 0.6;
@@ -52,7 +59,7 @@
   height: auto       !important;
   border-radius: 3px !important;
 
-  cursor: pointer        !important;
+  cursor: pointer    !important;
 
   -moz-box-sizing: border-box;
   box-sizing: border-box;
