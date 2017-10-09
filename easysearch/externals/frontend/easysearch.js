@@ -11,6 +11,10 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     curIndex: '',
     currentTag: '',
     tempTag: '',
+    $searchPrimaryContainer: '',
+    perPage: 10,
+    nativeSearchBarInited: false,
+    searchQuery: '',
 
     dbSRC: '',
     tree: {'':[]},
@@ -26,19 +30,31 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
     initPage: function()
     {
+      easysearch.jq('.easysearch-item-selector').each(function(){
+        var $el = easysearch.jq(this).nextAll(':not(".easysearch-item-selector"):not(".easylockdown-item-selector"):not(".easy-item-selector"):first');
+        if( $el.length ) $el.addClass('easysearch-item').attr('data-tags', easysearch.jq(this).attr('data-tags'));
+      });
+      easysearch.jq('.easysearch-item-selector').remove();
+
       easysearch.jq('div[id=easysearch-holder] select').attr('disabled', true);
       easysearch.initPapaparse();
 
-      var event = document.createEvent('Event');
-      event.initEvent('easysearch_init', true, true);
-      document.dispatchEvent(event);
+      var event1 = document.createEvent('Event');
+      event1.initEvent('easysearch_init', true, true);
+      document.dispatchEvent(event1);
+
+      var event2 = document.createEvent('Event');
+      event2.initEvent('easysearch_init_native_search_page', true, true);
+      document.dispatchEvent(event2);
 
       easysearch.jq('div[id=easysearch-holder]').show();
     },
 
-    initSearchTree: function( keepFilter )
+    initSearchTree: function( keepFilter, keepSearchFilter )
     {
       if( !easysearch.dbSRC ) return;
+
+      if( keepSearchFilter ) easysearch.initNativeSearchBar();
 
       var ua = window.navigator.userAgent;
       var msie = ua.indexOf("MSIE "); // ie 10-
@@ -54,6 +70,73 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         } catch( error) {
           easysearch.simpleParser( keepFilter );
         }
+      }
+    },
+
+    initNativeSearchBar()
+    {
+      if( easysearch.nativeSearchBarInited ) return;
+
+      easysearch.nativeSearchBarInited = true;
+      easysearch.jq('body').on('submit', 'form[action$="/search"]', function(event) {
+        if( easysearch.currentTag ) {
+          var $q = easysearch.jq(this).find('input[name=q]');
+          if( $q.length && easysearch.currentTag ) $q.val($q.val() + ' ' + easysearch.currentTag.replace(/\+/g, ' '));
+        }
+      });
+
+      var regTag;
+      var $sforms = easysearch.jq('form[action$="/search"]');
+
+      if( easysearch.currentTag ) regTag = new RegExp('(?:^|\\s)' + easysearch.currentTag.replace(/\+/g, ' ') + '(?=\\s|$)', 'i');
+
+      if( $sforms.length ) {
+        $sforms.each(function(){
+          var $q = easysearch.jq(this).find('input[name=q]');
+          if( $q.length ) {
+            if( !easysearch.searchQuery ) easysearch.searchQuery = $q.val();
+            if( regTag ) $q.val( easysearch.jq.trim($q.val().replace(regTag, '')) );
+          }
+        });
+      }
+
+      if( easysearch.jq('.easysearch-search-terms').length ) {
+        if( regTag ) easysearch.jq('.easysearch-search-terms').html( easysearch.jq.trim(easysearch.jq('.easysearch-search-terms').html().replace(regTag, '')) );
+        easysearch.jq('.easysearch-search-terms').removeAttr('style');
+      }
+    },
+
+    initNativeSearchPage( keepSearchFilter )
+    {
+      if( keepSearchFilter ) easysearch.initNativeSearchBar();
+
+      if( keepSearchFilter && easysearch.currentTag && easysearch.jq("easysearch-holder").length ) {
+        var $itemsList = easysearch.jq('.easysearch-item');
+
+        if( $itemsList.length ) {
+          easysearch.jq("easysearch-holder").each(function(i, c){
+            if( easysearch.jq(c).children(':not(".easylockdown-item-selector"):not(".easy-item-selector"):not(".easysearch-paginate-more")').length ) {
+              easysearch.$searchPrimaryContainer = easysearch.jq(c);
+              return false; // break;
+            }
+          });
+
+          if( easysearch.$searchPrimaryContainer.length ) {
+            $itemsList.remove();
+            var $nextA = easysearch.$searchPrimaryContainer.find('.easysearch-paginate-more a');
+            if( $nextA.length ) {
+              $nextA.attr('data-url', $nextA.attr('data-url').replace(/page=\d+/i, 'page=1'));
+              $nextA.click();
+            } else {
+              easysearch.searchPagePaginator(null, easysearch.searchQuery);
+            }
+          }
+        }
+
+      } else {
+        easysearch.jq('#easysearch-hp-style').remove();
+        easysearch.jq('.easysearch-paginate-more').remove();
+        easysearch.jq('.easysearch-item').removeAttr('data-tags');
       }
     },
 
@@ -85,44 +168,69 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
     },
 
-    getCookie: function(name)
+    getCookie: function( name )
     {
+      if( easysearch.supportsLocalStorage() && localStorage[name] != undefined ) {
+        var lsObj = JSON.parse(localStorage[name]);
+        var dateString = lsObj.expires;
+        if( !dateString ) return lsObj.value;
+
+        var now = new Date().getTime().toString();
+        if( now - lsObj.expires  > 0 ) {
+          localStorage.removeItem(name);
+          return undefined;
+        }
+        return lsObj.value;
+      }
+
       var matches = document.cookie.match(new RegExp(
         "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
       ));
       return matches ? decodeURIComponent(matches[1]) : undefined;
     },
 
-    setCookie: function(name, value, options)
+    setCookie: function( name, value, options )
     {
       options = options || {};
 
-      var expires = options.expires;
+      var lsObj = {value: value, expires: null};
+      var expires = options.expires ? options.expires : 3600;
+
       if( expires ) {
         expires = parseInt(expires);
         var d = new Date();
         d.setTime(d.getTime() + (expires * 1000));
         expires = options.expires = d;
+        if( expires.toUTCString ) options.expires = expires.toUTCString();
+        lsObj.expires = expires.getTime().toString();
       }
 
-      if( expires && expires.toUTCString ) {
-        options.expires = expires.toUTCString();
+      if( easysearch.supportsLocalStorage() ) {
+        localStorage[name] = JSON.stringify(lsObj);
+        return;
       }
 
-      value = encodeURIComponent(value);
-
-      var updatedCookie = name + "=" + value;
+      var updatedCookie = name + "=" + encodeURIComponent(value);
 
       for( var propName in options ) {
-        updatedCookie += "; " + propName;
+        updatedCookie += ";" + propName;
         var propValue = options[propName];
-        if (propValue !== true) {
+        if( propValue !== true ) {
           updatedCookie += "=" + propValue;
         }
       }
       updatedCookie += ";path=/";
 
       document.cookie = updatedCookie;
+    },
+
+    supportsLocalStorage: function()
+    {
+      try {
+        return 'localStorage' in window && window['localStorage'] !== null;
+      } catch (e) {
+        return false;
+      }
     },
 
     saveSearchParams: function(el)
@@ -166,6 +274,14 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
             var reg = new RegExp(t.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ), 'i');
             gotoUrl = gotoUrl.replace(reg, '');
           }
+        }
+
+      } else {
+        var tagExists = window.location.href.toLowerCase().match(/\/search\?/i);
+        if( tagExists && tagExists[0] ) {
+          curTag = '+' + curTag;
+          var reg = new RegExp(curTag.replace( /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" ), 'ig');
+          gotoUrl = gotoUrl.replace(reg, '');
         }
       }
 
@@ -258,6 +374,115 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       }
 
       return false;
+    },
+
+    searchPagePaginator( btn, initSQ )
+    {
+      if( !easysearch.$searchPrimaryContainer || !easysearch.$searchPrimaryContainer.length ) return;
+
+      var $more   = easysearch.jq('.easysearch-paginate-more');
+      var nextUrl = btn ? easysearch.jq( btn ).attr("data-url") : ( initSQ ? '/search?page=1&q=' + initSQ : '');
+
+      if( easysearch.jq(".easysearch-hidden-item").length >= easysearch.perPage ) {
+        easysearch.jq(".easysearch-hidden-item").slice(0, easysearch.perPage).removeClass('easysearch-hidden-item');
+        return;
+
+      } else if( !nextUrl ) {
+        easysearch.jq(".easysearch-hidden-item").removeClass('easysearch-hidden-item');
+        return;
+      }
+
+      if( nextUrl ) {
+        $.ajax({
+            type: 'GET',
+            url: nextUrl + '&view=easysearch&type=product',
+            beforeSend: function() {
+              // $more.each(function(i, el){ easysearch.jq( el ).after('<img class="easysearh-paginate-loader" src=\"{{ "loading.gif" | asset_url }}\" />'); });
+              $more.hide();
+              easysearch.jq('#easysearch-mb-style').remove();
+            },
+
+            success: function(data) {
+              // remove loading feedback
+              easysearch.jq('.easysearh-paginate-loader').remove();
+              $more.remove();
+
+              // prepare response
+              var $resultData = easysearch.jq( data ).find("easysearch-holder");
+              var $primaryData, children;
+              easysearch.jq( $resultData ).each(function(i, rd){
+                if( easysearch.jq(rd).children(':not(".easylockdown-item-selector"):not(".easy-item-selector"):not(".easysearch-paginate-more")').length ) {
+                  $primaryData = easysearch.jq(rd);
+                  return false; // break;
+                }
+              });
+
+              // if no result but next-page exists
+              if( !$primaryData || !$primaryData.length ) {
+                if( $resultData.find('.easysearch-paginate-more:first a').length ) {
+                  easysearch.$searchPrimaryContainer.append( $resultData.find('.easysearch-paginate-more:first') );
+                  easysearch.$searchPrimaryContainer.find('.easysearch-paginate-more:first a').click();
+                } else {
+                  easysearch.jq(".easysearch-hidden-item").removeClass('easysearch-hidden-item');
+                }
+                return;
+              }
+
+              $primaryData.find('.easysearch-item-selector').each(function(){
+                var $el = easysearch.jq(this).nextAll(':not(".easylockdown-item-selector"):not(".easy-item-selector"):first');
+                if( $el.length ) $el.addClass('easysearch-item').addClass('easysearch-hidden-item').attr('data-tags', easysearch.jq(this).attr('data-tags'));
+              });
+              $primaryData.find('.easysearch-item-selector').remove();
+
+              var $itemsList = $primaryData.find('.easysearch-item');
+              if( $itemsList.length ) {
+                var currentTags = easysearch.currentTag.split('+');
+                $itemsList.each(function(i, item){
+                  var $item = easysearch.jq(item);
+                  var tags  = $item.attr('data-tags').replace(/\s/g, '-').split(',');
+                  var allTagsExists = true;
+
+                  easysearch.jq.each(currentTags, function(i, t){
+                    if( easysearch.jq.inArray(t, tags) < 0 ) {
+                      allTagsExists = false;
+                      return false; // break;
+                    }
+                  });
+
+                  if( !allTagsExists ) $item.remove();
+                  else $item.removeAttr('data-tags');
+                });
+              }
+
+              // append data
+              easysearch.$searchPrimaryContainer.append( $primaryData.html() );
+
+              // easylockdown part
+              if( typeof easylockdown == 'object' ) {
+                easylockdown.jq('.easylockdown-item-selector').each(function(){
+                  var $el = easylockdown.jq(this).nextAll(':not(".easylockdown-item-selector"):not(".easy-item-selector"):first');
+                  if( $el.length ) {
+                    $el
+                      .addClass('easylockdown-item')
+                      .attr('data-eld-loc-can',    easylockdown.jq(this).attr('data-eld-loc-can'))
+                      .attr('data-eld-loc-cannot', easylockdown.jq(this).attr('data-eld-loc-cannot'))
+                      .attr('data-eld-loc-auth',   easylockdown.jq(this).attr('data-eld-loc-auth'))
+                    ;
+                  }
+                });
+                easylockdown.jq('.easylockdown-item-selector').remove();
+                easylockdown.hideAllLinks();
+              }
+
+              if( easysearch.jq('.easysearch-paginate-more:first a').length ) {
+                easysearch.jq('.easysearch-paginate-more:first a').click();
+              } else {
+                easysearch.jq(".easysearch-hidden-item").removeClass('easysearch-hidden-item');
+              }
+            },
+            dataType: "html"
+        });
+      }
     },
 
     initPapaparse: function()
@@ -1778,6 +2003,11 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         }
       });
     }
+  }
+
+  if( typeof document.registerElement == 'function' ) {
+    var easysearchHolder = Object.create(HTMLElement.prototype);
+    document.registerElement("easysearch-holder", { prototype: easysearchHolder });
   }
 
   easysearch.loadLink('//nexusmedia-ua.github.io/cdn/easysearch/externals/frontend/plugin.css');
