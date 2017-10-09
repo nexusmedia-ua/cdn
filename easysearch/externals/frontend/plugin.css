@@ -35,6 +35,9 @@
   margin: 0 !important;
   width: 100% !important;
 }
+.easysearch-select-holder select {
+  outline: 0 !important;
+}
 @supports (-ms-ime-align:auto) {
   .easysearch-select-holder select {
     cursor: default !important;
