@@ -674,6 +674,14 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         var event = document.createEvent('Event');
         event.initEvent('easylockdown_geoiso_allow', true, true);
         document.dispatchEvent(event);
+      },
+      error: function(response) {
+        easylockdown.currentISO = 'UN';
+        easylockdown.setCookie('easylockdownISO', easylockdown.currentISO, {expires: 10});
+
+        var event = document.createEvent('Event');
+        event.initEvent('easylockdown_geoiso_allow', true, true);
+        document.dispatchEvent(event);
       }
     });
   }

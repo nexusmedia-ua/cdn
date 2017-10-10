@@ -1940,7 +1940,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
     simpleParser: function( keepFilter )
     {
-      var start_time = performance.now();
       var searchRowName;
 
       easysearch.Papa.parse(easysearch.dbSRC, {
