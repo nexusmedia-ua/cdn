@@ -167,6 +167,7 @@
 
     function infoFromMeta() {
         var infoMeta = document.querySelector('meta.geo-ip');
+        if (!infoMeta) return false;
         var contentMetaJson = infoMeta.content;
         return JSON.parse(contentMetaJson);
     }
