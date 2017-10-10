@@ -33,7 +33,7 @@
         if (typeof config.rulesList !== 'undefined') {
             implementRules(config.rulesList);
         } else {
-            console.error('cant load rules');
+            //console.error('cant load rules');
         }
     }
 
@@ -167,7 +167,7 @@
 
     function infoFromMeta() {
         var infoMeta = document.querySelector('meta.geo-ip');
-        if (!infoMeta) return false;
+        if (!infoMeta) return false; 
         var contentMetaJson = infoMeta.content;
         return JSON.parse(contentMetaJson);
     }
