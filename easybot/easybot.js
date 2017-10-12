@@ -133,7 +133,7 @@
             document.querySelector('.easybot_messenger_header_title').innerHTML = '';
         }
 
-        if (userdata['showMessengerIcon'] === 'false') {
+        if (!userdata['small_icon']) {
             document.querySelector('.easybot_messenger_icon').style.display = 'none';
         }
 
