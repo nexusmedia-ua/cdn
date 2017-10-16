@@ -58,7 +58,7 @@ function checkStatus(status) {
         currentStatusText.innerText = 'disabled';
         currentStatusBtn.innerText = 'Enable';
         currentStatusBtn.classList.add('btn-primary');
-        displayOtherSettings(status);
+        displayOtherSettings(0);
     }
 }
 
@@ -72,10 +72,10 @@ function setEventListener() {
     wrapper.querySelector('.input-chat-icon-border-color').addEventListener('change', changeBorderColor);
     wrapper.querySelector('.input-title-live-chat').addEventListener('keyup', calcLettersInInput);
     for (var i = 0; i < messengerPositionBlocks.length; i++) {
-        messengerPositionBlocks[i].addEventListener('click', postPosition);
+        messengerPositionBlocks[i].addEventListener('click', postSettings);
     }
     for (var i = 0; i < messengerUserflowBlocks.length; i++) {
-        messengerUserflowBlocks[i].addEventListener('click', postUserflow);
+        messengerUserflowBlocks[i].addEventListener('click', postSettings);
     }
 }
 
