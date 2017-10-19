@@ -325,6 +325,29 @@ function downloadZip(btn, showConfirm)
         }
       }
     );
+  } else {
+    $(btn).closest('form').submit();
+  }
+}
+
+function showSubmissionNotice( type )
+{
+  if( !type ) type = 'none';
+  $('.form-tabs button').removeClass('active');
+  $('button[data-rel=' + type + ']').addClass('active');
+
+  $('.account-notice').hide();
+  $('#notice-' + type).show();
+
+  $('#dev-account').val(type);
+}
+
+function toggleDefaultAccount( el )
+{
+  if( $(el).prop('checked') ) {
+    $('label[for=use-default-accept]').show();
+  } else {
+    $('label[for=use-default-accept]').hide();
   }
 }
 
@@ -341,9 +364,9 @@ function resizeDevicePreview()
 {
   var $device = $('.device-container');
   if( $device.length ) {
-    var w = parseInt($device.parent().width());// - 40;
+    var w = parseInt($device.parent().width())
     $device.css('width', w);
-    $device.css('height', w * 2);
+    $device.css('height', w * 2 - 40);
     $('html, body').css('min-height', w * 2 + 50);
   }
 }
@@ -356,6 +379,19 @@ function removeImage(btn, devicePreviewEl)
   $container.children('.image-preview-holder').remove();
 
   if( devicePreviewEl ) $(devicePreviewEl).remove();
+}
+
+function readURLShowPreview( input, $holder )
+{
+  if( input.files && input.files[0] ) {
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $holder.attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
 }
 
 $.fn.extend({previewImplementation : function() {

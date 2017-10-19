@@ -242,7 +242,7 @@ input[type=radio] {
   top: 10.5%;
   bottom: 11.5%;
   left: 5.5%;
-  right: 5.5%;
+  right: 5.3%;
   background: white;
   border: 2px solid #dddddd;
   border-radius: 4px;
@@ -621,6 +621,7 @@ input[type=radio] {
 }
 .device-footer-svg > svg {
   padding-top: 10%;
+  margin-top: 0.3vw;
 }
 .device-footer-title {
   font-size: .8vw;
@@ -793,6 +794,10 @@ input.ui-autocomplete-input {
   font-weight: bold;
   letter-spacing: 1px;
 }
+.submission-content {
+  overflow: hidden;
+  margin-bottom: 50px;
+}
 .submission-content form {
   display: inline-block;
 }
@@ -955,4 +960,103 @@ td.progress-steps-container.current .progress-count {
 }
 #channels-parser-holder textarea {
   margin: 8px 0;
+}
+
+
+.form-tabs td {
+  padding: 0;
+}
+.form-tabs button {
+  display: block;
+  width: 100%;
+  border-radius: 0;
+  border-color: #3f4eae;
+  box-shadow: none !important;
+}
+.form-tabs .td-first button {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.form-tabs .td-last  button {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.Polaris-Banner {
+  text-align: left;
+}
+.form-elements + .form-elements,
+.Polaris-Banner + .form-elements {
+  margin-top: 2rem;
+}
+.Polaris-TextField textarea {
+  min-height: 85px;
+}
+.form-elements .Polaris-FormLayout__Item {
+  margin-top: 0;
+}
+.form-tabs button.active {
+  background: -webkit-linear-gradient(top, #3f4eae, #3f4eae);
+  background: linear-gradient(to bottom, #3f4eae, #3f4eae);
+  border-color: #38469b;
+}
+
+.account-notices-holder {
+  margin-top: 2rem;
+}
+.account-notices-holder .Polaris-ButtonGroup .Polaris-ButtonGroup__Item {
+  margin-left: 0.8rem;
+}
+.account-notice {
+  display: none;
+}
+#notice-none.account-notice {
+  display: block;
+}
+
+.or-checkbox-container {
+  margin: 1rem 0;
+  text-align: center;
+}
+.or-checkbox-holder {
+  display: inline-block;
+}
+.or-checkbox-holder p {
+  margin: 2rem 0;
+}
+.or-checkbox-container label {
+  text-align: left;
+}
+
+.form-elements .Polaris-FormLayout__Items {
+  align-items: normal;
+}
+.Polaris-Label__Text {
+  margin-bottom: 0;
+}
+.form-field-error {
+  display: block;
+  background: url('../images/error.svg') no-repeat left top;
+  padding-left: 24px;
+  color: #b22e34;
+  line-height: 22px;
+}
+
+.residue-symbols {
+  position: absolute;
+  z-index: 99;
+  bottom: 2px;
+  right: 2px;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.template-sdk_settings .one-whole .section-table > .next-card {
+  max-width: 800px;
+  margin: 40px auto;
+}
+.submission-sent-notify {
+  margin-top: 26px;
+}
+.errors-list {
+  margin-bottom: 20px;
 }
