@@ -99,6 +99,7 @@ function lockdownStatusToggle( id )
           select: function( event, ui ) {
             $holder.find('.ui-autocomplete-input').val( ui.item.label );
             event.preventDefault();
+            createQuickLinks();
           },
           focus: function (event, ui) {
             $holder.find('.ui-autocomplete-input').val( ui.item.label );
@@ -280,7 +281,7 @@ function createQuickLinks()
         if( handle ) _addQL('collections/' + handle + '/');
       });
 
-    } else if( primaryType == 'products' && (secondaryType == 'view-only' || secondaryType == 'product_view_onlys') ) {
+    } else if( primaryType == 'products' || (primaryType == 'view-only' && secondaryType == 'product_view_onlys') ) {
       var $sels = $tertiaryHolder.find('.content-data-holder select');
       $sels.each(function(i, el) {
         var selVal = $(el).val();
@@ -571,10 +572,11 @@ function disableContentVariations( el )
 
 function renderContentData( holder )
 {
-  var $holder   = $(holder);
-  var dataId    = $holder.attr('data-id');
-  var dataType  = $holder.attr('data-type');
-  var dataTitle = $holder.attr('data-title');
+  var $holder  = $(holder);
+  var dataId   = $holder.attr('data-id');
+  var dataType = $holder.attr('data-type');
+  var dataTitle  = $holder.attr('data-title');
+  var dataHandle = $holder.attr('data-handle');
 
   var contentType = dataType;
   if( contentType == 'collection_products' ) contentType = 'collections';
@@ -618,7 +620,7 @@ function renderContentData( holder )
     var $dataHolder = $holder.find('.lockdown-content-data-holder');
 
     var $select = $('<select class="">');
-    if( dataId && dataTitle ) $select.addClass('autocomplete-combobox').html('<option value="' + dataId + '">' + dataTitle + '</option>');
+    if( dataId && dataTitle ) $select.addClass('autocomplete-combobox').html('<option value="' + dataId + '" data-handle="' + dataHandle + '">' + dataTitle + '</option>');
     else $select.addClass('autocomplete-combobox').html('<option value=""></option>');
     $dataHolder.append($select).append('<div class="autocomplete-loader loader"><div class="next-spinner"><svg class="next-icon next-icon--20" preserveAspectRatio="xMinYMin"><circle class="next-spinner__ring" cx="50%" cy="50%" r="45%"></circle></svg></div></div>');
 
@@ -664,6 +666,7 @@ function addContentContainer()
   $('#add-content-container-holder').before( $container );
   $('.lockdown-content-container-remove-holder').show();
 
+  createQuickLinks();
   $('body.template-lockdown').animate({ scrollTop: $container.offset().top }, 500);
 }
 
@@ -677,6 +680,8 @@ function removeContentContainer( btn )
     }
     $container.remove();
   }
+
+  createQuickLinks();
 }
 
 function clearContentContainer( $container, ligthClear )

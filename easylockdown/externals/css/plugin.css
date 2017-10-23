@@ -210,8 +210,10 @@ input.ui-autocomplete-input {
 }
 
 #lockdown-customers-quicklinks > span {
+  display: block;
   padding: 3px 7px;
   user-select: initial;
+  word-wrap: break-word;
 }
 #lockdown-customers-quicklinks > span a {
   font-weight: bold;
