@@ -162,7 +162,7 @@ function getData() {
     }
     data['border_color'] = wrapper.querySelector('.input-chat-icon-border-color').value;
     if (wrapper.querySelector('.easybot_messenger_icon_tag').src.indexOf('scontent.xx.fbcdn.net') !== -1) {
-        data['icon_image'] = wrapper.querySelector('.easybot_messenger_icon_tag').src;
+        data['icon_image'] = '';
     } else {
         data['icon_image'] = wrapper.querySelector('.easybot_messenger_icon_tag').src;
     }
