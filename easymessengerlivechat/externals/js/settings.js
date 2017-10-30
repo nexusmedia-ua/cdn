@@ -18,6 +18,7 @@ function getCurrentSettings(data) {
             checkBorderColor(typeof settings.border_color === 'undefined' ? null : settings.border_color);
             checkChatTitle(typeof settings.chat_title === 'undefined' ? null : settings.chat_title);
             checkMessageText(typeof settings.message_text === 'undefined' ? null : settings.message_text);
+            checkReplyText(typeof settings.reply_text === 'undefined' ? null : settings.reply_text);
             checkDisplayDelay(typeof settings.display_timeout === 'undefined' ? null : settings.display_timeout);
             checkIcon(typeof settings.icon_image === 'undefined' ? null : settings.icon_image);
             checkStatus(typeof settings.status === 'undefined' ? null : settings.status);
@@ -28,6 +29,7 @@ function getCurrentSettings(data) {
             checkBorderColor();
             checkChatTitle();
             checkMessageText();
+            checkReplyText();
             checkDisplayDelay();
             checkIcon();
             checkStatus();
@@ -168,6 +170,7 @@ function getData() {
     }
     data['chat_title'] = wrapper.querySelector('.input-title-live-chat').value;
     data['message_text'] = wrapper.querySelector('.input-message-text').value;
+    data['reply_text'] = wrapper.querySelector('.input-reply-text').value;
     data['display_timeout'] = wrapper.querySelector('.input-display-timeout').value;
     data['small_icon'] = (wrapper.querySelector('.easybot_messenger_icon').getAttribute('data-visible_small_icon') === "false") ? 0 : 1;
 }
@@ -276,6 +279,14 @@ function checkMessageText(message) {
         wrapper.querySelector('.input-message-text').value = '';
     } else {
         wrapper.querySelector('.input-message-text').value = message;
+    }
+}
+
+function checkReplyText(message) {
+    if (typeof(message) === 'undefined' || message === '' || message === null) {
+        wrapper.querySelector('.input-reply-text').value = 'Write a reply...';
+    } else {
+        wrapper.querySelector('.input-reply-text').value = message;
     }
 }
 
