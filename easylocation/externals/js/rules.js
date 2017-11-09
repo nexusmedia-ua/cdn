@@ -33,6 +33,7 @@ function setStartPage() {
 
 function createRule(item) {
     var countries = item.countries,
+        exceptions = item.exceptions,
         ip = item.ip,
         countriesList = '',
         ipList = '';
@@ -44,6 +45,11 @@ function createRule(item) {
     for (var i = 0; i < countries.length; i++) {
         if (countries[i] !== "") {
             countriesList += '<span><span class="title country-title">' + countries[i] + '</span></span>'
+        }
+    }
+    for (var i = 0; i < exceptions.length; i++) {
+        if (exceptions[i] !== "") {
+            countriesList += '<span class="red"><span class="title exception-title">' + exceptions[i] + '</span></span>'
         }
     }
     for (var i = 0; i < ip.length; i++) {
@@ -68,7 +74,7 @@ function createRule(item) {
     } else {
         var linkValue = '<a target="_blank" href="' + item.link + '" class="redirect-value">' + item.link + '</a>';
     }
-    child.innerHTML = '<td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><span class="layout-item-status tooltip-holder layout-disabled" data-status="' + item.enabled + '" onclick="layoutStatusToggle(this);"><i class="fa fa-toggle-' + switchClass + '"></i></span></td><td class="input-countries"><div class="tag green-tag">' + values + '</div></td><td class="input-store-name"><span>' + item.store_name + '</span></td><td class="redirect-to-block">' + linkValue + '</td><td class="text-right nowrap button-save-and-delete"><button class="btn btn-edit">Edit</button><button class="btn delete-btn" onclick="deleteNode(this);">&times;</button></td>';
+    child.innerHTML = '<td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><span class="layout-item-status tooltip-holder layout-disabled" data-status="' + item.enabled + '" onclick="layoutStatusToggle(this);"><i class="fa fa-toggle-' + switchClass + '"></i></span></td><td class="input-countries"><div class="tag green-tag">' + values + '</div></td><td class="redirect-to-block-td"><div class="clear:both"><div class="input-store-name"><span>' + item.store_name + '</span></div></div><div class="clear:both"><div class="redirect-to-block">' + linkValue + '</div></div></td><td class="text-right button-save-and-delete"><button class="btn btn-edit">Edit</button><button class="btn delete-btn" onclick="deleteNode(this);">&times;</button></td>';
     if (item.link === 'about:blank') {
         child.setAttribute('data-is_blocked', true);
     }
@@ -91,6 +97,24 @@ function addCountryBlock() {
     if (singleValues !== '' && availableTags.indexOf(singleValues) !== -1 && countryExist === false) {
         var newSpan = document.createElement('span');
         newSpan.innerHTML = '<span class="title country-title">' + singleValues + '</span><span class="close">&times;</span>';
+        tagEditBlock.appendChild(newSpan);
+        newSpan.querySelector('.close').addEventListener('click', function (event) {
+            var toDelete = event.target.parentNode;
+            toDelete.parentNode.removeChild(toDelete);
+        });
+        tr.querySelector('.inputAutocomplete').value = '';
+    }
+}
+
+function addExceptionBlock() {
+    var tr = closest(this,'tr');
+    var singleValues = tr.querySelector('.inputAutocomplete').value;
+    var tagEditBlock = tr.querySelector('.tag-edit');
+    var countryExist = checkIfCountryAlreadyExist(tagEditBlock, singleValues);
+    if (singleValues !== '' && availableTags.indexOf(singleValues) !== -1 && countryExist === false) {
+        var newSpan = document.createElement('span');
+        newSpan.className = "red";
+        newSpan.innerHTML = '<span class="title exception-title">' + singleValues + '</span><span class="close">&times;</span>';
         tagEditBlock.appendChild(newSpan);
         newSpan.querySelector('.close').addEventListener('click', function (event) {
             var toDelete = event.target.parentNode;
@@ -184,8 +208,9 @@ function showRuleInEditMode(rule) {
     setRedirectValue(rule);
     addCountrySearchInput(rule);
     rule.querySelector('button.add-country-btn').addEventListener('click', addCountryBlock);
+    rule.querySelector('button.add-exception-btn').addEventListener('click', addExceptionBlock);
     rule.querySelector('button.add-ip-btn').addEventListener('click', addIpBlock);
-    rule.querySelector('.inputAutocomplete').addEventListener('keypress', addCountryBlock);
+    //rule.querySelector('.inputAutocomplete').addEventListener('keypress', addCountryBlock);
     rule.querySelector('input.inputAutocomplete').addEventListener('keydown', runAutocomplete);
 
     var prevState = rule.getAttribute('data-is_blocked') === 'true';
@@ -228,14 +253,19 @@ function saveValueEditebleRule(tr) {
     data.enabled = tr.querySelector('.layout-item-status').getAttribute('data-status');
     data.domain_redirect = (tr.getAttribute('data-is_domain_redirect') === 'true');
     data.countries = [];
+    data.exceptions = [];
     data.ip = [];
     var countryTitles = tr.querySelectorAll('.title');
     var k = 0,
         n = 0;
+        m = 0;
     for (var i = 0; i < countryTitles.length; i++) {
         if (countryTitles[i].classList.contains("country-title")) {
             data.countries[k] = countryTitles[i].innerHTML;
             k++;
+        } else if (countryTitles[i].classList.contains("exception-title")) {
+            data.exceptions[m] = countryTitles[i].innerHTML;
+            m++;
         } else if (countryTitles[i].classList.contains("ip-title")) {
             data.ip[n] = countryTitles[i].innerHTML;
             n++;
@@ -262,22 +292,22 @@ function saveValueEditebleRule(tr) {
 
 function changeBtnBlockStyle(item) {
     var btnParentBlock = closest(item,'td');
-    btnParentBlock.innerHTML = '<td class="text-right nowrap btn-block button-save-and-delete"><button class="btn delete-btn" onclick="cancelEdit();">Cancel</button>&nbsp;<button class="btn btn-primary save-btn">Save</button></td>';
+    btnParentBlock.innerHTML = '<td class="text-right btn-block button-save-and-delete"><button class="btn btn-primary save-btn">Save</button><button class="btn delete-btn cancel-btn" onclick="cancelEdit();">Cancel</button></td>';
     btnParentBlock.querySelector('button.save-btn').addEventListener('click', saveChangesToBase);
 }
 
 function setStoreNameToInput(rule) {
     var store = rule.querySelector('.input-store-name');
-    store.innerHTML = '<div class="quick-response-form"><input class="store-name" type="text" value="' + store.innerText + '"/></div>';
+    store.innerHTML = '<div class="quick-response-form"><input class="store-name" placeholder="Redirect title, for ex. US Store" type="text" value="' + store.innerText + '"/></div>';
     store.setAttribute('valign', 'top');
 }
 
 function setRedirectValue(rule) {
     var redirect = rule.querySelector('.redirect-value');
     var redirectValue = redirect.innerText;
-    var redirectRule = closest(redirect,'td');
+    var redirectRule = closest(redirect,'div');
     var blockButtonText = (redirectValue === 'about:blank') ? 'Unblock' : 'Block';
-    redirectRule.innerHTML = '<div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">' + blockButtonText + '</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" type="text" value="' + redirectValue + '"/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span>Domain Redirect</button><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div>';
+    redirectRule.innerHTML = '<div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">' + blockButtonText + '</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input placeholder="https://yourlocalstore.com/" class="redirect-link" type="text" value="' + redirectValue + '"/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span></button><label onclick="$(this).prev().click();">Domain redirect</label><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div>';
     redirectRule.setAttribute('valign', 'top');
     addTooltip(redirectRule);
     redirectRule.querySelector('.redirect-link').addEventListener('keyup', function (e) {
@@ -291,7 +321,7 @@ function addCountrySearchInput(rule) {
     var tagEditBlockTD = closest(tagEditBlock,'td');
     var addCountryInput = document.createElement("div");
     addCountryInput.className = 'quick-response-form';
-    addCountryInput.innerHTML = '<div class="ui-widget"><input placeholder="Region, country or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button> <button class="btn btn-primary add-ip-btn">Add IP</button>';
+    addCountryInput.innerHTML = '<div class="ui-widget"><input placeholder="Region, country or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button> <button class="btn btn-primary add-exception-btn">Except country</button> <button class="btn btn-primary add-ip-btn">Add IP</button>';
     tagEditBlockTD.insertBefore(addCountryInput, tagEditBlock);
     setCountryTitleFromList(tagEditBlockTD);
 }
@@ -348,7 +378,9 @@ function runAutocomplete() {
         source: availableTags,
         select: function (event, ui) {
             var addCountryBtn = $(this).parent().parent().find(".add-country-btn");
-            setTimeout(function() { addCountryBtn.trigger('click'); }, 10);
+            if ($(this).parent().parent().parent().find(".country-title").length == 0) {
+               setTimeout(function() { addCountryBtn.trigger('click'); }, 10);
+            }
         }
     });
 }
@@ -424,7 +456,7 @@ function deleteNode(node) {
 }
 
 function blockRule(button) {
-    var tr = button.parentNode.parentNode.parentNode.parentNode;
+    var tr = button.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode;
     var prevState = tr.getAttribute('data-is_blocked') === 'true';
     tr.setAttribute('data-is_blocked', !prevState);
     var div = tr.querySelector('.redirect-value');
@@ -485,7 +517,7 @@ function newRow() {
 function addNewRuleBlock(tbody) {
     var newtr = document.createElement("tr");
     newtr.setAttribute('data-is_edit_mode', 'true');
-    newtr.innerHTML = '<tr class="dragable"><td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><div class="layout-item-status tooltip-holder layout-enabled" data-status="1" onclick="layoutStatusToggle(this)"><i class="fa fa-toggle-on" onclick=""></i></div></td><td class="input-countries"><div class="quick-response-form"><div class="ui-widget"><input placeholder="Country, region or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button><button class="btn btn-primary add-ip-btn">Add IP</button></div><div class="tag green-tag tag-edit"></div></td><td valign="top" class="input-store-name"><div class="quick-response-form"><input class="store-name" type="text" placeholder="For ex. US Store"/></div></td><td valign="top" class="redirect-to-block"><div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">Block</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" type="text" value=""/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span>Domain Redirect</button><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div></td><td class="text-right nowrap btn-block button-save-and-delete"><button class="btn delete-btn" onclick="cancelEdit();">Cancel</button>&nbsp;<button class="btn btn-primary save-btn">Save</button></td></tr>';
+    newtr.innerHTML = '<tr class="dragable"><td class="text-left draggable"><i class="fa fa-bars handle"></i></td><td class="text-left switch"><div class="layout-item-status tooltip-holder layout-enabled" data-status="1" onclick="layoutStatusToggle(this)"><i class="fa fa-toggle-on" onclick=""></i></div></td><td class="input-countries"><div class="quick-response-form"><div class="ui-widget"><input placeholder="Country, region or IP..." class="inputAutocomplete"></div><button class="btn btn-primary add-country-btn">Add country</button><button class="btn btn-primary add-exception-btn">Except country</button><button class="btn btn-primary add-ip-btn">Add IP</button></div><div class="tag green-tag tag-edit"></div></td><td class="redirect-to-block-td"><div class="clear:both"><div class="input-store-name"><div class="quick-response-form"><input class="store-name" type="text" placeholder="Redirect title, for ex. US Store"/></div></div></div><div style="clear:both"><div valign="top" class="redirect-to-block"><div class="right-blocker"><div class="or">or&nbsp</div><div class="blocker-div"><button class="btn btn-primary btn-blocker" onclick="blockRule(this);">Block</button></div></div><div class="quick-response-form redirect-link-div"><div class="left-blocker"><input class="redirect-link" placeholder="https://yourlocalstore.com/" type="text" value=""/><button class="btn btn-primary domain-redirect-btn tooltip" onclick="domainRedirect(this);"><span class="tooltiptext"></span></button><label onclick="$(this).prev().click();">Domain redirect</label><span class="domain-redirect-text"><i><b>Domain Redirect</b> is enabled</i></span></div></div></div></div></td><td class="text-right btn-block button-save-and-delete"><button class="btn btn-primary save-btn">Save</button><button class="btn delete-btn cancel-btn" onclick="cancelEdit();">Cancel</button></td></tr>';
     visibilityOfBlock(tbody);
     tbody.appendChild(newtr);
     addTooltip(newtr);
@@ -494,7 +526,8 @@ function addNewRuleBlock(tbody) {
     });
     newtr.querySelector('button.add-country-btn').addEventListener('click', addCountryBlock);
     newtr.querySelector('button.add-ip-btn').addEventListener('click', addIpBlock);
-    newtr.querySelector(".inputAutocomplete").addEventListener('keypress', addCountryBlock);
+    newtr.querySelector('button.add-exception-btn').addEventListener('click', addExceptionBlock);
+    //newtr.querySelector(".inputAutocomplete").addEventListener('keypress', addCountryBlock);
     newtr.querySelector('input.inputAutocomplete').addEventListener('keydown', runAutocomplete);
     newtr.querySelector('button.save-btn').addEventListener('click', saveChangesToBase);
 }

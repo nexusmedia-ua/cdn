@@ -956,6 +956,16 @@ tr[data-is_blocked="true"] .redirect-link-div, tr[data-is_blocked="true"] .or{
     display: none!important;
 }
 
+.redirect-link-div label {
+    position: absolute;
+    left: 25px;
+    white-space: nowrap;
+    font-weight: normal;
+    cursor: pointer;    
+}
+
+.domain-redirect-btn { padding: 8px;  }
+
 .btn-edit {
     margin-right: 10px;
     margin-top: 4px;
@@ -991,19 +1001,23 @@ tr[data-is_blocked="true"] .redirect-link-div, tr[data-is_blocked="true"] .or{
 }
 
 td.input-countries{
-    width: 40%
+    width: 50%
 }
 
-@media (max-width:1110px) {
-    .input-countries button.add-country-btn{
-        top: inherit;
-        left: 0;
-    }
+.input-countries button.add-country-btn{
+    top: inherit;
+    left: 0;
+}
 
-    .input-countries button.add-ip-btn{
-        top: inherit;
-        left: 115px;
-    }
+.input-countries button.add-exception-btn{
+    top: inherit;
+    left: 110px;
+}
+
+.input-countries button.add-ip-btn{
+    top: inherit;
+    left: 235px;
+}
 
     .input-countries div.tag-edit{
         margin-top: 40px;
@@ -1024,46 +1038,78 @@ td.input-countries{
     .redirect-to-block .redirect-link-div {
         width: 70%
     }
-}
+
 
 @media (max-width:1000px) {
     .redirect-to-block .redirect-link-div {
         width: 60%
     }
-
 }
 
 @media (max-width:872px) {
 
     #thead { display: none; }
-    .next-card tr td { display: block; width: 100% !important; } 
-    .next-card tr td.draggable {
-        width: 40px !important;
-        float: left;
-        padding-top: 4px;        
+    .next-card tr td { display: block; width: 100% !important; border:none;} 
+    tr:not([data-is_edit_mode="true"]) .button-save-and-delete {
+        border-bottom: 1px #eee solid !important;  
+        text-align: left;
+        padding-top: 5px !important;   
+        padding-bottom: 25px;
+        margin-bottom: 15px;
     }
+    .next-card tr:last-child .button-save-and-delete {
+        border-bottom: none !important;    
+        padding-bottom: 5px;
+        margin-bottom: 0px;
+    }
+    .next-card tr td.draggable, .next-card tr td.switch { width:47% !important; padding-bottom: 20px; }
+    .next-card tr td.draggable { float: left; }
+    .next-card tr td.switch { float: right; text-align: right; }
+
 
     .redirect-to-block .redirect-link-div {
         width: 50%
     }
 
-    .input-countries button.add-ip-btn{
-        left: 0;
-        top: 80px;
+    .button-save-and-delete {
+        padding-top: 25px;
+        padding-right: 10px !important;
     }
 
-    .input-countries div.tag-edit{
-        margin-top: 70px;
+    .button-save-and-delete .save-btn {
+        float: right;
+        margin-left: 10px;
     }
+
 }
 
+@media (max-width:399px) {
+
+    .input-countries button.add-country-btn{
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .input-countries button.add-exception-btn{
+        left: 88px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .input-countries button.add-ip-btn{
+        left: 192px;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+}
 
 .input-store-name {
-    width: 13%;
 }
 
-.redirect-to-block {
-    width: 40%;
+.redirect-to-block-td {
+    width: 30%;
+    vertical-align: top;
 }
 
 .or {
@@ -1094,8 +1140,11 @@ td.input-countries{
 
 td.button-save-and-delete {
     vertical-align: initial !important;
-    width: 8%;
-    min-width: 135.33px;
+    min-width: 115px;
+}
+
+.button-save-and-delete .save-btn, .button-save-and-delete .cancel-btn {
+    width: 105px;
 }
 
 .quick-response-form button.add-ip-btn {
@@ -1112,6 +1161,7 @@ tr[data-is_edit_mode="false"]  .store-name-block {
     right: 0;
     bottom: -20px;
     text-align: center;
+    display: none !important;
 }
 
 td.button-save-and-delete {

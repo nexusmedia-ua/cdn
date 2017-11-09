@@ -33,7 +33,7 @@
         if (typeof config.rulesList !== 'undefined') {
             implementRules(config.rulesList);
         } else {
-            //console.error('cant load rules');
+            console.error('cant load rules');
         }
     }
 
@@ -130,20 +130,38 @@
 
     function compareCountries(rule) {
         var arrCountries = [];
+        var arrExceptionCountries = [];        
         if (Array.isArray(rule.countries)) {
             arrCountries = rule.countries
         } else {
             arrCountries = rule.countries.split(',');
         }
+        if (Array.isArray(rule.exceptions)) {
+            arrExceptionCountries = rule.exceptions
+        } else {
+            arrExceptionCountries = rule.exceptions.split(',');
+        }        
         if (checkIp(rule.ip) === true) {
             return true;
         }
+
+        var passed = false;
         for (var i = 0; i < arrCountries.length; i++) {
             var position = arrCountries[i];
             if (position === 'All countries' || checkCountry(position) || checkRegion(position)) {
-                return true;
+                passed = true;
             }
         }
+        if (passed) {
+            for (var i = 0; i < arrExceptionCountries.length; i++) {
+                var position = arrExceptionCountries[i];
+                if (position === 'All countries' || checkCountry(position) || checkRegion(position)) {
+                    return false;
+                }
+            }            
+            return true;
+        }
+
         return false;
     }
 
@@ -167,7 +185,6 @@
 
     function infoFromMeta() {
         var infoMeta = document.querySelector('meta.geo-ip');
-        if (!infoMeta) return false; 
         var contentMetaJson = infoMeta.content;
         return JSON.parse(contentMetaJson);
     }
