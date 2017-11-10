@@ -202,6 +202,7 @@ function getContentTitleByType( type )
   switch( type ) {
     case 'website':    return 'Whole Website'; break;
     case 'index':      return 'Home Page'; break;
+    case 'signup':     return 'Sign Up Page'; break;
     case 'cart':       return 'Cart Page'; break;
     case 'search':     return 'Search Page'; break;
     case 'page':       return 'Page'; break;
@@ -249,6 +250,9 @@ function createQuickLinks()
     } else if( primaryType == 'pages' ) {
       if( secondaryType == 'index' ) {
         _addQL('');
+
+      } else if( secondaryType == 'signup' ) {
+        _addQL('account/register');
 
       } else if( secondaryType == 'cart' ) {
         _addQL('cart');
@@ -427,6 +431,7 @@ function hideAndShow()
       $('#hide-links-section').toggle(showHideLinksByFilter || showHideLinksByJS);
       $('#hide-links-by-filters-holder').toggle(showHideLinksByFilter);
       $('#hide-links-by-js-holder').toggle(showHideLinksByJS);
+      if( !showHideLinksByJS ) $('#hide-links-by-js').prop('checked', false);
     }
 
     $('.customers-type-secondary').hide();
@@ -555,7 +560,10 @@ function disableContentVariations( el )
 
   var allOptionsSelector = [];
   var $sels = $holder.find('select');
-  if( !$sels.length ) return;
+  if( !$sels.length ) {
+    createQuickLinks();
+    return;
+  }
 
   $sels.each(function(i, el){
     $(el).parent().closest('.content-data-holder').attr('data-id', $(el).val());
@@ -566,8 +574,6 @@ function disableContentVariations( el )
     $(this).children('option[disabled]:not(option[data-disabled])').prop('disabled', false);
     $(this).children( allOptionsSelector.join(',') ).filter(':not(option[value="' + $(this).val() + '"])').prop('disabled', true);
   });
-
-  createQuickLinks();
 }
 
 function renderContentData( holder )
@@ -638,6 +644,7 @@ function addContentItem( btn )
 
   renderContentData( $holder );
   disableContentVariations( $holder );
+  createQuickLinks();
 }
 
 function removeContentItem( btn )
@@ -646,6 +653,7 @@ function removeContentItem( btn )
 
   $(btn).parent().closest('.content-data-holder').remove();
   disableContentVariations($holder);
+  createQuickLinks();
 }
 
 function addContentContainer()
@@ -1350,7 +1358,7 @@ function submitLockdownForm()
       return false; // break;
 
     } else if( primaryType == 'pages' ) {
-      if( secondaryType == 'index' || secondaryType == 'cart' || secondaryType == 'search' ) {
+      if( secondaryType == 'index' || secondaryType == 'signup' || secondaryType == 'cart' || secondaryType == 'search' ) {
         $form.append( $hidden.attr('name', 'lockdown_content[' + secondaryType + ']').val(1) );
 
       } else if( secondaryType == 'pages' ) {
