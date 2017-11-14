@@ -1286,7 +1286,8 @@
     text-decoration:none !important;
     text-transform: none !important;
   }
-  .eorder_featherlight small {
+  .eorder_featherlight small,
+  .eorder_featherlight small span {
     font-size: 11px !important;
   }
 
