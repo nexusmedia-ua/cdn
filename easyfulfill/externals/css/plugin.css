@@ -37,6 +37,9 @@ body > .wrapper {
   margin-bottom: 50px;
 }
 
+#orders-list-holder {
+  font-size: 13px !important;
+}
 #main-header {
   table-layout: fixed;
   margin-bottom: 10px;
@@ -52,7 +55,7 @@ body > .wrapper {
   margin-bottom: 0;
 }
 .main-header-imported-filter {
-  width: 210px;
+  width: 220px;
 }
 .main-header-imported-filter label {
   margin-bottom: 0;
@@ -60,9 +63,145 @@ body > .wrapper {
 #main-header p.note {
   margin: 0;
 }
-
 .main-header-import {
   width: 218px;
+}
+
+.order-date-col {
+  width: 164px;
+  cursor: pointer;
+}
+.order-date-col:hover .order-date-text {
+  color: #5c6ac4;
+}
+.order-date-arrow {
+  font: normal normal normal 14px/1 FontAwesome;
+}
+.order-date-arrow:before {
+  content: "\f0d7";
+  margin-left: 2px;
+}
+input#orders-sort:checked + .order-date-arrow:before {
+  content: "\f0d8";
+}
+
+.order-notification-col > div {
+  min-width: 40px;
+}
+.order-notification-col label {
+  display: inline;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+#main-header th.order-notification-col {
+  width: 166px;
+}
+.mobile-header {
+  display: none;
+}
+
+
+@media screen and (max-width: 820px) {
+  #main-header th {
+    display: block;
+    max-width: 100%;
+    margin: 0 0 8px;
+  }
+  .main-header-import,
+  .main-header-paid-filter,
+  .main-header-imported-filter {
+    width: auto;
+  }
+  .main-header-paid-filter label,
+  .main-header-imported-filter label,
+  .main-header-import .btn {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .main-header-import .btn {
+    max-width: 220px;
+  }
+  .order-date-col {
+    width: 110px;
+  }
+  .order-notification-col {
+    width: 40px;
+  }
+  .order-carriers-col select,
+  .order-item-carriers select {
+    max-width: 60px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  #orders-list-container > .next-card {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #orders-list-container #main-header {
+    padding: 0 10px;
+  }
+
+  #orders-list-holder > thead {
+    display: none;
+  }
+  #orders-list-holder tr {
+    display: block;
+    border-top: 20px solid #eee;
+    font-size: 0;
+  }
+  #orders-list-holder td {
+    display: block;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
+  .mobile-header {
+    display: inline-block;
+    width: 68px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .mobile-header label {
+    margin: 0;
+    font-weight: normal;
+  }
+  .order-item-notify .mobile-header {
+    width: auto;
+  }
+
+  #orders-list-holder td.order-item-carriers,
+  #orders-list-holder td.order-item-codes {
+    display: inline-block;
+    padding-bottom: 20px;
+  }
+  #orders-list-holder td.order-item-carriers {
+    width: 40%;
+  }
+  #orders-list-holder td.order-item-codes {
+    width: 60%;
+  }
+  .order-item-carriers .mobile-header,
+  .order-item-codes .mobile-header {
+    width: auto;
+  }
+  .order-item-codes select {
+    width: auto !important;
+    max-width: 100%;
+  }
+  .order-carriers-col select,
+  .order-item-carriers select {
+    width: auto !important;
+    max-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  #carrier-edit-container {
+    padding: 0;
+  }
 }
 
 .order-item-carriers select {
@@ -76,6 +215,7 @@ body > .wrapper {
 }
 .order-item-codes input {
   width: 100%;
+  min-width: 50px;
   margin: 0;
 }
 .order-item-codes .codes-holder {
@@ -175,11 +315,31 @@ td.carrier-item-actions a.btn {
 }
 .carriers-header-cell-status,
 .carrier-item-cell-status {
-  width: 48px;
+  width: 70px;
 }
 .carriers-header-cell-actions,
 .carrier-item-cell-actions {
   width: 128px;
+}
+
+@media screen and (max-width: 700px) {
+  .medium--one-half #carriers-holder .carrier-item-cell-name {
+    word-wrap: break-word;
+  }
+  .medium--one-half #carriers-holder .carriers-header-cell-actions,
+  .medium--one-half #carriers-holder .carrier-item-cell-actions {
+    width: 80px;
+    text-align: right;
+  }
+  .medium--one-half #carriers-holder .carrier-item-cell-actions .main-delete-carrier {
+    margin-top: 5px;
+  }
+}
+@media screen and (max-width: 520px) {
+  .carriers-header-cell-status,
+  .carrier-item-cell-status {
+    width: 52px;
+  }
 }
 
 .no-carrier-notice {
@@ -238,21 +398,4 @@ table.csv-example {
 }
 table.csv-example td {
   border: 1px solid #ccc;
-}
-
-.order-date-col {
-  cursor: pointer;
-}
-.order-date-col:hover .order-date-text {
-  color: #5c6ac4;
-}
-.order-date-arrow {
-  font: normal normal normal 14px/1 FontAwesome;
-}
-.order-date-arrow:before {
-  content: "\f0d7";
-  margin-left: 2px;
-}
-input#orders-sort:checked + .order-date-arrow:before {
-  content: "\f0d8";
 }

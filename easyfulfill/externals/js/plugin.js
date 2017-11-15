@@ -24,7 +24,7 @@ function editCarrier( cid )
   if( ajaxIsActive ) return;
   cid = cid || 0;
 
-  $('#carriers-container').addClass('large--two-thirds medium--two-thirds');
+  $('#carriers-container').addClass('large--two-thirds medium--one-half');
   $('#carrier-edit-form-holder').empty().show();
   $('#carrier-edit-loader').show();
   $('#carrier-edit-container').show();
@@ -53,7 +53,7 @@ function cancelEditCarrier()
 {
   $('#carrier-edit-container').hide();
   $('#carrier-edit-form-holder').empty();
-  $('#carriers-container').removeClass('large--two-thirds medium--two-thirds');
+  $('#carriers-container').removeClass('large--two-thirds medium--one-half');
 }
 
 function saveCarrier()
@@ -215,9 +215,9 @@ function addCode( el, code )
 
 
   var $row = $codesHolder.closest('tr');
-  var $sel = $row.find('.order-item-carriers > select:first').clone();
+  var $sel = $row.find('.order-item-carriers-wrapper > select:first').clone();
 
-  $row.find('.order-item-carriers > select:first').after( $sel );
+  $row.find('.order-item-carriers-wrapper > select:first').after( $sel );
 }
 
 function removeCode( el )
@@ -226,7 +226,7 @@ function removeCode( el )
   var index = $(el).parent().index();
 
   $(el).parent().remove();
-  $row.find('.order-item-carriers > select:eq(' + index + ')').remove();
+  $row.find('.order-item-carriers-wrapper > select:eq(' + index + ')').remove();
 }
 
 function setDefaultCarrier( el )
