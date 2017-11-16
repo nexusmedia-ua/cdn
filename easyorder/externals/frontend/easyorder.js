@@ -8,6 +8,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     jq: jQuery.noConflict(true),
     showProducts: true,
     showVendor: true,
+    reloadAfterClose: false,
 
     loadLink: function(url)
     {
@@ -568,6 +569,11 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
               deferred.resolve();
             });
           }
+
+          if( easyorder.reloadAfterClose ) {
+            window.location.reload(true);
+          }
+
           return deferred.promise();
         },
 
