@@ -1245,6 +1245,15 @@
 
 
 /* ------------------------------------------------------ start of plugin.css ----------------------------------------------- */
+  .easyorder-ios-fix-caret {
+    position: fixed;
+    width: 100%;
+  }
+  .easyorder-ios-fix-scroll,
+  .easyorder-ios-fix-scroll * {
+    -webkit-overflow-scrolling: touch;
+  }
+
   .eorder_featherlight .easyorder-text-center {
     text-align: center !important;
   }

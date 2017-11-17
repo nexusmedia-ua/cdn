@@ -390,9 +390,9 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         beforeOpen:   easyorder.jq.noop,                 /* Called before open. can return false to prevent opening of lightbox. Gets event as parameter, this contains all data */
         beforeContent: easyorder.jq.noop,                /* Called when content is loaded. Gets event as parameter, this contains all data */
         beforeClose:  easyorder.jq.noop,                 /* Called before close. can return false to prevent opening of lightbox. Gets event as parameter, this contains all data */
-        afterOpen:    easyorder.jq.noop,                 /* Called after open. Gets event as parameter, this contains all data */
+        afterOpen:    function(){ easyorder.iosFixPack(); },  /* Called after open. Gets event as parameter, this contains all data */
         afterContent: easyorder.jq.noop,                 /* Called after content is ready and has been set. Gets event as parameter, this contains all data */
-        afterClose:   easyorder.jq.noop,                 /* Called after close. Gets event as parameter, this contains all data */
+        afterClose:   function(){ easyorder.jq('body').removeClass('easyorder-ios-fix-caret').removeClass('easyorder-ios-fix-scroll'); },  /* Called after close. Gets event as parameter, this contains all data */
         onKeyUp:      easyorder.jq.noop,                 /* Called on key down for the frontmost featherlight */
         onResize:     easyorder.jq.noop,                 /* Called after new content and when a window is resized */
         type:         null,                   /* Specify type of lightbox. If unset, it will check for the targetAttrs value. */
@@ -827,6 +827,19 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( typeof fbPixel != 'undefined' && typeof fbq == 'function' ) {
         var params = {'value': fbPrice, 'currency': fbCurrency};
         fbq('track', 'Purchase', params);
+      }
+    },
+
+    iosFixPack: function()
+    {
+      var ua = navigator.userAgent;
+      var iOS = /iPad|iPhone|iPod/.test(ua);
+
+      if( iOS ) {
+        easyorder.jq('body').addClass('easyorder-ios-fix-scroll');
+
+        var iOS11 = /OS 11_0_1|OS 11_0_2|OS 11_0_3|OS 11_1|OS 11_1_1|OS 11_2/.test(ua);
+        if( iOS11 ) easyorder.jq('body').addClass('easyorder-ios-fix-caret');
       }
     }
   }
