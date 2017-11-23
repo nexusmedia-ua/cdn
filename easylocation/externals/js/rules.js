@@ -11,7 +11,8 @@ function getRules() {
 function renderRules(rulesJSON) {
     window.rulesJSON = rulesJSON;
     document.querySelector('#rules tbody').innerHTML = '';
-    document.querySelector('.next-card,.Polaris-Banner').style.display = 'block';
+    document.querySelector('.next-card').style.display = 'block';
+    document.querySelector('.Polaris-Banner').style.display = '';
     var rules = rulesJSON.content;
     if (rules === null || rules.length === 0) {
         setStartPage();
@@ -27,7 +28,8 @@ function setStartPage() {
     var mainBlock = document.querySelector('.section-table');
     if (mainBlock.querySelector('#tbody').rows.length - 1 === 0 || mainBlock.querySelector('#tbody').rows.length - 1 === -1) {
         document.querySelector('.Polaris-Page').style.display = 'block';
-        mainBlock.querySelector('.next-card,.Polaris-Banner').style.display = 'none';
+        mainBlock.querySelector('.next-card').style.display = 'none';
+        document.querySelector('.Polaris-Banner').style.display = 'none';
     }
 }
 
