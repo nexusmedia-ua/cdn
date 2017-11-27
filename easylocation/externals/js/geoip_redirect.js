@@ -108,7 +108,7 @@
 
     function setCookieLocation(cookieName, value) {
         var date = new Date();
-        date.setDate(date.getDate() + 1);
+        date.setHours(date.getHours() + 1);
         document.cookie = cookieName + '=' + escape(JSON.stringify(value)) + "; expires=" + date.toUTCString();
     }
 
