@@ -653,6 +653,21 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           }
         }
       }
+    },
+
+    clearData: function()
+    {
+      console.log('clearData...');
+      easylockdown.hideLinks = [];
+      easylockdown.hideLinksListByAuth = {'can': {}};
+      easylockdown.hideLinksListByLocation = {'can': {}, 'cannot': {}};
+
+      easylockdown.routeListByAuth =  {'can': []};
+      easylockdown.routeListByLocation =  {'can': [], 'cannot': []};
+
+      easylockdown.hidePriceListByLocation =  {'can': [], 'cannot': []};
+      easylockdown.hidePurchaseListByAuth =  {'can': []};
+      easylockdown.hidePurchaseListByLocation =  {'can': [], 'cannot': []};
     }
   }
 
