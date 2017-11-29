@@ -657,7 +657,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
     clearData: function()
     {
-      console.log('clearData...');
       easylockdown.hideLinks = [];
       easylockdown.hideLinksListByAuth = {'can': {}};
       easylockdown.hideLinksListByLocation = {'can': {}, 'cannot': {}};
@@ -702,7 +701,10 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
   }
 
   easylockdown.jq(document).ready(function(){
-    if( typeof InstantClick == 'object' ) InstantClick.on('change', easylockdown.initPage);
+    if( typeof InstantClick == 'object' ) InstantClick.on('change', function(){
+      easylockdown.initPage();
+      easylockdown.hideAllLinks();
+    });
 
     easylockdown.initPage();
   });
