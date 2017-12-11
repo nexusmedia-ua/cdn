@@ -133,12 +133,12 @@
         var arrExceptionCountries = [];        
         if (Array.isArray(rule.countries)) {
             arrCountries = rule.countries
-        } else {
+        } else if (typeof(rule.countries) != "undefined" && rule.countries !== null) {
             arrCountries = rule.countries.split(',');
         }
         if (Array.isArray(rule.exceptions)) {
             arrExceptionCountries = rule.exceptions
-        } else {
+        } else if (typeof(rule.exceptions) != "undefined" && rule.exceptions !== null) {
             arrExceptionCountries = rule.exceptions.split(',');
         }        
         if (checkIp(rule.ip) === true) {
