@@ -391,7 +391,7 @@ function hideAndShow()
 
   } else {
     var $redirectModeEl = $("input:radio[name='lockdown_redirect[mode]']:checked");
-    if( $redirectModeEl.length && $('.master-step-6').length ) $('.master-step-6').removeClass('master-step-holder').removeClass(' master-step-6');
+    if( $('.master-step-6').length && ($redirectModeEl.length || permissionType == 'authorized') ) $('.master-step-6').removeClass('master-step-holder').removeClass(' master-step-6');
 
     $('#how-to-lock-section').show();
     $('#additional-settings-section').show();
