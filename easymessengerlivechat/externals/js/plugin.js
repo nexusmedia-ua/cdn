@@ -1,222 +1,189 @@
-(function( $ ) {
-  var selected = false;
-  $.widget( "custom.combobox", {
-    _create: function() {
-      this.wrapper = $("<span>").addClass("fa custom-combobox").insertAfter( this.element );
-      this.element.hide();
-      this._createAutocomplete();
-    },
+function initConnectPage( initData )
+{
+  toggleStatusBar( initData.status );
 
-    _createAutocomplete: function() {
-      var selected = this.element.children(":selected");
-      var value = selected.val() ? selected.text() : "";
-      var $holder = this.wrapper.parent();
-        this.input = $( "<input>" )
-        .appendTo( this.wrapper )
-        .val( value )
-        .attr("title", "")
-        .attr("placeholder", "Type product title here")
-        .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
-        .autocomplete({
-          delay: 500,
-          minLength: 1,
-          source: $.proxy( this, "_source" ),
-          appendTo: '#' + $holder.attr('id'),
+  // userflow
+  if( typeof initData.userflow != 'undefined' ) {
+    $('.messenger-userflow[data-userflow="' + initData.userflow + '"]').addClass('selected');
+    $('.advanced-settings').toggle( (initData.userflow !== 2) );
+  }
 
-          select: function( event, ui ) {
-            event.preventDefault();
-            selected = true;
+  // message text
+  if( typeof initData.message_text != 'undefined' ) {
+    $('#input-message-text').val( initData.message_text );
+  }
 
-            var $a = $('#ac-li-item-' + ui.item.value + ' > a');
-            if( $a.length ) {
-              if( $a.hasClass('selected-product') ) $a.removeClass('selected-product');
-              else $a.addClass('selected-product');
-            }
+  // display timeout
+  if( typeof initData.display_timeout != 'undefined' ) {
+    $('#input-display-timeout').val( initData.display_timeout );
+  }
 
-            $holder.find('.ui-autocomplete-input').val( ui.item.label );
-            if( $($holder.parentNode).find('.product-' + ui.item.value).length ) {
-              removeAttachementProduct($holder.getElementsByClassName('product-' + ui.item.value)[0], $holder);
-            } else {
-              addAttachementProduct(ui.item, $holder);
-            }
-            $('.custom-combobox-input').val('');
-          },
+  // button icon
+  if( typeof initData.icon_image != 'undefined' && initData.icon_image ) {
+    $('.messenger-button-avatar').attr('src', initData.icon_image);
+  } else {
+    $('.messenger-button-avatar').attr('src', $('#fb-avatar').attr('src'));
+  }
 
-          focus: function (event, ui) {
-            event.preventDefault();
-          },
+  // button small icon
+  $('.easybot_messenger_icon').toggleClass( 'hidden', !initData.small_icon );
+  $('#show-messenger-icon').prop('checked', !!initData.small_icon );
 
-          search: function(event, ui) {
-            if( ajaxRequest !== null ) ajaxRequest.abort();
-            $holder.find('.autocomplete-loader').show();
-          },
+  // chat title
+  if( typeof initData.chat_title != 'undefined' ) {
+    $('#input-title-live-chat').val( initData.chat_title );
+  }
 
-          response: function(event, ui) {
-            $holder.find('.autocomplete-loader').hide();
-            $holder.find('.autocomplete-tooltip').show();
-          },
+  // border color
+  if( typeof initData.border_color != 'undefined' ) {
+    $('#input-chat-icon-border-color').val( initData.border_color );
+    $('.easybot-messenger-button').css('border-color', '#' + initData.border_color);
+  }
 
-          create: function () {
-            $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
-              var $li = $('<li>').attr('id', 'ac-li-item-' + item.value);
-              if( $($holder.parentNode).find('.product-' + item.value).length ) {
-                $li.append('<a class="selected-product"><i class="fa fa-check"></i><div class="ac-title">' + item.label + '</div></a>');
-              } else {
-                $li.append('<a><i class="fa fa-check"></i><div class="ac-title">' + item.label + '</div></a>');
-              }
-              return $li.appendTo(ul);
-            };
-          },
+  // reply text
+  if( typeof initData.reply_text != 'undefined' ) {
+    $('#input-reply-text').val( initData.reply_text );
+  }
 
-          close: function(event, ui) {
-            $holder.find('.autocomplete-tooltip').hide();
-          }
-        }).on('focus', function(){ $(this).autocomplete("search"); } );
+  // position
+  if( typeof initData.position != 'undefined' ) {
+    $('.messenger-position[data-position="' + initData.position + '"]').addClass('selected');
+  }
 
-        var originalCloseMethod = this.input.data('ui-autocomplete').close;
-        this.input.data("ui-autocomplete").close = function(event) {
-          if (!selected){
-            //close requested by someone else, let it pass
-            originalCloseMethod.apply( this, arguments );
-          }
-          selected = false;
-        };
 
-      this._on( this.input, {
-        autocompleteselect: function( event, ui ) {
-          ui.item.option.selected = true;
-          this._trigger( "select", event, {
-            item: ui.item.option
-          });
-        },
+  initSymbolCounter($('#input-title-live-chat'), 40);
+  initSymbolCounter($('#input-reply-text'), 40);
 
-        autocompletechange: "_removeIfInvalid"
-      });
-    },
+  // event listeners
+  $('body').on('click', '.messenger-userflow', changeUserflow);
+  $('body').on('click', '.messenger-position', changePosition);
+  $('body').on('click', '.enable-disable-button', changeCurrentStatus);
 
-    _source: function(text, callback){
-      var $select = this.element;
-      if( ajaxRequest !== null ) ajaxRequest.abort();
+  $('body').on('click', '.use-fb-icon', function(){
+    $('.messenger-button-avatar').attr('src', $('#fb-avatar').attr('src'));
+  });
 
-      var request = ajaxCall(
-        globalBaseUrl,
-        { 'task': 'ajax_controller', 'action': 'get_products', 'text': text.term }
-      );
+  $('body').on('change', '#show-messenger-icon', function(){
+    $('.easybot_messenger_icon').toggleClass('hidden', !this.checked);
+  });
 
-      if( request ) {
-        request.done(function(response) {
-          $select.empty();
+  $('body').on('change', '#input-chat-icon-border-color', function(){
+    $('.easybot-messenger-button').css('border-color', '#' + this.value);
+  });
 
-          if( response && response.data ) {
-            $.each(response.data, function(i, value){
-              var $opt = $('<option>').text(value.title).attr('value', value.value);
-              if( typeof value.image !== 'undefined' && typeof value.image.src !== 'undefined' ) $opt.attr('data-img', value.image.src);
-              $opt.appendTo($select);
-            });
-
-            callback( $select.children("option").map(function() {
-              return {
-                label: $(this).text(),
-                value: $(this).val(),
-                image: $(this).attr('data-img'),
-                option: this
-              };
-            }));
-          } else {
-            callback([]);
-          }
-        });
-      }
-    },
-
-    _removeIfInvalid: function( event, ui ) {
-      // Selected an item, nothing to do
-      if ( ui.item ) return;
-
-      // Search for a match (case-insensitive)
-      var value = this.input.val(),
-          valueLowerCase = value.toLowerCase(),
-          valid = false;
-
-      this.element.children("option").each(function() {
-        if ( $( this ).text().toLowerCase() === valueLowerCase ) {
-          this.selected = valid = true;
-          return false;
-        }
-      });
-
-      // Found a match, nothing to do
-      if ( valid ) return;
-
-      // Remove invalid value
-      //this.input.val("");
-      this.input.autocomplete( "instance" ).term = "";
-      this.element.val("");
-      this.element.parent().find('.autocomplete-loader').hide();
-    },
-
-    _destroy: function() {
-      this.wrapper.remove();
-      this.element.show();
+  $('body').on('change', '.upload-icon-input', function(){
+    if( this.files[0] ) {
+      var fr = new FileReader();
+      fr.addEventListener('load', function(){
+        $('.messenger-button-avatar').attr('src', fr.result);
+      }, false);
+      fr.readAsDataURL(this.files[0]);
     }
   });
-})( jQuery );
 
-
-function initAutocomplete($holder)
-{
-  var $comboboxHolder = $holder.find('.autocomplete-combobox');
-  $comboboxHolder.combobox($holder);
-}
-
-
-function addAttachementProduct(item, $holder)
-{
-  gSortedProductList.push(item.label);
-  gSortedProductList.sort();
-  var newRowPosition = gSortedProductList.indexOf(item.label);
-
-  var row = [
-    '<tbody class="product-' + item.value + '">',
-      '<tr>',
-        '<td style="width: 40px">',
-          '<div class="image-holder">',
-            '<img src="' + item.image + '" title="' + item.label + '">',
-          '</div>',
-        '</td>',
-        '<td>',
-          item.label,
-          '<input type="hidden" name="attachement[data][products][' + item.value + ']" value="' + item.label + '" />',
-        '</td>',
-        '<td style="width: 40px">',
-          '<button type="button" class="btn btn--plain btn--plain--flush-right" onclick="removeAttachementProduct(this)">',
-            '<i class="fa fa-close"></i>',
-          '</button>',
-        '</td>',
-      '</tr>',
-    '</tbody>'
-  ].join('');
-    var component = $($holder[0].parentNode.querySelector('.attachement-product-values'));
-    if (newRowPosition == 0) {
-        component.prepend(row);
-    } else if (newRowPosition >= gSortedProductList.length - 1) {
-        component.append(row);
-    } else {
-        $($holder[0].parentNode).find('.attachement-product-values tbody:eq(' + newRowPosition + ')').before(row);
-  }
-}
-
-function removeAttachementProduct(el, $holder)
-{
-  $(el).closest('tbody').remove();
-  if($holder) {
-      var component = $($holder[0].parentNode);
-  } else {
-      var component = $(el).closest('.attachement-product-values')
-  }
-    gSortedProductList = [];
-  component.find('.attachement-product-values input[type=hidden]').each(function(i, el){
-    gSortedProductList.push(el.value);
+  $('body').on('focus', 'input[type=text]', function(){
+    $(this).removeClass('error-field');
+    $('.form-field-error[rel=' + this.id + ']').hide();
   });
-  gSortedProductList.sort();
+}
+
+// +
+function toggleStatusBar( status )
+{
+  if( status === 1 ) {
+    $('.current-status-text').text('enabled');
+    $('.enable-disable-button').removeClass('Polaris-Button--primary').find('.button-label').text('Disable');
+
+  } else {
+    $('.current-status-text').text('disabled');
+    $('.enable-disable-button').addClass('Polaris-Button--primary').find('.button-label').text('Enable');
+  }
+
+  $('.settings-block').toggle( !!status );
+}
+
+// +
+function changeCurrentStatus()
+{
+  var status = $('.current-status-text').text() == 'disabled' ? 1 : 0;
+  toggleStatusBar( status );
+
+  saveSingleSetting('status', status);
+}
+
+// +
+function changeUserflow( e )
+{
+  var $el = $(e.currentTarget);
+  $('.messenger-userflow').removeClass('selected');
+  $el.addClass('selected');
+
+  var value = $el.attr('data-userflow') ? parseInt($el.attr('data-userflow')) : 0;
+  $('.advanced-settings').toggle( (value !== 2) );
+
+  saveSingleSetting('userflow', value);
+}
+
+// +
+function changePosition( e )
+{
+  var $el = $(e.currentTarget);
+  $('.messenger-position').removeClass('selected');
+  $el.addClass('selected');
+
+  var value = $el.attr('data-position') ? $el.attr('data-position') : 'bottom';
+
+  saveSingleSetting('position', value);
+}
+
+// +
+function saveSingleSetting( field, value )
+{
+  var request = ajaxCall(
+    globalBaseUrl,
+    { task : 'ajax_controller', action: 'update_single_setting', field: field, value: value },
+    { disabled_block: '.template-connect > .wrapper' },
+    successNotification,
+    failtureNotification
+  );
+}
+
+// +
+function saveSeveralSettings()
+{
+  if( $.trim($('#input-title-live-chat').val()) == '' ) {
+    $('#input-title-live-chat').addClass('error-field');
+    $('.form-field-error[rel=input-title-live-chat]').show();
+    return false;
+  }
+
+  var settings = {};
+
+  settings['message_text'] = $('#input-message-text').val();
+  settings['display_timeout'] = $('#input-display-timeout').val();
+
+  settings['icon_image'] = $('.messenger-button-avatar').attr('src').indexOf('scontent.xx.fbcdn.net') === -1 ? $('.messenger-button-avatar').attr('src') : '';
+  settings['small_icon'] = $('#show-messenger-icon').prop('checked') ? 1 : 0;
+
+  settings['chat_title'] = $('#input-title-live-chat').val();
+  settings['border_color'] = $('#input-chat-icon-border-color').val();
+  settings['reply_text'] = $('#input-reply-text').val();
+
+  var request = ajaxCall(
+    globalBaseUrl,
+    { task : 'ajax_controller', action: 'update_several_settings', settings: settings },
+    { disabled_block: '.template-connect > .wrapper' },
+    successNotification,
+    failtureNotification
+  );
+}
+
+function successNotification()
+{
+  ShopifyApp.flashNotice("Settings successfully saved.");
+}
+
+function failtureNotification()
+{
+  ShopifyApp.flashError("Please try later");
 }

@@ -100,6 +100,21 @@ function getRandomInt(min, max)
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+function initSymbolCounter( $holder, max )
+{
+  function _initSymbolCounter()
+  {
+    var text = $holder.val();
+    var residue = (text.length < max) ? max - text.length : 0;
+
+    $holder.parent().find('.residue-symbols').text(residue);
+    if( text.length > max ) return false;
+  }
+
+  _initSymbolCounter();
+  $holder.keyup(_initSymbolCounter);
+}
+
 function checkboxToggle(checkbox, el)
 {
   if( checkbox.checked ) $(el).show();

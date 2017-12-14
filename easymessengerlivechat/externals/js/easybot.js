@@ -2,8 +2,27 @@
 
     var container = null;
     window.userdata = getInfoFromMeta();
-    userdata['fbPageUrl'] = 'https://www.facebook.com/' + window.userdata.social_page_id + '/';
-    userdata['data-hash'] = '01234567890';
+
+    if( window.userdata === false ) {
+        var chatHolder = document.querySelector('div.easybot-chat');
+        if( chatHolder ) {
+            (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                  if (d.getElementById(id)) {return;}
+                  js = d.createElement(s); js.id = id;
+                  js.src = "//connect.facebook.net/en_US/sdk.js";
+                  fjs.parentNode.insertBefore(js, fjs);
+                }(document, 'script', 'facebook-jssdk')
+            );
+
+            window.fbAsyncInit = function() {
+                FB.init({ appId: chatHolder.getAttribute('app_id'), xfbml: true, version: 'v2.11' });
+            }
+        }
+    } else {
+        userdata['fbPageUrl'] = 'https://www.facebook.com/' + window.userdata.social_page_id + '/';
+        userdata['data-hash'] = '01234567890';
+    }
 
     function createCookie(name,value,days) {
         var expires = "";
@@ -181,7 +200,7 @@
     }
 
     function clickChatButton() {
-        if (window.userdata['userflow'] === '1' || navigator.appVersion.indexOf('Android') !== -1 || navigator.appVersion.indexOf('iPhone') !== -1) {
+        if (window.userdata['userflow'] == '1' || navigator.appVersion.indexOf('Android') !== -1 || navigator.appVersion.indexOf('iPhone') !== -1) {
             window.open('http://m.me/' + window.userdata['social_page_id'], '_newtab');
             closeEasybotChatTextBlock();
         } else {
@@ -370,7 +389,7 @@
             op += 0.1;
             if (op >= 1) {
                 clearInterval(timer);
-            } 
+            }
         }, 10);
     }
 
