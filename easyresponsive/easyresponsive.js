@@ -144,14 +144,20 @@ documentReady(function(){
 
     var resizeVideos = function() {
       er.each(videos, function(video) {
+        var olddisplay = video.parentElement.style.display;
+        video.parentElement.style.display = "block";
         var newWidth = video.parentElement.offsetWidth;
+        video.parentElement.style.display = olddisplay;
         er.resize(video, newWidth);
       });
     }; // End of resizing all videos
 
     var resizeVideosImmediately = function() {
       er.each(videos, function(video) {
+        var olddisplay = video.parentElement.style.display;
+        video.parentElement.style.display = "block";
         var newWidth = video.parentElement.offsetWidth;
+        video.parentElement.style.display = olddisplay;
         er.resizeImmediately(video, newWidth);
       });
     }; // End of resizing all videos

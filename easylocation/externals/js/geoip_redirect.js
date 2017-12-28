@@ -214,7 +214,7 @@
     function addPopupStyles(wrapperDiv) {
         wrapperDiv.style.height = '100%';
         wrapperDiv.style.width = '100%';
-        wrapperDiv.style.position = 'absolute';
+        wrapperDiv.style.position = 'fixed';
         wrapperDiv.style.zIndex = '9999999999999';
         wrapperDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
     }
