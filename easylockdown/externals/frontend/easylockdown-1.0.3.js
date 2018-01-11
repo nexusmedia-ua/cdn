@@ -396,13 +396,17 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
       if( !easylockdown.priceBlocks || !easylockdown.priceBlocks.length ) return;
 
       if( linkText && linkUrl ) {
-        if( linkUrl == 'login' ) linkUrl = '/account/login?return_to=' + window.location.href;
+        if( linkUrl != '#' ) {
+          if( linkUrl == 'login' ) linkUrl = '/account/login?return_to=' + window.location.href;
+          var link = '<a href="javascript:void(0)" class="easylockdown-price-link" onclick="easylockdown.router(\'' + linkUrl + '\');">' + linkText + '</a>';
+        } else {
+          var link = '<span class="easylockdown-price-text">' + linkText + '</span>';
+        }
 
-        var link = '<a href="javascript:void(0)" class="easylockdown-price-link" onclick="easylockdown.router(\'' + linkUrl + '\');">' + linkText + '</a>';
         easylockdown.priceBlocks.each(function(){
-          easylockdown.jq(this).before( link );
-          easylockdown.jq(this).remove();
+          easylockdown.jq(this).replaceWith( link );
         });
+
       } else {
         easylockdown.priceBlocks.remove();
       }
@@ -485,8 +489,8 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
           if( $collectionsItemsList.length ) {
             $collectionsItemsList.each(function(i, item){
               var $item = easylockdown.jq(item);
-              var auth = $item.attr('data-eld-loc-auth');
-              var can = $item.attr('data-eld-loc-can');
+              var auth  = $item.attr('data-eld-loc-auth');
+              var can   = $item.attr('data-eld-loc-can');
               var cannot = $item.attr('data-eld-loc-cannot');
 
               if( auth && auth.length) {
@@ -676,7 +680,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
   if( iso ) {
     easylockdown.currentISO = iso;
 
-  } else {
+  } else if( typeof easylockdownLocationDisabled == 'undefined' || !easylockdownLocationDisabled ) {
     easylockdown.jq.ajax({
       type: 'post',
       url: easylockdown.geosrc,
@@ -690,6 +694,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         document.dispatchEvent(event);
       },
       error: function(response) {
+        alert('UN');
         easylockdown.currentISO = 'UN';
         easylockdown.setCookie('easylockdownISO', easylockdown.currentISO, {expires: 10});
 
