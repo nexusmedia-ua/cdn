@@ -48,6 +48,15 @@ body > .wrapper {
   padding: 0 8px;
   border: none;
 }
+.main-header-orders-per-page {
+  width: 130px;
+}
+.main-header-orders-per-page p.note {
+  line-height: 28px;
+}
+#orders-per-page-form select {
+  display: inline-block;
+}
 .main-header-paid-filter {
   width: 190px;
 }
@@ -102,7 +111,7 @@ input#orders-sort:checked + .order-date-arrow:before {
 }
 
 
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 950px) {
   #main-header th {
     display: block;
     max-width: 100%;
