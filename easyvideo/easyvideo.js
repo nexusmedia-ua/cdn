@@ -288,7 +288,7 @@ ev$(function(){
       ev$('.product-single > .grid__item .feature-row__image, .product-single > .product-single__hero .product-single__image-wrapper  .product-single__image').each(function(){
         var video_link = ev$(this).attr('alt');
         ev$(this).parent().css('overflow', "vidible").css("height", "auto").css("width", "100%");
-        flexwidth = ev$(this).parent().width();
+        flexwidth = ev$(this).width();
         console.log(flexwidth);
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
