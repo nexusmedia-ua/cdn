@@ -285,7 +285,7 @@ ev$(function(){
       });       
 
       // Fix for Debut, Minimal theme
-      ev$('.product-single > .grid__item .feature-row__image, .product-single > .product-single__hero .product-single__image-wrapper > .product-single__image').each(function(){
+      ev$('.product-single > .grid__item .feature-row__image, .product-single > .product-single__hero .product-single__image-wrapper  .product-single__image').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
