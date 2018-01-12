@@ -269,7 +269,7 @@ ev$(function(){
       });   
 
       // Fix for Blockshop theme
-      ev$('.photos > .container > .photo > img, .transform-to-video img, img.transform-to-video, .product-single > .grid__item .feature-row__image').each(function(){
+      ev$('.photos > .container > .photo > img, .transform-to-video img, img.transform-to-video').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
@@ -319,6 +319,7 @@ ev$(function(){
 
   	  }
 
+  	  console.log(force_to_evpb);
   	  if (force_to_evpb) {
   	  	var ev_main_img_url = "#evpb";
   	  } else {
