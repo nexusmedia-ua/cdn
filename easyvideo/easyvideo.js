@@ -355,6 +355,7 @@ ev$(function(){
   	  	var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
         var ev_product_img_url = ev$("#easyvideo_featured_product_image").attr("content");  	  	
   	  }
+  	  console.log(ev_main_img_url);
       var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
       var ev_main_img = ev$( ev_main_img_selector );
 
