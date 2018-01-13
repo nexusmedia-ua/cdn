@@ -407,7 +407,7 @@ ev$(function(){
       });
 
       // Fix for MagicZoom
-      ev$("body").on("touchend click", ".MagicToolboxSelectorsContainer a", function () {
+      ev$(".MagicToolboxSelectorsContainer a").on("touchend click", function () {
         setTimeout(function(){
           //console.log('MagicToolboxSelectorsContainer a Touchend Fired: ' + ev_video_is_show);
           if (!ev_video_is_show) {
@@ -517,26 +517,26 @@ ev$(function(){
           }          
         }
 
-        ev$("body").on("touchmove", "img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']", function(){
+        ev$("img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']").on("touchmove", function(){
           dragging = true;
         });
-        ev$("body").on("touchstart", "img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']", function(){
+        ev$("img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']").on("touchstart", function(){
           dragging = false;
         });
 
-        ev$("body").unbind("click").on("touchend click", "img[alt*='youtube.com/watch']", function(e){
+        ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
           evShowPopupVideo(ev$(this), "youtube");
         });
 
-        ev$("body").on("touchend click", "img[alt*='youtu.be/']", function(e){
+        ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
           evShowPopupVideo(ev$(this), "youtu.be");
         });
 
-        ev$("body").on("touchend click", "img[alt*='//vimeo.com/']", function(e){
+        ev$("img[alt*='//vimeo.com/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
           evShowPopupVideo(ev$(this), "vimeo");
@@ -579,10 +579,10 @@ ev$(function(){
 
       } else {
 
-        ev$("body").on("touchmove", "img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']", function(){
+        ev$("img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']").on("touchmove", function(){
           dragging = true;
         });
-        ev$("body").on("touchstart", "img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']", function(){
+        ev$("img[alt*='youtube.com/watch'],img[alt*='youtu.be/'],img[alt*='//vimeo.com/']").on("touchstart", function(){
           dragging = false;
         });
 
@@ -599,7 +599,7 @@ ev$(function(){
             showVideoBlock(ev$);
         }
 
-        ev$("body").on("touchend click","img[alt*='youtu.be/']", function(){
+        ev$("img[alt*='youtu.be/']").on("touchend click", function(){
           if (dragging) return;
           if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
             ev_video_is_show = true;
@@ -632,7 +632,7 @@ ev$(function(){
             showVideoBlock(ev$);
         }
 
-        ev$("body").on("touchend click", "img[alt*='youtube.com/watch']", function(){
+        ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
           if (dragging) return;
           if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
             ev_video_is_show = true;
@@ -648,7 +648,7 @@ ev$(function(){
         });
 
 
-        ev$("body").on("touchend click", "img[alt*='//vimeo.com/']", function(){
+        ev$("img[alt*='//vimeo.com/']").on("touchend click", function(){
           if (dragging) return;
           if (!ev$(this).is(ev_main_img_parent.find("img").first())) {
             ev_video_is_show = true;
