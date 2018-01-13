@@ -349,36 +349,33 @@ ev$(function(){
 
 
   	  if (force_to_evpb) {
-  	  	var ev_main_img_url = "#evpb";
-  	  	var ev_product_img_url = "#evpb";
+  	  	var ev_main_img = ev$("#evpb");
   	  } else {
-  	  	var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
-        var ev_product_img_url = ev$("#easyvideo_featured_product_image").attr("content");  	  	
-  	  }
-  	  console.log(ev_main_img_url);
-      var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
-      var ev_main_img = ev$( ev_main_img_selector );
+ 
+	      var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
+	      var ev_main_img = ev$( ev_main_img_selector );
 
-      if (ev_main_img.length < 2) {
-        ev_main_img_selector = "img[src*='" + ev_product_img_url + "']";
-        ev_main_img = ev$( ev_main_img_selector );
-      }
+	      if (ev_main_img.length < 2) {
+	        ev_main_img_selector = "img[src*='" + ev_product_img_url + "']";
+	        ev_main_img = ev$( ev_main_img_selector );
+	      }
 
-      if (ev$('.easyvideo_main_image').length > 0) {
-        ev_main_img_selector = '.easyvideo_main_image';
-        ev_main_img = ev$( ev_main_img_selector );
-      } else if (ev$("#easyvideo_selector").attr("content") != "") {
-        ev_main_img_selector = ev$("#easyvideo_selector").attr("content") ;
-        ev_main_img = ev$( ev_main_img_selector );
-        if (ev_main_img.length < 1) return false;
-        if (ev_main_img.length >= 2) {
-          ev_main_img = ev_main_img.first();
-        }
-      } else {
-        if (ev_main_img.length >= 2) {
-          ev_main_img = ev_main_img.first();
-        } else return false;
-      }
+	      if (ev$('.easyvideo_main_image').length > 0) {
+	        ev_main_img_selector = '.easyvideo_main_image';
+	        ev_main_img = ev$( ev_main_img_selector );
+	      } else if (ev$("#easyvideo_selector").attr("content") != "") {
+	        ev_main_img_selector = ev$("#easyvideo_selector").attr("content") ;
+	        ev_main_img = ev$( ev_main_img_selector );
+	        if (ev_main_img.length < 1) return false;
+	        if (ev_main_img.length >= 2) {
+	          ev_main_img = ev_main_img.first();
+	        }
+	      } else {
+	        if (ev_main_img.length >= 2) {
+	          ev_main_img = ev_main_img.first();
+	        } else return false;
+	      }
+	  }
 
 
       var ev_main_img_parent = ev_main_img.parent();
