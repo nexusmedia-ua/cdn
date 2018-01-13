@@ -349,8 +349,13 @@ ev$(function(){
 
 
   	  if (force_to_evpb) {
+  	  	var ev_main_img_url = "#evpb";
+  	  	var ev_product_img_url  = "#evpb";
   	  	var ev_main_img = ev$("#evpb");
   	  } else {
+
+	  	  var ev_main_img_url = ev$("#easyvideo_featured_main_image").attr("content");
+	      var ev_product_img_url = ev$("#easyvideo_featured_product_image").attr("content");  	  	
  
 	      var ev_main_img_selector = "img[src*='" + ev_main_img_url + "']";
 	      var ev_main_img = ev$( ev_main_img_selector );
