@@ -180,6 +180,7 @@
     }
 
     function pureRedirect(item) {
+        if( window.frameElement && window.frameElement.id && window.frameElement.id == 'theme-editor-iframe' ) return;
         window.location = item.link;
     }
 
