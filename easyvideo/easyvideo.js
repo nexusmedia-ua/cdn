@@ -323,7 +323,7 @@ ev$(function(){
       // Fix for Supply theme
       ev$('.product-photo-container > .product__image-wrapper > img').each(function(){
         var video_link = ev$(this).attr('alt');
-        flexwidth = ev$(this).parent().width();
+        flexwidth = ev$(this).parent().parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
           ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim().split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', video_link.replace("https://www.youtube.com/watch?v=", "").trim().split('&')[0].split('?')[0]) + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
