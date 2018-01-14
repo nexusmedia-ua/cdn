@@ -359,9 +359,12 @@ ev$(function(){
         var video_link = ev$(this).attr('alt');
         if (video_link) {
           force_to_evpb = true;
-          console.log('evpb = true');
         } 
       });
+
+      if (ev$('#easyvideo_popup').attr('content') == "1") {
+      	force_to_evpb = true;
+      }
 
 
   	  if (force_to_evpb) {
