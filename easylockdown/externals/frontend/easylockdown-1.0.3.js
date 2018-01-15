@@ -8,7 +8,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
     jq: jQuery.noConflict(true),
     checkPasswordUrl: '//shopifier.net/app/easylockdown/check_password.php',
     geosrc: 'https://apps.nexusmedia-ua.com/geoip/',
-    currentISO: '',
+    currentISO: 'UN',
     hideLinks: [],
     hideLinksListByAuth: {'can': {}},
     hideLinksListByLocation: {'can': {}, 'cannot': {}},
@@ -676,6 +676,7 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
 
   document.addEventListener = document.addEventListener || function(e, f){ document.attachEvent('on' + e, f); };
 
+  // init current location
   var iso = easylockdown.getCookie('easylockdownISO');
   if( iso ) {
     easylockdown.currentISO = iso;
@@ -694,8 +695,6 @@ return(!i||i!==r&&!b.contains(r,i))&&(e.type=o.origType,n=o.handler.apply(this,a
         document.dispatchEvent(event);
       },
       error: function(response) {
-        alert('UN');
-        easylockdown.currentISO = 'UN';
         easylockdown.setCookie('easylockdownISO', easylockdown.currentISO, {expires: 10});
 
         var event = document.createEvent('Event');
