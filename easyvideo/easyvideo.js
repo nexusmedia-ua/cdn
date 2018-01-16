@@ -305,7 +305,7 @@ ev$(function(){
       // Fix for Pop theme
       ev$('.product-single .product-single__photos .product-single__image-wrapper .product-single__image').each(function(){
         var video_link = ev$(this).attr('alt');
-        flexwidth = ev$(this).parent().parent().width();
+        flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         ev$(this).parent().css('overflow', "vidible").css("height", "auto");
         if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
