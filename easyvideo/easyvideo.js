@@ -287,7 +287,7 @@ ev$(function(){
       // Fix for Simple theme
       ev$('.product-single .product-single__featured-image-wrapper .product-single__photos img').each(function(){
         var video_link = ev$(this).attr('alt');
-        flexwidth = ev$(this).parent().parent().width();
+        flexwidth = ev$(this).parent().parent().parent().width();
         console.log(flexwidth);
         if (parseInt(flexwidth) == 0) flexwidth = 505;
         ev$(this).parent().css('overflow', "vidible").css("height", "auto");
