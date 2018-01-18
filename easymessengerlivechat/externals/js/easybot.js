@@ -6,8 +6,8 @@
     if( window.userdata === false ) {
         var chatAppId  = document.querySelector('div.easybot-chat');
         if( chatAppId ) {
-            var chatHolder = document.querySelector('div.easybot-fb-customerchat');
-            if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
+            //var chatHolder = document.querySelector('div.easybot-fb-customerchat');
+            //if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
 
             (function(d, s, id){
                 var js, fjs = d.getElementsByTagName(s)[0];
@@ -19,6 +19,8 @@
             );
 
             window.fbAsyncInit = function() {
+                var chatHolder = document.querySelector('div.easybot-fb-customerchat');
+                if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
                 FB.init({ appId: chatAppId.getAttribute('app_id'), xfbml: true, version: 'v2.11' });
             }
         }
