@@ -4,8 +4,11 @@
     window.userdata = getInfoFromMeta();
 
     if( window.userdata === false ) {
-        var chatHolder = document.querySelector('div.easybot-chat');
-        if( chatHolder ) {
+        var chatAppId  = document.querySelector('div.easybot-chat');
+        if( chatAppId ) {
+            var chatHolder = document.querySelector('div.easybot-fb-customerchat');
+            if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
+
             (function(d, s, id){
                 var js, fjs = d.getElementsByTagName(s)[0];
                   if (d.getElementById(id)) {return;}
@@ -16,7 +19,7 @@
             );
 
             window.fbAsyncInit = function() {
-                FB.init({ appId: chatHolder.getAttribute('app_id'), xfbml: true, version: 'v2.11' });
+                FB.init({ appId: chatAppId.getAttribute('app_id'), xfbml: true, version: 'v2.11' });
             }
         }
     } else {
