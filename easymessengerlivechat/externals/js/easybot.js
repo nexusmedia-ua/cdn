@@ -6,8 +6,11 @@
     if( window.userdata === false ) {
         var chatAppId  = document.querySelector('div.easybot-chat');
         if( chatAppId ) {
-            //var chatHolder = document.querySelector('div.easybot-fb-customerchat');
-            //if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
+            window.fbAsyncInit = function() {
+                var chatHolder = document.querySelector('div.easybot-fb-customerchat');
+                if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
+                FB.init({ appId: chatAppId.getAttribute('app_id'), xfbml: true, version: 'v2.11' });
+            }
 
             (function(d, s, id){
                 var js, fjs = d.getElementsByTagName(s)[0];
@@ -17,12 +20,6 @@
                   fjs.parentNode.insertBefore(js, fjs);
                 }(document, 'script', 'facebook-jssdk')
             );
-
-            window.fbAsyncInit = function() {
-                var chatHolder = document.querySelector('div.easybot-fb-customerchat');
-                if( chatHolder ) chatHolder.setAttribute('class', 'fb-customerchat');
-                FB.init({ appId: chatAppId.getAttribute('app_id'), xfbml: true, version: 'v2.11' });
-            }
         }
     } else {
         userdata['fbPageUrl'] = 'https://www.facebook.com/' + window.userdata.social_page_id + '/';
