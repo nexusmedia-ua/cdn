@@ -427,12 +427,13 @@ ev$(function(){
   	  }
 
       // Fix for Brooklyn theme - popup mode
+      /*
       ev$('.product-single__photos .product-single__photo').each(function(){
         var video_link = ev$(this).attr('alt');
         if (video_link) {
           force_to_evpb = true;
         } 
-      });
+      });*/
 
       if (ev$('#easyvideo_popup').attr('content') == "1") {
       	force_to_evpb = true;
