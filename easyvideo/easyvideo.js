@@ -427,7 +427,7 @@ ev$(function(){
 
       ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').not('.slide-main-nav img').each(function(){
         var video_link = ev$(this).attr('alt');
-        if (typeof(video_link) !== undefined) {
+        if (typeof(video_link) !== "undefined") {
 	        flexwidth = ev$(this).parent().width();
 	        if (parseInt(flexwidth) == 0) flexwidth = 505;
 	        if ( video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
