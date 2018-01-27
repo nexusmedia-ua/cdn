@@ -425,7 +425,7 @@ ev$(function(){
         force_to_evpb = true;
       });  
 
-      ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').each(function(){
+      ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').not('.slide-main-nav img').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().width();
         if (parseInt(flexwidth) == 0) flexwidth = 505;
