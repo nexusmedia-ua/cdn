@@ -436,7 +436,7 @@ ev$(function(){
         force_to_evpb = true;
       });  
 
-      ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').not('.slide-main-nav img').each(function(){
+      ev$('.slick-slide > img, .swiper-slide > img').not('#previewsGallery img').not('.slide-main-nav img').not('.thumb img').each(function(){
         var video_link = ev$(this).attr('alt');
         if (typeof(video_link) !== "undefined") {
 	        flexwidth = ev$(this).parent().width();
