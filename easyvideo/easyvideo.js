@@ -262,7 +262,7 @@ ev$(function(){
       });  
 
       // Fix for Brooklyn theme
-      ev$('.product-single__photos .product-single__photo').not('#thumbnails img').not('#ProductPhotoImg').each(function(){
+      ev$('.product-single__photos .product-single__photo').not('#thumbnails img').not('#ProductPhotoImg').not('.main_photo').each(function(){
         var video_link = ev$(this).attr('alt');
         if (video_link) {
           flexwidth = ev$(this).parent().parent().width();
