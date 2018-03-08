@@ -243,7 +243,7 @@ ev$(function(){
       
 
       // Fix for Simple theme
-      ev$('.product-single .product-single__featured-image-wrapper .product-single__photos img').each(function(){
+      ev$('.product-single .product-single__featured-image-wrapper .product-single__photos img').not('.main_photo').each(function(){
         var video_link = ev$(this).attr('alt');
         flexwidth = ev$(this).parent().parent().parent().width();
         //console.log(flexwidth);
