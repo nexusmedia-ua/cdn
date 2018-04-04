@@ -661,19 +661,22 @@ ev$(function(){
         ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
-          setTimeout(function() { evShowPopupVideo(ev$(this), "youtube"); }, 100);
+          var slf = ev$(this);
+          setTimeout(function() { evShowPopupVideo(slf, "youtube"); }, 100);
         });
 
         ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
-          setTimeout(function() { evShowPopupVideo(ev$(this), "youtu.be"); }, 100);
+          var slf = ev$(this);
+          setTimeout(function() { evShowPopupVideo(slf, "youtu.be"); }, 100);
         });
 
         ev$("img[alt*='//vimeo.com/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
-          setTimeout(function() { evShowPopupVideo(ev$(this), "vimeo"); }, 100);
+          var slf = ev$(this);
+          setTimeout(function() { evShowPopupVideo(slf, "vimeo"); }, 100);
         });
 
         if (typeof $ == 'function') {
