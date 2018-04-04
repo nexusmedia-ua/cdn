@@ -661,19 +661,19 @@ ev$(function(){
         ev$("img[alt*='youtube.com/watch']").unbind("click").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
-          evShowPopupVideo(ev$(this), "youtube");
+          setTimeout(function() { evShowPopupVideo(ev$(this), "youtube"); }, 100);
         });
 
         ev$("img[alt*='youtu.be/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
-          evShowPopupVideo(ev$(this), "youtu.be");
+          setTimeout(function() { evShowPopupVideo(ev$(this), "youtu.be"); }, 100);
         });
 
         ev$("img[alt*='//vimeo.com/']").on("touchend click", function(e){
           if (dragging) return;
           e.preventDefault();
-          evShowPopupVideo(ev$(this), "vimeo");
+          setTimeout(function() { evShowPopupVideo(ev$(this), "vimeo"); }, 100);
         });
 
         if (typeof $ == 'function') {
