@@ -734,6 +734,7 @@ ev$(function(){
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round(ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
 
             showVideoBlock(ev$);
+            setTimeout(function(){ showVideoBlock(ev$); }, 500);
         }
 
         ev$("img[alt*='youtu.be/']").on("touchend click", function(){
@@ -751,6 +752,7 @@ ev$(function(){
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
 
             showVideoBlock(ev$);
+            setTimeout(function(){ showVideoBlock(ev$); }, 500);
           }
         });
 
@@ -767,6 +769,7 @@ ev$(function(){
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
 
             showVideoBlock(ev$);
+            setTimeout(function(){ showVideoBlock(ev$); }, 500);
         }
 
         ev$("img[alt*='youtube.com/watch']").on("touchend click", function(){
