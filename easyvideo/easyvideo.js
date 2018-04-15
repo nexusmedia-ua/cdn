@@ -780,7 +780,7 @@ ev$(function(){
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
             }
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
-            setTimeout(function(){ showVideoBlock(ev$); }, 200);
+            setTimeout(function(){ showVideoBlock(ev$); }, 500);
           }
         });
 
@@ -800,7 +800,7 @@ ev$(function(){
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
 
             showVideoBlock(ev$);
-            setTimeout(function(){ showVideoBlock(ev$); }, 200);
+            setTimeout(function(){ showVideoBlock(ev$); }, 500);
           }
         });
 
@@ -815,7 +815,7 @@ ev$(function(){
             setTimeout(function(){ if (is_zoom) ev_container.removeClass(zoom_class); ev$('#easyvideo_video').find("iframe").attr("height", Math.round( ev$('#easyvideo_video').find("iframe").width() * ev_dimensions)); }, 150);
 
             showVideoBlock(ev$);
-            setTimeout(function(){ showVideoBlock(ev$); }, 200);
+            setTimeout(function(){ showVideoBlock(ev$); }, 500);
         }
 
         ev$("img").not("img[alt*='youtu.be/']").not("img[alt*='youtube.com/watch']").not("img[alt*='//vimeo.com/']").on("touchend click", function(){
