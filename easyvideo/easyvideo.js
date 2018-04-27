@@ -76,6 +76,11 @@ ev$(function(){
         ev$("img[alt*='//vimeo.com/']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
         ev$("img[alt*='youtube.com/watch']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
         ev$("img[alt*='youtu.be/']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
+        setTimeout(function(){ 
+	        ev$("img[alt*='//vimeo.com/']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
+	        ev$("img[alt*='youtube.com/watch']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
+	        ev$("img[alt*='youtu.be/']").wrap("<span class='easyvideo-overlay-play-icon'></span>");
+        }, 1000);
       }      
     
     }
@@ -770,7 +775,7 @@ ev$(function(){
         if (ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
             hideMainImage(ev$, ev_main_img);
 
-            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0]) + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+            ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0]) + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
             if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
               video_width = ev$('#easyvideo_video').find("iframe").width();
               ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
@@ -865,7 +870,7 @@ ev$(function(){
           if (ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").size() > 0) {
               hideMainImage(ev$, ev_main_img);
 
-              ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', ev$(this).prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0]) + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
+              ev$('#easyvideo_video').css("line-height","0").css("position","relative").css("z-index", "999").html('<iframe width="100%"  src="https://www.youtube.com/embed/' + ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', ev$("img[alt*='youtube.com/watch']").filter("img[src*='" + ev_main_img_url + "']").first().prop('alt').replace("https://www.youtube.com/watch?v=", "").split('&')[0].split('?')[0]) + '" frameborder="0" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
               if ( ev$('#easyvideo_video').find("iframe").width() > 0) {
                 video_width = ev$('#easyvideo_video').find("iframe").width();
                 ev$('#easyvideo_video').find("iframe").attr("height", Math.round(video_width * ev_dimensions));
