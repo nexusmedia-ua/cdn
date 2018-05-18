@@ -1,0 +1,1 @@
+document.getElementsByClassName('ssi-wrapper')[0].style.display = "block";
