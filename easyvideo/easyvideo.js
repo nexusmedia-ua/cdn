@@ -407,10 +407,10 @@ ev$(function(){
         if ( typeof video_link !== "undefined" && video_link.toLowerCase().indexOf("youtube.com/watch") >= 0 ) {
           ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://www.youtube.com/watch?v=", "").trim().split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', video_link.replace("https://www.youtube.com/watch?v=", "").trim().split('&')[0].split('?')[0]) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
         }
-        if ( typeof video_link !== "undefined" &&  && video_link.toLowerCase().indexOf("youtu.be/") >= 0 ) {
+        if ( typeof video_link !== "undefined" && video_link.toLowerCase().indexOf("youtu.be/") >= 0 ) {
           ev$(this).parent().html('<iframe width="100%"  src="https://www.youtube.com/embed/' + video_link.replace("https://youtu.be/", "").trim().split('&')[0].split('?')[0] + youtube_parameters.replace('VIDEOID', video_link.replace("https://www.youtube.com/watch?v=", "").trim().split('&')[0].split('?')[0]) + '" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
         }
-        if ( typeof video_link !== "undefined" &&  && video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
+        if ( typeof video_link !== "undefined" && video_link.toLowerCase().indexOf("//vimeo.com/") >= 0 ) {
           ev$(this).parent().html('<iframe src="https://player.vimeo.com/video/' + video_link.replace("https://", "").replace("http://", "").replace("vimeo.com/","").trim().split('&')[0].split('?')[0] + vimeo_parameters + '" width="100%" frameborder="0" webkitallowfullscreen mozallowfullscreen allow="autoplay; encrypted-media" allowfullscreen></iframe>').find("iframe").attr("height", Math.round(flexwidth * ev_dimensions)).css("height", Math.round(flexwidth * ev_dimensions) + "px");
         }
         force_to_evpb = true;
